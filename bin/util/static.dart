@@ -24,8 +24,8 @@ root
    		
 **/
 
-String AppDirectory 		= "~/web/app/";
-String StorageDirectory		= "~/daemon/storage/";
+String AppDirectory 		= "../../../web/app/";
+String StorageDirectory		= "../../storage/";
 
 //String AppDirectory		 	= "../../dotaboards-web/app/";
 //String StorageDirectory		= "../storage/";
