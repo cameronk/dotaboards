@@ -5,10 +5,15 @@ part of util;
 File structure should follow this convention:
 	
 root
-	dotaboards-web/
+	web/
    		- app/
    		...
-   	dotaboards-daemon/
+    daemon/
+    	- dart-sdk/
+    		- bin/
+    			dart
+    			dart2js
+    			...
    		- bin/
    			dotaboards.dart
    			...
@@ -19,8 +24,11 @@ root
    		
 **/
 
-String AppDirectory		 	= "../../dotaboards-web/app/";
-String StorageDirectory		= "../storage/";
+String AppDirectory 		= "~/web/app";
+String StorageDirectory		= "~/daemon/storage";
+
+//String AppDirectory		 	= "../../dotaboards-web/app/";
+//String StorageDirectory		= "../storage/";
 
 //String AppDirectory		 	= "";
 //String StorageDirectory		= "storage/";
