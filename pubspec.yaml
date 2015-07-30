@@ -1,0 +1,8 @@
+name: dotaboards
+author: Cameron Kelley & Azuru Networks
+description: Dotaboards backend
+homepage: http://dotaboards.com
+dependencies:
+  http: any
+  mailer: any
+  sqljocky: any
