@@ -24,7 +24,7 @@ class Generator {
 		this.heroPlayCounts = heroPlayCounts;
 //		this._PrecisionModifier = ENV.PrecisionModifierMap;
 		
-		print(" | Instantiated generator for ${process.regionalShortcode}");
+		ENV.log("Instantiated generator for ${process.regionalShortcode}", type: 3);
 	}
 	
 	
@@ -33,9 +33,7 @@ class Generator {
 	 */
 	Generator makeBoards(Map store, Set recordedMatches, Map playerTopAppearances) {
 		
-		print("\n=========================================");
-		print("======== MakeBoards for ${this.process.regionalShortcode} =========");
-		print("=========================================\n");
+		ENV.log("MakeBoards for ${this.process.regionalShortcode}=", type: 1);
 		
 		/// Get a cached version of the current boards for rendering. ///
 		this.boards = this.process.getLiveBoards();
@@ -59,8 +57,7 @@ class Generator {
 		this.htmlBasic  += "</div><!-- end boards -->";
 		this.htmlMobile += "</div><!-- end boards -->";
 		
-		print("Completed MakeBoards for ${this.process.regionalShortcode} in ${new DateTime.now().difference(now)} ");
-		print("=========================================\n");
+		ENV.log("Completed MakeBoards for ${this.process.regionalShortcode} in ${new DateTime.now().difference(now)} ", type: 4);
 		
 		return this;
 	}
@@ -94,8 +91,8 @@ class Generator {
 	 */
 	void renderBoardsHTML(Map board, Map store, String boardName, Map topAppearances) {
 		
-		print(" | Rendering boards HTML for ${this.process.regionalShortcode}-$boardName");
-		print(" | ...${board['raw'].length} on boards");
+		ENV.log("Rendering boards HTML for ${this.process.regionalShortcode}-$boardName", type: 3);
+		ENV.log("...${board['raw'].length} on boards", type: 3);
 		
 		/// 					  		///
 		/// Base HTML for this board. 	///
@@ -138,7 +135,7 @@ class Generator {
 					String playCount 		= this.util.intToShort(this.heroPlayCounts[heroPlayIndex][1]);
 					String heroPopup		= "class='popup' data-title='${ENV.Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount}k plays)' data-position='bottom center'";
 					
-					print(" | #${position + 1} ${name}: ${value} as ${ENV.Heroes[heroID][1]}");
+					ENV.log("#${position + 1} ${name}: ${value} as ${ENV.Heroes[heroID][1]}", type: 3);
 					
 					/// Set variables based on board type. ///
 					switch(boardName) {
@@ -188,10 +185,10 @@ class Generator {
 						try {
 							
 							if(topAppearances.containsKey(player[0])) {
-								/*print("Player was found in topAppearances");
-								print("Player0 is string: ${player[0] is String}");
-								print("First key is String: ${topAppearances.keys.first is String}");
-								print("TopAppearances:player0 is int: ${topAppearances[player[0]] is int}");*/
+								/*ENV.log("Player was found in topAppearances");
+								ENV.log("Player0 is string: ${player[0] is String}");
+								ENV.log("First key is String: ${topAppearances.keys.first is String}");
+								ENV.log("TopAppearances:player0 is int: ${topAppearances[player[0]] is int}");*/
 								appearancesCount = topAppearances[player[0]];
 							} else appearancesCount = 1;
 						
@@ -205,7 +202,7 @@ class Generator {
 	
 							
 						} catch(e) {
-							print(e.toString());
+							ENV.log(e.toString(), type: 4);
 							throw e;
 						}
 					} else {
@@ -240,13 +237,13 @@ class Generator {
 					/// so we should remove them from the boards to
 					/// make room for other people
 					this.playersToDiscard.add( player[0] );
-					print(" | Discarding ${player[0]} with: user(null)=${user==null} detailed(null)=${detailed==null}, banned=${this.bans.contains(player[0])}");
+					ENV.log("Discarding ${player[0]} with: user(null)=${user==null} detailed(null)=${detailed==null}, banned=${this.bans.contains(player[0])}", type: 3);
 					
 				}
 			} catch(e, stack) {
-				print(" | \n | ERROR:");
-				print(" | $e \n");
-				print(" | $stack");
+				ENV.log("ERROR:", type: 4);
+				ENV.log("$e \n", type: 3);
+				ENV.log("$stack", type: 3);
 				continue;
 			}
 		
@@ -259,7 +256,7 @@ class Generator {
 		
 		this.htmlBasic += "</div><!--[end .board]--></div><!--[end .column]-->";
 		
-		print(" | ...done rendering ${boardName}\n | \n | ====================== \n |");
+		ENV.log("...done rendering ${boardName}", type: 3);
 		
 	}
 	

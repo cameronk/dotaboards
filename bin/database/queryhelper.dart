@@ -12,16 +12,16 @@ class QueryHelper {
 	dynamic _attempt(dynamic<Future<Results>, Future<List<Results>>> query) {
 		try {
 			query.timeout(this.queryTimeout, onTimeout: () { 
-				print("ERROR: Query timed out.");
+				ENV.log("ERROR: Query timed out.", type: 4);
 				throw new QueryError("Query timed out.");
 			}).catchError((e) {
 				this._attempt(query);
-				print(e);
-				print("ERROR: Caught error ${e.toString()} in query.");
+				ENV.log(e.toString(), type: 4);
+				ENV.log("ERROR: Caught error ${e.toString()} in query.", type: 3);
 			});
 		} catch(e) {
-			print("Query catchError thrown to wrapping try/catch");
-			print(e);
+			ENV.log("Query catchError thrown to wrapping try/catch", type: 3);
+			ENV.log(e);
 		} finally {
 			return query;
 		}
@@ -32,7 +32,7 @@ class QueryHelper {
 	 * Truncates the matches table.
 	 */
 	Future<Results> truncateMatches() {
-		print("QueryHelper::truncateMatches()");
+		ENV.log("QueryHelper::truncateMatches()", type: 3);
 		try {
 			return this._attempt(this.pool.query("TRUNCATE `matches`"));
 		} catch(e) {
@@ -45,7 +45,7 @@ class QueryHelper {
 	 * Retreive list of bans from table.
 	 */
 	Future<List> retrieveBans() {
-		print("QueryHelper::retrieveBans()");
+		ENV.log("QueryHelper::retrieveBans()", type: 3);
 		try {
 			return this._attempt(this.pool.query("SELECT `id` FROM `player-bans`")).then((results) => results.toList());
 		} catch(e) {
@@ -58,7 +58,7 @@ class QueryHelper {
 	 * Push a match to the matches table.
 	 */
 	Future pushMatch(Map match) {
-		//print("QueryHelper::pushMatch()");
+//		ENV.log("QueryHelper::pushMatch()");
 		try {
 			return pool.prepare("INSERT INTO `matches` (id, seqnum, cluster, gamemode, radiant_win, completed_at) VALUES (?, ?, ?, ?, ?, ?)").then((query) {
 				return this._attempt(query.execute(match.values.toList()));
@@ -74,7 +74,7 @@ class QueryHelper {
 	 * Return hero play counts.
 	 */
 	Future<List> retrieveHeroPlayCounts({sort:true}) {
-		print(" | QueryHelper::retrieveHeroPlayCounts()");
+		ENV.log("QueryHelper::retrieveHeroPlayCounts()", type: 3);
 		try {
 			return this._attempt(this.pool.query("SELECT * FROM `heroes` ORDER BY count DESC")).then((Results results) {
 	
@@ -97,7 +97,7 @@ class QueryHelper {
 	 * Add match to discarded table.
 	 */
 	Future discardMatch(Map match, String reason) {
-		//print("QueryHelper::discardMatch()");
+		//ENV.log("QueryHelper::discardMatch()");
 		try {
 			return pool.prepare("INSERT INTO `discarded-matches` (id, seq, reason) VALUES(?, ?, ?)").then((query) {
 				return this._attempt(query.execute([match['match_id'], match['match_seq_num'], reason]));
@@ -119,7 +119,7 @@ class QueryHelper {
 	 * Update the current match count for today.
 	 */
 	Future<Results> updateCurrentMatchCount(int currentRecordedMatchCount) {
-		print("QueryHelper::updateCurrentMatchCount($currentRecordedMatchCount)");
+		ENV.log("QueryHelper::updateCurrentMatchCount($currentRecordedMatchCount)", type: 3);
 		try {
 			return pool.prepare("UPDATE `site` SET `current_match_count`=? WHERE `id`='0'").then((query) {
 				return this._attempt(query.execute( [ currentRecordedMatchCount ]  ));
@@ -135,7 +135,7 @@ class QueryHelper {
 	 * Update the all-time match count.
 	 */
 	Future updateTotalMatchCount(int currentRecordedMatchCount, int lastRetrievedMatchCount) {
-		print("QueryHelper::updateTotalMatchCount($currentRecordedMatchCount, $lastRetrievedMatchCount)");
+		ENV.log("QueryHelper::updateTotalMatchCount($currentRecordedMatchCount, $lastRetrievedMatchCount)", type: 3);
 		try {
 			return pool.prepare("UPDATE `site` SET `total_match_count`=total_match_count + ? WHERE `id`='0'").then((query) {
 				return this._attempt(query.execute( [ currentRecordedMatchCount - lastRetrievedMatchCount ] ));
@@ -151,7 +151,7 @@ class QueryHelper {
 	 * Update player stat counts
 	 */
 	Future updatePlayerStatCounts(Map<String, Map> playerStats) {
-		print("QueryHelper::updatePlayerStatCounts(playerStats: ${playerStats.toString()})");
+		ENV.log("QueryHelper::updatePlayerStatCounts(playerStats: ${playerStats.toString()})", type: 3);
 		try {
 			
 			List statsList = [
@@ -165,7 +165,7 @@ class QueryHelper {
 				playerStats["total"]["assists"]
 			];
 			
-			print("Using statslist: ${statsList.toString()}");
+			ENV.log("Using statslist: ${statsList.toString()}");
 			
 			String query = "UPDATE `site` SET `current_kills`=?, `current_deaths`=?, `current_assists`=?, `current_duration`=?, `total_duration`=total_duration + ?, `total_kills`=total_kills + ?, `total_deaths`=total_deaths + ?, `total_assists`=total_assists + ? WHERE `id`='0'";
 			return pool.prepare(query).then((query) {
@@ -183,14 +183,14 @@ class QueryHelper {
 	 * Insert stats row with today's average statistics.
 	 */
 	Future insertNewStatsRow(Map stats) {
-		print("QueryHelper::insertNewStatsRow()");
+		ENV.log("QueryHelper::insertNewStatsRow()", type: 3);
 		try {
 			String set = "";
 			for(String stat in stats.keys.toList()) {
 				set += "`$stat`=${stats[stat]}, ";
 			}
 			
-			//print("INSERT INTO `stats` SET ${set.substring(0, (set.length - 2))}");
+			//ENV.log("INSERT INTO `stats` SET ${set.substring(0, (set.length - 2))}");
 			return this._attempt(pool.query("INSERT INTO `stats` SET ${set.substring(0, (set.length - 2))}"));
 		} catch(e) {
 			throw new QueryError("Failed to insert new stats row " + e.toString());
@@ -203,7 +203,7 @@ class QueryHelper {
 	 * Increment the number of days online by 1.
 	 */
 	Future updateDaysOnline() {
-		print("QueryHelper::updateDaysOnline()");
+		ENV.log("QueryHelper::updateDaysOnline()", type: 3);
 		try {
 			return pool.prepare("UPDATE `site` SET `days_online`=days_online + ? WHERE `id`=0").then((query) {
 				return this._attempt(query.execute( [ 1 ] ));
@@ -219,7 +219,7 @@ class QueryHelper {
 	 * Update player appearances table.
 	 */
 	Future updatePlayerAppearances( Map<String, int> appearances ) {
-		print("QueryHelper::updatePlayerAppearances()");
+		ENV.log("QueryHelper::updatePlayerAppearances()", type: 3);
 		
 		List converted = new List();
 		for(String playerID in appearances.keys.toList()) {
@@ -242,15 +242,15 @@ class QueryHelper {
 	 * Get player appearances for specific ID.
 	 */
 	Future getAppearancesForPlayerID(String id) {
-		print("QueryHelper::getAppearancesForPlayerID($id)");
+		ENV.log("QueryHelper::getAppearancesForPlayerID($id)", type: 3);
 		try {
 			return this._attempt(this.pool.query("SELECT count FROM `appearances` WHERE id = ${id} LIMIT 1"))
 				.then((Results results) {
-					print(" | Getting appearances for $id");
+					ENV.log(" | Getting appearances for $id");
 					Map appearance = new Map();
 					appearance[id] = 1;
 					return results.forEach((row) {
-						print("forEach($id): ${row.count}");
+						ENV.log("forEach($id): ${row.count}");
 						appearance[id] += row.count;
 					}).then((_) => appearance);
 				});
@@ -264,7 +264,7 @@ class QueryHelper {
 	 * Update hero play counts.
 	 */
 	Future updateHeroPlayCounts(Map<int, int> heroes) {
-		print("QueryHelper::updateHeroPlayCounts()");
+		ENV.log("QueryHelper::updateHeroPlayCounts()", type: 3);
 		
 		List converted = new List();
 		for(int heroID in heroes.keys.toList()) {
@@ -289,7 +289,7 @@ class QueryHelper {
 	 * Get averages of this stats row.
 	 */
 	Future getBoardAverage(String board) {
-		print(" | QueryHelper::getBoardAverage($board)");
+		ENV.log(" | QueryHelper::getBoardAverage($board)", type: 3);
 		try {
 			return this._attempt(pool.query("SELECT AVG(avg_${board}) AS ${board} FROM stats")).then((result) => result.toList());
 		} catch(e) {
@@ -305,7 +305,7 @@ class QueryHelper {
 	 * Update steam status to specified value
 	 */
 	Future steamStatus(int val) {
-		print("QueryHelper::steamStatus($val)");
+		ENV.log("QueryHelper::steamStatus($val)", type: 3);
 		try {
 			return this._attempt(pool.query("UPDATE `site` SET `steam_online` = '${val.toString()}', `steam_down_at` = CURRENT_TIMESTAMP()"));
 		} catch(e) {
