@@ -16,7 +16,7 @@ class Pool {
 //	String db		= "dotaboards_main";
 	
 	Pool() {
-		ENV.log("Initialized new pool instance.", 4);
+		ENV.log("Initialized new pool instance.", type: 4);
 		
 //		if(ENV.name == "TESTING" || ENV.name == "LOCAL") {
 //			print("Pool: Using testing environment");

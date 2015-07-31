@@ -8,6 +8,7 @@ class Environment {
 	String name;
 	String hash;
 	File logFile;
+	IOSink sink;
 	
 	
 	/**
@@ -668,7 +669,7 @@ class Environment {
 		var rng = new Random();
 		
 		this.name = $ENV;
-		this.hash = new List.generate(15, (_) => rng.nextInt(100)).join();
+		this.hash = new List.generate(8, (_) => rng.nextInt(100)).join();
 		
 		switch($ENV) {
 			case "PRODUCTION":
@@ -727,12 +728,14 @@ class Environment {
 	
 	Future setup() {
 		return new Future(() {
-			File log = new File(this.StorageDirectory + "log-${this.hash}-${new DateTime.now().toIso8601String()}.txt");
+			String fileName = "log-${this.hash}_${new DateTime.now().toIso8601String().replaceAll(":", "")}.txt";
+			File log = new File(this.StorageDirectory + "logs/" + fileName);
 			
 			return log.exists().then((exists) {
 				if(exists == false) {
 					return log.create().then((File file) {
 						this.logFile = file;
+						this.sink = file.openWrite();
 						return this;
 					});
 				} else {
@@ -743,7 +746,7 @@ class Environment {
 		});
 	}
 	
-	void log(String msg, [int type=1]) {
+	void log(String msg, {int type: 0, int level: 1}) {
 		
 		/**
 		 * Types:
@@ -754,39 +757,57 @@ class Environment {
 		 * 4:  > message
 		 */
 		
-		String message;
+		/**
+		 * Levels:
+		 * 0: message;
+		 * 1: important
+		 * 2: warning
+		 * 3: error
+		 */
 		
-		switch(type) {
-			case 0:
-				message = msg;
-				break;
-			case 1:
+		/**
+		 * In testing/local, log everything.
+		 * In production, don't log messages.
+		 */
+		if(this.name != "PRODUCTION" || level != 0) { 
+
+			String message;
+		
+			switch(type) {
+				case 0:
+					message = msg;
+					break;
+				case 1:
+					
+					String middle = "=====     $msg     =====";
+					String side = "";
+					for(int i = 0; i < middle.length; i++) {
+						side += "=";
+					}
+					
+					message = "$side\n$middle\n$side";
+					break;
+				case 2:
+					message = "[$msg]";
+					break;
+				case 3:
+					message = " | $msg";
+					break;
+				case 4:
+					message = " > $msg";
+					break;
+				default:
+					message = msg;
+					break;
 				
-				String middle = "=====     $msg     =====";
-				String side;
-				for(int i = 0; i < middle.length; i++) {
-					side += "=";
-				}
-				
-				message = "$side\n$middle\n$side";
-				break;
-			case 2:
-				message = "[$msg]";
-				break;
-			case 3:
-				message = " | $msg";
-				break;
-			case 4:
-				message = " > $msg";
-				break;
-			default:
-				message = msg;
-				break;
+			}
 			
+			this.sink.write(message + "\n");
+			
+			if(this.name == "LOCAL") {
+				print(message);
+			}
 		}
-		
-		this.logFile.writeAsString(message + "\n", mode: APPEND);
-		
 	}
 	
 	

@@ -73,7 +73,7 @@ class Processor {
 	 */
 	Processor(String regionalShortcode, String locationIdentifier) {
 		
-		print("Instantiated processor ${this.hashCode} with shortcode: ${regionalShortcode}, ident: ${locationIdentifier}");
+		ENV.log("Instantiated processor ${this.hashCode} with shortcode: ${regionalShortcode}, ident: ${locationIdentifier}", type: 3);
 		
 		/// MUST STAY HERE because of weird object pointing bug ///
 		this._Boards =  {
@@ -260,7 +260,7 @@ class Processor {
 			
 			/// Overwrite player's previous entry if lower than new one. ///
 			int currentRawBoardIndex = this.findRawIndexByID(board, player["id"]);
-			ENV.log("Found player ${player['id']} on ${this.regionalShortcode}-${board} at index ${currentRawBoardIndex.toString()}", 4);
+			ENV.log("Found player ${player['id']} on ${this.regionalShortcode}-${board} at index ${currentRawBoardIndex.toString()}", type: 4);
 			
 			if(value > this._Boards[board]["raw"][currentRawBoardIndex][1]) {
 				

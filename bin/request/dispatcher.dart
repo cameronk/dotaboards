@@ -59,7 +59,7 @@ class Dispatcher {
 		this.stats = new Statistics(this.queries);
 		
 		ENV.log("\n\n\n\n");
-		ENV.log("STARTING", 1);
+		ENV.log("STARTING", type: 1);
 		this.getLatestMatchSeqNum().then((num) {
 			this.lastMatchSequenceNum = num;
 			this.start();
@@ -80,7 +80,7 @@ class Dispatcher {
 		this.process = new Processor("global", "worldwide");
 		
 		for(String region in (ENV.RegionMap).keys.toList()) {
-			ENV.log("Instantiating: ${region}", 4);
+			ENV.log("Instantiating: ${region}", type: 4);
 			Processor newProcessor = new Processor(region, (ENV.RegionIdentifiers)[region]);
 			this.regionalProcessors[region] = newProcessor;
 		}
@@ -92,7 +92,7 @@ class Dispatcher {
 	 * Begin the first fetch, initialize timers.
 	 */
 	void start() {
-		ENV.log("at ${this.lastMatchSequenceNum.toString()}", 4);
+		ENV.log("at ${this.lastMatchSequenceNum.toString()}", type: 4);
 		/// Start loops ///
 		
 		this.fetch();
@@ -106,8 +106,6 @@ class Dispatcher {
 	void initTimers() {
 		this._pushTimer = new Timer.periodic(const Duration(seconds: 60), (_) {
 			DateTime now = new DateTime.now();
-			//[0, 20, 40]
-			//[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
 			if([0, 20, 40].contains(now.minute)) {
 				this.waitingToPush = true;
 			}
@@ -144,7 +142,7 @@ class Dispatcher {
 			
 			HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v0001/?key=${this._key}&matches_requested=25&start_at_match_seq_num=${this.lastMatchSequenceNum.toString()}")
 				.then((response) {
-					ENV.log("==>(${(new DateTime.now()).difference(fetchStart).inMilliseconds}ms):", 3);
+					ENV.log("==> ${(new DateTime.now()).difference(fetchStart).inMilliseconds}ms", type: 3);
 					if(response.statusCode == 200) {
 						
 						this.requestSuccess();
@@ -157,7 +155,7 @@ class Dispatcher {
 						if(result["status"] == 1 && result["matches"] != null) {
 						
 							final List matches = result["matches"];
-							ENV.log("Got ${matches.length} matches.", 3);
+							ENV.log("Got ${matches.length} matches.", type: 3);
 							
 							/// -1: Loop through all returned matches. ///
 							for(Map match in matches) {
@@ -212,28 +210,28 @@ class Dispatcher {
 												String region = ENV.RegionMapReverse[ this.util.getCluster(player['loc']) ];
 												
 												if(regionalProcessors.containsKey(region)) {
-													ENV.log("${player['id']} --> $region", 3);
+													ENV.log("${player['id']} --> $region", type: 3);
 													(this.regionalProcessors[region]).player(player);
 												}
 												
 											}
 											
 										} else {
-											ENV.log("No valid players in ${match['match_seq_num']}.", 3);
+											ENV.log("No valid players in ${match['match_seq_num']}.", type: 3);
 										}
 										
 									} else disqualifiedMatches++;
 								
 								} else {
 									disqualifiedMatches++;
-									ENV.log("Already processed match ${match['match_seq_num']}.", 4);
+									ENV.log("Already processed match ${match['match_seq_num']}.", type: 4);
 								}
 								
 							}
 							
-							ENV.log("Done processing ${this.lastMatchSequenceNum}. $disqualifiedMatches/${matches.length} disqualified", 3);
+							ENV.log("Done processing ${this.lastMatchSequenceNum}. $disqualifiedMatches/${matches.length} disqualified", type: 3);
 							this.lastMatchSequenceNum = matches.last["match_seq_num"] + 1;
-							ENV.log("Looping back to ${this.lastMatchSequenceNum}...", 3);
+							ENV.log("Looping back to ${this.lastMatchSequenceNum}...", type: 3);
 							
 							//(this.process.saveBoards()).then((_) {
 								int difference = (new DateTime.now()).difference(fetchStart).inMilliseconds;
@@ -243,12 +241,12 @@ class Dispatcher {
 					} else throw new DispatchError("Received ${response.statusCode} from API.");
 				})
 				.timeout( (new Duration(seconds: 30)), onTimeout: () { 
-					ENV.log("WARNING: Timed out...", 3);
+					ENV.log("WARNING: Timed out...", type: 3);
 					throw new DispatchError("Timed out.");
 				})
 				.catchError((Error error) {
-					ENV.log("Caught a request error for fetching from ${this.lastMatchSequenceNum}.", 3);
-					ENV.log("Running another loop in 15 seconds...", 3);
+					ENV.log("Caught a request error for fetching from ${this.lastMatchSequenceNum}.", type: 3);
+					ENV.log("Running another loop in 15 seconds...", type: 3);
 					this.requestFailure(error.toString());
 					this.fetchRestartTimer = new Timer(const Duration(seconds: 15), () => this.fetch());
 				});
@@ -262,7 +260,7 @@ class Dispatcher {
 	 */
 	void push () {
 		
-		ENV.log("Beginning push.", 1);
+		ENV.log("Beginning push.", type: 1);
 		
 		Set currentRecordedMatches = this.recordedMatches;
 		
@@ -297,7 +295,7 @@ class Dispatcher {
 			/// Now get the hero play counts list. ///
 			this.queries.retrieveHeroPlayCounts().then((heroPlayCounts) {
 				
-				ENV.log("Got hero play counts with length ${heroPlayCounts.length}", 4);
+				ENV.log("Got hero play counts with length ${heroPlayCounts.length}", type: 4);
 				
 				/// Sort hero play counts by number of plays ///
 				heroPlayCounts.sort((a, b) => (b[1] - a[1]));
@@ -305,7 +303,7 @@ class Dispatcher {
 				/// Parse users.json file. ///
 				this.grab(ENV.StorageDirectory + "users.json").then((data) {
 	
-					ENV.log("Already got ${data.length} users", 4);
+					ENV.log("Already got ${data.length} users", type: 4);
 					
 					List alreadySaved = data.keys.toList();
 					
@@ -325,7 +323,7 @@ class Dispatcher {
 					/// Split ALL IDs to grab for this request. ///
 					List<List<int>> getIDs = this.process.splitIDsForRequest(idMap);       /// List with ID lists
                     					
-					ENV.log("Getting ids: ${JSON.encode(getIDs)}", 4);
+					ENV.log("Getting ids: ${JSON.encode(getIDs)}", type: 4);
 					
 					
 					if(getIDs.length > 0) {
@@ -346,7 +344,7 @@ class Dispatcher {
 							
 							this.save(ENV.StorageDirectory + "users.json", store).then((_) {
 		
-								ENV.log("Saved users.json with ${store.length} players.", 4);
+								ENV.log("Saved users.json with ${store.length} players.", type: 4);
 								
 								List<Future> generateBoards = new List();
 								Map<String, List> playersProcessedMap = new Map();
@@ -384,7 +382,7 @@ class Dispatcher {
 	    						Future.wait(generateBoards).then((_) {
 	    							
 	    							this.save(ENV.StorageDirectory + "players-processed.json", playersProcessedMap, isJSON: true).then((_) {
-		    							ENV.log("Saved boards-latest-primary and boards-latest-mobile.", 3);
+		    							ENV.log("Saved boards-latest-primary and boards-latest-mobile.", type: 3);
 		    							done();
 	    							});
 	    						});
@@ -406,14 +404,14 @@ class Dispatcher {
 	Future generate(Processor process, heroPlayCounts, store) {
 		Map cached = process.getLiveBoards();
         				
-		ENV.log("Dispatching generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches", 2);
+		ENV.log("Dispatching generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches", type: 2);
 		
 		List<Future> wait = new List();
 		
 		for(String board in cached.keys.toList()) {
 			if(cached[board]["raw"].length > 0) {
 				String first = cached[board]["raw"][0][0];
-				ENV.log("First player for $board: $first", 4);
+				ENV.log("First player for $board: $first", type: 4);
 				wait.add(this.queries.getAppearancesForPlayerID(first));
 			} else {
 				wait.add(new Future(() { return {"none": 0}; }));
@@ -427,7 +425,7 @@ class Dispatcher {
 				playerTopAppearances[ response.keys.first.toString() ] = response.values.first; 
 			}
 			
-			ENV.log("Running generator for ${process.locationIdentifier}", 3);
+			ENV.log("Running generator for ${process.locationIdentifier}", type: 3);
 			Generator generator = new Generator(process, this.bans, heroPlayCounts).makeBoards(store, this.recordedMatches, playerTopAppearances);
             						
 			for(String player in generator.playersToDiscard) {
@@ -450,14 +448,14 @@ class Dispatcher {
 	 */
 	void clean () {
 		
-		ENV.log("Running clean.", 1);
+		ENV.log("Running clean.", type: 1);
 		
 		this._pushTimer.cancel();
 		this._cleanTimer.cancel();
 		
 		this.stats.recordClean(this.process.getLiveBoards(), this.process.getAppearances()).then((_) {
 			
-			ENV.log("Getting board averages.", 3);
+			ENV.log("Getting board averages.", type: 3);
 			
 			List<Future> wait = new List();
 			Map statMap = new Map();
@@ -467,23 +465,23 @@ class Dispatcher {
 				wait.add(getBoardAverage);
 				
 				getBoardAverage.then((List result)  {
-					ENV.log("...$board: ${result[0][0].toStringAsFixed(2)}", 3);
+					ENV.log("...$board: ${result[0][0].toStringAsFixed(2)}", type: 3);
 					statMap[board] = result[0][0].toStringAsFixed(2);
 				});  
 			}
 			
 			Future.wait(wait).then((List values) {
 				
-				ENV.log("Done retrieving board averages, moving to play counts...", 4);
+				ENV.log("Done retrieving board averages, moving to play counts...", type: 4);
 				
 				this.queries.retrieveHeroPlayCounts().then((heroPlayCounts) {
 
 						
-					ENV.log("Sorting hero play counts (${heroPlayCounts.length})...", 3);
+					ENV.log("Sorting hero play counts (${heroPlayCounts.length})...", type: 3);
 					
 					heroPlayCounts.sort((a, b) => (b[1] - a[1]));
 					
-					ENV.log("Hero play counts map sorted. (${heroPlayCounts.length})", 3);
+					ENV.log("Hero play counts map sorted. (${heroPlayCounts.length})", type: 3);
 					
 					Map<int, int> heroPlaysMap = new Map();
 					
@@ -504,7 +502,7 @@ class Dispatcher {
 					
 					Future.wait(wait).then((_) {
 						
-						ENV.log("Finished saving stats, re-instantiating Processor() and running start()", 4);
+						ENV.log("Finished saving stats, re-instantiating Processor() and running start()", type: 4);
 						
 						this.instantiateProcessors();
 						
@@ -724,12 +722,12 @@ class Dispatcher {
 	 * Request failed.
 	 */
 	void requestFailure([String reason="unknown"]) {
-		ENV.log("RequestFailure ($reason)", 4);
+		ENV.log("RequestFailure ($reason)", type: 4);
 		if(this.steamPingAttempts == 0) 
 			this.steamDownStartTime = new DateTime.now();
 		
 		if(this.steamPingAttempts == 10) {
-			ENV.log("Putting the API down...", 4);
+			ENV.log("Putting the API down...", type: 4);
 			this.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
 			
 			this.destroyTimers();
