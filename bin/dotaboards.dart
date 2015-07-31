@@ -44,7 +44,7 @@ void main(List<String> args) {
 	
 		var util = new Util();
 		
-		ConnectionPool pool = new Pool($ENV).create();
+		ConnectionPool pool = new Pool().create();
 		var queries = new QueryHelper(pool);
 		
 		queries.truncateMatches()

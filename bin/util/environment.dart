@@ -16,6 +16,14 @@ class Environment {
 	String AppDirectory;
 	String StorageDirectory;
 	
+	/**
+	 * Database config
+	 */
+	String dbHost;
+	int dbPort = 3306;
+	String dbUser;
+	String dbPass;
+	String db;
 	
 	/**
 	 * Region maps
@@ -669,6 +677,14 @@ class Environment {
 				this.AppDirectory 		= "/home/dotaboards/web/app/";
 				this.StorageDirectory	= "/home/dotaboards/daemon/storage/";
 				
+
+				/// Setup MySQL connection ///
+				/// dbHost  = default
+				/// dbPort  = default
+				this.dbUser = "root";
+				this.dbPass = r"uruza852@jk$uck$d1k";
+				this.db		= "dotaboards_main";
+				
 				break;
 				
 			case "TESTING":
@@ -677,6 +693,13 @@ class Environment {
 				this.AppDirectory 		= "/home/cameron/web/app/";
 				this.StorageDirectory	= "/home/cameron/daemon/storage/";
 				
+				/// Setup MySQL connection ///
+				/// dbHost  = default
+				/// dbPort  = default
+				this.dbUser = "cameron-dota";
+				this.dbPass = "9238283762313586";
+				this.db		= "cameron-dota";
+				
 				break;
 				
 			case "LOCAL":
@@ -684,6 +707,13 @@ class Environment {
 				/// Setup storage directories ///
 				this.AppDirectory 		= "storage/_app/";
 				this.StorageDirectory 	= "storage/";
+
+				/// Setup MySQL connection ///
+				/// dbPort  = default
+				this.dbHost = "lander.muny.us";
+				this.dbUser = "cameron-dota";
+				this.dbPass = "9238283762313586";
+				this.db		= "cameron-dota";
 				
 				
 				break;
