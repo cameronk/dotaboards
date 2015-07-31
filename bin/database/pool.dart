@@ -18,7 +18,7 @@ class Pool {
 	Pool(String $ENV) {
 		print("Initialized new pool instance.");
 		
-		if($ENV == "TESTING") {
+		if($ENV == "TESTING" || $ENV == "LOCAL") {
 			print("Pool: Using testing environment");
 			this.user 		= "cameron-dota";
 			this.password 	= "9238283762313586";

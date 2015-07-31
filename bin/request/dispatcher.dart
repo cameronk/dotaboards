@@ -58,9 +58,8 @@ class Dispatcher {
 		this.util = new Util(); 
 		this.stats = new Statistics(this.queries);
 		
-		print("Storage directory: $StorageDirectory");
-		
-		print("\n\n\n\n\n STARTING");
+		ENV.log("\n\n\n\n");
+		ENV.log("STARTING", 1);
 		this.getLatestMatchSeqNum().then((num) {
 			this.lastMatchSequenceNum = num;
 			this.start();
@@ -80,9 +79,9 @@ class Dispatcher {
 		
 		this.process = new Processor("global", "worldwide");
 		
-		for(String region in RegionMap.keys.toList()) {
-			print("Instantiating: ${region}");
-			Processor newProcessor = new Processor(region, RegionIdentifiers[region]);
+		for(String region in (ENV.RegionMap).keys.toList()) {
+			ENV.log("Instantiating: ${region}", 4);
+			Processor newProcessor = new Processor(region, (ENV.RegionIdentifiers)[region]);
 			this.regionalProcessors[region] = newProcessor;
 		}
 		
@@ -93,7 +92,7 @@ class Dispatcher {
 	 * Begin the first fetch, initialize timers.
 	 */
 	void start() {
-		print("at ${this.lastMatchSequenceNum.toString()} \n\n\n\n\n");
+		ENV.log("at ${this.lastMatchSequenceNum.toString()}", 4);
 		/// Start loops ///
 		
 		this.fetch();
@@ -141,24 +140,24 @@ class Dispatcher {
 			this.push();
 		} else {
 			DateTime fetchStart = new DateTime.now();
-			print("${this.lastMatchSequenceNum} [${fetchStart.toString()}] >");
+			ENV.log("${this.lastMatchSequenceNum} [${fetchStart.toString()}] >");
 			
 			HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v0001/?key=${this._key}&matches_requested=25&start_at_match_seq_num=${this.lastMatchSequenceNum.toString()}")
 				.then((response) {
-					print(" | RESPONSE (${(new DateTime.now()).difference(fetchStart).inMilliseconds}ms):");
+					ENV.log("==>(${(new DateTime.now()).difference(fetchStart).inMilliseconds}ms):", 3);
 					if(response.statusCode == 200) {
 						
 						this.requestSuccess();
 						this.fetchRestartTimer.cancel();
 						
-						//print("BODY: ${response.body.substring(0, 10)} ...");
+						//ENV.log("BODY: ${response.body.substring(0, 10)} ...");
 						final Map result = JSON.decode(response.body)["result"];
 						int disqualifiedMatches = 0;
 						
 						if(result["status"] == 1 && result["matches"] != null) {
 						
 							final List matches = result["matches"];
-							print(" | Got ${matches.length} matches.");
+							ENV.log("Got ${matches.length} matches.", 3);
 							
 							/// -1: Loop through all returned matches. ///
 							for(Map match in matches) {
@@ -183,7 +182,7 @@ class Dispatcher {
 										for(Map player in match['players']) {
 											
 											/// 2.1: Check if player meets basic criteria. ///
-											if( (player['account_id'] != this._privatePlayer) && player['leaver_status'] == 0 && Heroes.containsKey(player['hero_id'].toString()) && !this.bans.contains(player['account_id']) ) {
+											if( (player['account_id'] != this._privatePlayer) && player['leaver_status'] == 0 && (ENV.Heroes).containsKey(player['hero_id'].toString()) && !this.bans.contains(player['account_id']) ) {
 												
 												players[player['account_id']] = this.buildPlayerMap(player, match);
 												
@@ -210,31 +209,31 @@ class Dispatcher {
 												this.process.player(player);
 												
 												/// Dispatch this player to their specified region. ///
-												String region = RegionMapReverse[ this.util.getCluster(player['loc']) ];
+												String region = ENV.RegionMapReverse[ this.util.getCluster(player['loc']) ];
 												
 												if(regionalProcessors.containsKey(region)) {
-													print(" | ${player['id']} -> $region");
+													ENV.log("${player['id']} --> $region", 3);
 													(this.regionalProcessors[region]).player(player);
 												}
 												
 											}
 											
 										} else {
-											print(" | No valid players in ${match['match_seq_num']}.");
+											ENV.log("No valid players in ${match['match_seq_num']}.", 3);
 										}
 										
 									} else disqualifiedMatches++;
 								
 								} else {
 									disqualifiedMatches++;
-									print(" > Already processed match ${match['match_seq_num']}.");
+									ENV.log("Already processed match ${match['match_seq_num']}.", 4);
 								}
 								
 							}
 							
-							print(" | Done processing ${this.lastMatchSequenceNum}. $disqualifiedMatches/${matches.length} disqualified");
+							ENV.log("Done processing ${this.lastMatchSequenceNum}. $disqualifiedMatches/${matches.length} disqualified", 3);
 							this.lastMatchSequenceNum = matches.last["match_seq_num"] + 1;
-							print(" | Looping back to ${this.lastMatchSequenceNum}...");
+							ENV.log("Looping back to ${this.lastMatchSequenceNum}...", 3);
 							
 							//(this.process.saveBoards()).then((_) {
 								int difference = (new DateTime.now()).difference(fetchStart).inMilliseconds;
@@ -244,12 +243,12 @@ class Dispatcher {
 					} else throw new DispatchError("Received ${response.statusCode} from API.");
 				})
 				.timeout( (new Duration(seconds: 30)), onTimeout: () { 
-					print(" | WARNING: Timed out...");
+					ENV.log("WARNING: Timed out...", 3);
 					throw new DispatchError("Timed out.");
 				})
 				.catchError((Error error) {
-					print(" | Caught a request error for fetching from ${this.lastMatchSequenceNum}.");
-					print(" | Running another loop in 15 seconds...");
+					ENV.log("Caught a request error for fetching from ${this.lastMatchSequenceNum}.", 3);
+					ENV.log("Running another loop in 15 seconds...", 3);
 					this.requestFailure(error.toString());
 					this.fetchRestartTimer = new Timer(const Duration(seconds: 15), () => this.fetch());
 				});
@@ -263,7 +262,7 @@ class Dispatcher {
 	 */
 	void push () {
 		
-		print("\n\n\Beginning push.\n==========================\n");
+		ENV.log("Beginning push.", 1);
 		
 		Set currentRecordedMatches = this.recordedMatches;
 		
@@ -298,15 +297,15 @@ class Dispatcher {
 			/// Now get the hero play counts list. ///
 			this.queries.retrieveHeroPlayCounts().then((heroPlayCounts) {
 				
-				print("Got hero play counts with length ${heroPlayCounts.length}");
+				ENV.log("Got hero play counts with length ${heroPlayCounts.length}", 4);
 				
 				/// Sort hero play counts by number of plays ///
 				heroPlayCounts.sort((a, b) => (b[1] - a[1]));
 				
 				/// Parse users.json file. ///
-				this.grab(StorageDirectory + "users.json").then((data) {
+				this.grab(ENV.StorageDirectory + "users.json").then((data) {
 	
-					print("Already got ${data.length} users");
+					ENV.log("Already got ${data.length} users", 4);
 					
 					List alreadySaved = data.keys.toList();
 					
@@ -314,7 +313,7 @@ class Dispatcher {
 					Map<int, int> idMap = this.process.get64BitIDList(alreadySaved); /// [id64]: [id32]
 					
 					/// Get IDs from each regional processor ///
-					for(String region in RegionMap.keys.toList()) {
+					for(String region in (ENV.RegionMap).keys.toList()) {
 						Map<int, int> pushMap = new Map();
 						if(this.regionalProcessors.containsKey(region)) {
 							pushMap.addAll(this.regionalProcessors[region].get64BitIDList(alreadySaved));
@@ -326,7 +325,7 @@ class Dispatcher {
 					/// Split ALL IDs to grab for this request. ///
 					List<List<int>> getIDs = this.process.splitIDsForRequest(idMap);       /// List with ID lists
                     					
-					print("Getting ids: ${JSON.encode(getIDs)}");
+					ENV.log("Getting ids: ${JSON.encode(getIDs)}", 4);
 					
 					
 					if(getIDs.length > 0) {
@@ -345,9 +344,9 @@ class Dispatcher {
 								store.addAll(response);
 							}
 							
-							this.save(StorageDirectory + "users.json", store).then((_) {
+							this.save(ENV.StorageDirectory + "users.json", store).then((_) {
 		
-								print("Saved users.json with ${store.length} players.");
+								ENV.log("Saved users.json with ${store.length} players.", 4);
 								
 								List<Future> generateBoards = new List();
 								Map<String, List> playersProcessedMap = new Map();
@@ -362,9 +361,9 @@ class Dispatcher {
 								this.process.playersProcessedUpToLastFetch = this.process.playersProcessed;
 								
 								/// Apply generator to loaded regional processors ///
-								for(String region in RegionMap.keys.toList()) {
+								for(String region in (ENV.RegionMap).keys.toList()) {
 
-									String name = RegionIdentifiersSingular[region];
+									String name = ENV.RegionIdentifiersSingular[region];
 									
 									if(this.regionalProcessors.containsKey(region)) {
 										Processor proc = this.regionalProcessors[region];
@@ -384,11 +383,8 @@ class Dispatcher {
 	    						
 	    						Future.wait(generateBoards).then((_) {
 	    							
-	    							print("Players processed map:");
-	    							print(playersProcessedMap);
-	    							
-	    							this.save(StorageDirectory + "players-processed.json", playersProcessedMap, isJSON: true).then((_) {
-		    							print("Saved boards-latest-primary and boards-latest-mobile.");
+	    							this.save(ENV.StorageDirectory + "players-processed.json", playersProcessedMap, isJSON: true).then((_) {
+		    							ENV.log("Saved boards-latest-primary and boards-latest-mobile.", 3);
 		    							done();
 	    							});
 	    						});
@@ -410,15 +406,14 @@ class Dispatcher {
 	Future generate(Processor process, heroPlayCounts, store) {
 		Map cached = process.getLiveBoards();
         				
-		print("\n\nDispatching generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches");
-		print(cached);
+		ENV.log("Dispatching generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches", 2);
 		
 		List<Future> wait = new List();
 		
 		for(String board in cached.keys.toList()) {
 			if(cached[board]["raw"].length > 0) {
 				String first = cached[board]["raw"][0][0];
-				print("First player for $board: $first");
+				ENV.log("First player for $board: $first", 4);
 				wait.add(this.queries.getAppearancesForPlayerID(first));
 			} else {
 				wait.add(new Future(() { return {"none": 0}; }));
@@ -432,7 +427,7 @@ class Dispatcher {
 				playerTopAppearances[ response.keys.first.toString() ] = response.values.first; 
 			}
 			
-			print("Running generator for ${process.locationIdentifier}");
+			ENV.log("Running generator for ${process.locationIdentifier}", 3);
 			Generator generator = new Generator(process, this.bans, heroPlayCounts).makeBoards(store, this.recordedMatches, playerTopAppearances);
             						
 			for(String player in generator.playersToDiscard) {
@@ -440,8 +435,8 @@ class Dispatcher {
 			}
 			
 			List<Future> wait = [
-				this.save(AppDirectory + "views/boards/${process.regionalShortcode}-primary.blade.php", generator.htmlBasic, isJSON: false), 
-				this.save(AppDirectory + "views/boards/${process.regionalShortcode}-mobile.blade.php", generator.htmlMobile, isJSON: false) 
+				this.save(ENV.AppDirectory + "views/boards/${process.regionalShortcode}-primary.blade.php", generator.htmlBasic, isJSON: false), 
+				this.save(ENV.AppDirectory + "views/boards/${process.regionalShortcode}-mobile.blade.php", generator.htmlMobile, isJSON: false) 
 			];
 			
 			return wait;
@@ -455,68 +450,61 @@ class Dispatcher {
 	 */
 	void clean () {
 		
-		print("\n\n=========================================");
-		print("============ Running clean ==============");
-		print("=========================================");
+		ENV.log("Running clean.", 1);
 		
 		this._pushTimer.cancel();
 		this._cleanTimer.cancel();
 		
-		this.stats.recordClean(this.process.getLiveBoards(), this.process.getAppearances(), PrecisionModifierMap).then((_) {
+		this.stats.recordClean(this.process.getLiveBoards(), this.process.getAppearances()).then((_) {
 			
-			print(" | Getting board averages. \n |");
+			ENV.log("Getting board averages.", 3);
 			
 			List<Future> wait = new List();
 			Map statMap = new Map();
-			for(String board in Boards.keys.toList()) {
+			for(String board in (ENV.Boards).keys.toList()) {
 				
 				Future getBoardAverage = this.queries.getBoardAverage(board.toLowerCase());
 				wait.add(getBoardAverage);
 				
 				getBoardAverage.then((List result)  {
-					print(" | ...$board: ${result[0][0].toStringAsFixed(2)} ");
+					ENV.log("...$board: ${result[0][0].toStringAsFixed(2)}", 3);
 					statMap[board] = result[0][0].toStringAsFixed(2);
 				});  
 			}
 			
 			Future.wait(wait).then((List values) {
 				
-    			print(" |");
-				
-				print(" | Done retrieving board averages, moving to play counts...");
+				ENV.log("Done retrieving board averages, moving to play counts...", 4);
 				
 				this.queries.retrieveHeroPlayCounts().then((heroPlayCounts) {
 
 						
-					print(" | Sorting hero play counts (${heroPlayCounts.length})...");
-
+					ENV.log("Sorting hero play counts (${heroPlayCounts.length})...", 3);
 					
-					print(heroPlayCounts);
 					heroPlayCounts.sort((a, b) => (b[1] - a[1]));
-					print(heroPlayCounts);
 					
-					print(" | Hero play counts map sorted. (${heroPlayCounts.length})");
+					ENV.log("Hero play counts map sorted. (${heroPlayCounts.length})", 3);
 					
 					Map<int, int> heroPlaysMap = new Map();
 					
 					for(List hero in heroPlayCounts) {
-						print(" | ${hero[0]}: ${hero[1]}");
+						ENV.log(" | ${hero[0]}: ${hero[1]}");
 						heroPlaysMap[hero[0]] = hero[1];		
 					}
 					
-					print(" | Retrieved play counts (${heroPlaysMap.length}. \n | Generating stats...");
+					ENV.log(" | Retrieved play counts (${heroPlaysMap.length}. \n | Generating stats...");
 					
 					Generator generator = new Generator(this.process).makeStats(statMap, heroPlaysMap);
 					
-					print("STATS: \n ${generator.htmlBasic}");
+//					ENV.log("STATS: \n ${generator.htmlBasic}");
 					
 					List<Future> wait = [
-						this.save(AppDirectory + 'views/stats-latest-primary.blade.php', generator.htmlBasic, isJSON: false)
+						this.save(ENV.AppDirectory + 'views/stats-latest-primary.blade.php', generator.htmlBasic, isJSON: false)
 					];
 					
 					Future.wait(wait).then((_) {
 						
-						print("Finished saving stats, re-instantiating Processor() and running start()");
+						ENV.log("Finished saving stats, re-instantiating Processor() and running start()", 4);
 						
 						this.instantiateProcessors();
 						
@@ -609,7 +597,7 @@ class Dispatcher {
 			.catchError((Error error) {
 				this.requestFailure(error.toString());
 				this.util.printError(error);
-				print("Set timer for next request...\n\n\n");
+				ENV.log("Set timer for next request...\n\n\n");
 				return new Future.delayed(const Duration(seconds:5), () => this.getUserData(idMap, requestIDs));
 			});
 	}
@@ -736,12 +724,12 @@ class Dispatcher {
 	 * Request failed.
 	 */
 	void requestFailure([String reason="unknown"]) {
-		print(" > RequestFailure ($reason)");
+		ENV.log("RequestFailure ($reason)", 4);
 		if(this.steamPingAttempts == 0) 
 			this.steamDownStartTime = new DateTime.now();
 		
 		if(this.steamPingAttempts == 10) {
-			print(" > Putting the API down...");
+			ENV.log("Putting the API down...", 4);
 			this.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
 			
 			this.destroyTimers();

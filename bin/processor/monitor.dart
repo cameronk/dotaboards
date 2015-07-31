@@ -85,7 +85,7 @@ class Monitor {
 		this.pushList.add(newDataThisPush);
 		
 		/// Store in a file on the server ///
-		this.save("$StorageDirectory/monitors/monitor-${now.year}-${now.month}-${now.day}.json", this.pushList, isJSON: true);
+		this.save(ENV.StorageDirectory + "monitors/monitor-${now.year}-${now.month}-${now.day}.json", this.pushList, isJSON: true);
 		
 		/// Reset push-based variables to 0 ///
 		this.reset();

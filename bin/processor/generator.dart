@@ -7,7 +7,7 @@ class Generator {
 	List bans;
 	Map<String, Map> boards;
 	List<List<int>> heroPlayCounts;
-	Map _PrecisionModifier;
+//	Map _PrecisionModifier;
 	
 	String htmlBasic  = "";
 	String htmlMobile = "";
@@ -22,7 +22,7 @@ class Generator {
 		this.process = process;
 		this.bans = bans;
 		this.heroPlayCounts = heroPlayCounts;
-		this._PrecisionModifier = PrecisionModifierMap;
+//		this._PrecisionModifier = ENV.PrecisionModifierMap;
 		
 		print(" | Instantiated generator for ${process.regionalShortcode}");
 	}
@@ -73,15 +73,15 @@ class Generator {
 		
 		this.htmlBasic += "<!-- Starting stats... --><div class='column'><div class='board' id='mod'><div class='first'><h1 class='reset'>Average stats needed <small>to reach the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
 		
-		for(String board in Boards.keys.toList()) {
+		for(String board in (ENV.Boards).keys.toList()) {
 			String value = (double.parse(statMap[board]) > 1000) ? (this.util.intToShort(double.parse(statMap[board])) + "k") : statMap[board];
-			this.htmlBasic += "<li><span>${BoardNames[board.toUpperCase()][0]}</span><div class='label'>$value</div></li>";
+			this.htmlBasic += "<li><span>${ENV.BoardNames[board.toUpperCase()][0]}</span><div class='label'>$value</div></li>";
 		}
 		
 		this.htmlBasic += "</ul><!--rest--></div><!--#scroll-wrapper for stats section--></div><!--.board--></div><!--.column--><div class='column'><div class='board'><div class='first'><h1 class='reset'>Hero popularity <small>in order of appearances on the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
 		
 		for(int heroID in heroPlaysMap.keys.toList()) {
-			this.htmlBasic += "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${Heroes[heroID.toString()][0]}_sb.png' /><span>${Heroes[heroID.toString()][1]}</span><div class='label'>${heroPlaysMap[heroID]}</div></li>";							 		
+			this.htmlBasic += "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID.toString()][0]}_sb.png' /><span>${ENV.Heroes[heroID.toString()][1]}</span><div class='label'>${heroPlaysMap[heroID]}</div></li>";							 		
 		}
 		
 		this.htmlBasic += "</ul></div></div></div><!-- Ending stats... -->";
@@ -123,12 +123,12 @@ class Generator {
 		
 					
 					/// Lots of player information! ///
-					dynamic<double, String> value	= player[1] / this._PrecisionModifier[boardName];
+					dynamic<double, String> value	= player[1] / ENV.PrecisionModifierMap[boardName];
 					String name 					= user["name"].length > 0 ? this.htmlEntities(user["name"]) : "<em>no name provided</em>";
 					String id64						= this.util.to64(int.parse(player[0])).toString();
 					String pic 						= user['pic'];
 					
-					String realBoardName 	= BoardNames[boardName][1];
+					String realBoardName 	= ENV.BoardNames[boardName][1];
 					String playerDetails 	= "<span>${detailed['kills']} kills</span> &nbsp; <span>${detailed['deaths']} deaths</span> &nbsp; <span>${detailed['assists']} assists</span>";
 					String matchData		= " data-player-id='${player[0]}' data-match-id='${detailed['match']}'";
 					String location			= this.util.getCluster( detailed['loc'] );
@@ -136,9 +136,9 @@ class Generator {
 					int heroPlayIndex		= this.util.getHeroPlayIndex(detailed['hero'], this.heroPlayCounts);
 					String popularity 		= (heroPlayIndex + 1).toString() + this.util.intAddSuffix(heroPlayIndex + 1);
 					String playCount 		= this.util.intToShort(this.heroPlayCounts[heroPlayIndex][1]);
-					String heroPopup		= "class='popup' data-title='${Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount}k plays)' data-position='bottom center'";
+					String heroPopup		= "class='popup' data-title='${ENV.Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount}k plays)' data-position='bottom center'";
 					
-					print(" | #${position + 1} ${name}: ${value} as ${Heroes[heroID][1]}");
+					print(" | #${position + 1} ${name}: ${value} as ${ENV.Heroes[heroID][1]}");
 					
 					/// Set variables based on board type. ///
 					switch(boardName) {
@@ -216,8 +216,8 @@ class Generator {
 							this.htmlMobile += "<ul class='rest'>";
 						}
 						
-						this.htmlBasic  += "<li${matchData}><img src='//cdn.dota2.com/apps/dota2/images/heroes/${Heroes[heroID][0]}_sb.png' ${heroPopup}/><span title='${name}'>${name}</span><div class='label'>${value}</div><div class='detailed'><span class='location-buff' data-loc='${location}'>${location}</span>${playerDetails}</div></li>";
-	                    this.htmlMobile	+= "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${Heroes[heroID][0]}_sb.png' /><span>${name}</span><div class='label'>${value}</div></li>";
+						this.htmlBasic  += "<li${matchData}><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' ${heroPopup}/><span title='${name}'>${name}</span><div class='label'>${value}</div><div class='detailed'><span class='location-buff' data-loc='${location}'>${location}</span>${playerDetails}</div></li>";
+	                    this.htmlMobile	+= "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' /><span>${name}</span><div class='label'>${value}</div></li>";
 	                    					
 						if(position == (board["raw"].length - discarded)) {
 							hasFinished = true;

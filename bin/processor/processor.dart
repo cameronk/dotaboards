@@ -59,7 +59,6 @@ class Processor {
 	
 	Map<String, int> 					_Appearances;
 	Set<String>							_RecentlyRetrievedPlayers;
-	Map<String, int>					_PrecisionModifier;
 	Util 								util;
 	
 	String regionalShortcode;
@@ -111,12 +110,11 @@ class Processor {
         	}
         };
 		
-		this._CumulativeStatistics 		= CumulativeStatistics;
+		this._CumulativeStatistics 		= new Map<String, Map<String, int>>.from(ENV.CumulativeStatistics);
 		
 		this._Appearances				= new Map<String, int>();
 		this._RecentlyRetrievedPlayers 	= new Set<String>();
 		this.util 						= new Util();
-		this._PrecisionModifier 		= PrecisionModifierMap;
 		
 		this.regionalShortcode 			= regionalShortcode;
 		this.locationIdentifier			= locationIdentifier;
@@ -252,7 +250,7 @@ class Processor {
 		print(" | ${player['id']} (${this.regionalShortcode}) -> $board");
 		//print("Before: " + JSON.encode(this._Boards[board]['raw']));
 		
-		int value = (val * this._PrecisionModifier[board]).toInt();
+		int value = (val * ENV.PrecisionModifierMap[board]).toInt();
 		
 		this.playerAppeared(player['id']);
 		this.updateCumulativeStatistics(player);
@@ -262,7 +260,7 @@ class Processor {
 			
 			/// Overwrite player's previous entry if lower than new one. ///
 			int currentRawBoardIndex = this.findRawIndexByID(board, player["id"]);
-			this.util.Log("Found player ${player['id']} on ${this.regionalShortcode}-${board} at index ${currentRawBoardIndex.toString()}");
+			ENV.log("Found player ${player['id']} on ${this.regionalShortcode}-${board} at index ${currentRawBoardIndex.toString()}", 4);
 			
 			if(value > this._Boards[board]["raw"][currentRawBoardIndex][1]) {
 				
@@ -296,30 +294,30 @@ class Processor {
 	/**
 	 * Save boards to JSON file.
 	 */
-	Future<File> saveBoards() {
-		
-		this.sortBoards(); /// Run a complete sort before output.
-		
-		Future<File> doSave(File file) {
-			var json = JSON.encode(this._Boards);
-			
-			try { 
-				return file.writeAsString(json);
-			} catch(e) {
-				this.util.Log("Found error at file save point");
-			}
-		};
-		
-		var file = new File(StorageDirectory + "boards.json");
-		return file.exists().then((x) {
-			if(x == true) {
-				return file.create().then((file) => doSave(file));
-			} else {
-				this.util.Log("returned file exists false");
-				return doSave(file);
-			}
-		});
-	}
+//	Future<File> saveBoards() {
+//		
+//		this.sortBoards(); /// Run a complete sort before output.
+//		
+//		Future<File> doSave(File file) {
+//			var json = JSON.encode(this._Boards);
+//			
+//			try { 
+//				return file.writeAsString(json);
+//			} catch(e) {
+//				ENV.log("Found error at file save point", 4);
+//			}
+//		};
+//		
+//		var file = new File(ENV.StorageDirectory + "boards.json");
+//		return file.exists().then((x) {
+//			if(x == true) {
+//				return file.create().then((file) => doSave(file));
+//			} else {
+//				ENV.log("Returned file exists false", 4);
+//				return doSave(file);
+//			}
+//		});
+//	}
 	
 	
 	/**
@@ -329,7 +327,7 @@ class Processor {
 	 */
 	double getBase(String board, int def) {
 		this.sortBoard(board); /// Sort to ensure we're returning the true 'last' value.
-		return (this._Boards[board]["raw"].length >= 100) ? (this._Boards[board]["raw"].last[1].toDouble() / this._PrecisionModifier[board]) : def.toDouble();
+		return (this._Boards[board]["raw"].length >= 100) ? (this._Boards[board]["raw"].last[1].toDouble() / ENV.PrecisionModifierMap[board]) : def.toDouble();
 	}
 	
 	
