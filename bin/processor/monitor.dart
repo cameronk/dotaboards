@@ -17,7 +17,7 @@ class Monitor {
 	 * Monitor statistics about the daemon over its lifetime.
 	 */
 	Monitor() {
-		print("Instantiated monitor.");
+		ENV.log("Instantiated monitor.", type: 4);
 		
 		this.reset();
 	}
@@ -68,7 +68,7 @@ class Monitor {
 	 */
 	void push() {
 		
-		print("[Monitor] running push sequence @ loop ${this.averageMatchProcessingDelays.length}");
+		ENV.log("[Monitor] running push sequence @ loop ${this.averageMatchProcessingDelays.length}", type: 4);
 		
 		DateTime now = new DateTime.now();
 		
@@ -85,7 +85,7 @@ class Monitor {
 		this.pushList.add(newDataThisPush);
 		
 		/// Store in a file on the server ///
-		this.save("$StorageDirectory/monitors/monitor-${now.year}-${now.month}-${now.day}.json", this.pushList, isJSON: true);
+		this.save(ENV.StorageDirectory + "monitors/monitor-${now.year}-${now.month}-${now.day}.json", this.pushList, isJSON: true);
 		
 		/// Reset push-based variables to 0 ///
 		this.reset();

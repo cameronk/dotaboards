@@ -6,7 +6,12 @@ import "request/dispatcher.dart";
 import "database/pool.dart";
 import "util/util.dart";
 
-String $ENV = "PRODUCTION";
+String $ENV = "LOCAL";
+
+
+String AppDirectory;
+String StorageDirectory;
+
 
 /**
  * Here's where it all gets started.
@@ -16,33 +21,39 @@ String $ENV = "PRODUCTION";
  */
 void main(List<String> args) {
 	
-	
 	/// Set our environment variable ///
 	if(args.length > 0) {
 		$ENV = args[0].toUpperCase();
 	}
 	
-
-	print("________          __        ___.                          .___      ");
-	print("\______ \   _____/  |______ \_ |__   _________ _______  __| _/______");
-	print(" |    |  \ /  _ \   __\__  \ | __ \ /  _ \__  \\_  __ \/ __ |/  ___/");
-	print(" |    `   (  <_> )  |  / __ \| \_\ (  <_> ) __ \|  | \/ /_/ |\___ \ ");
-	print("/_______  /\____/|__| (____  /___  /\____(____  /__|  \____ /____  >");
-	print("         \/                 \/    \/           \/           \/    \/");
-	print("====================================================================");
-	print("					             ENV: ${$ENV}							");
-	print("====================================================================");
+	ENV = new Environment($ENV);
 	
-
-	var util = new Util();
-	ConnectionPool pool = new Pool($ENV).create();
-	var queries = new QueryHelper(pool);
 	
-	queries.truncateMatches()
-		.then((_) => queries.retrieveBans())
-		.then((list) {
-			new Dispatcher(list, queries);
-			return true;
-		});
+	ENV.setup().then((_) {
+
+		ENV.log("________          __        ___.                          .___      ");
+		ENV.log("\______ \   _____/  |______ \_ |__   _________ _______  __| _/______");
+		ENV.log(" |    |  \ /  _ \   __\__  \ | __ \ /  _ \__  \\_  __ \/ __ |/  ___/");
+		ENV.log(" |    `   (  <_> )  |  / __ \| \_\ (  <_> ) __ \|  | \/ /_/ |\___ \ ");
+		ENV.log("/_______  /\____/|__| (____  /___  /\____(____  /__|  \____ /____  >");
+		ENV.log("         \/                 \/    \/           \/           \/    \/");
+		ENV.log("====================================================================");
+		ENV.log("ENV: ${ENV.name}, hash: ${ENV.hash}");
+		ENV.log("====================================================================");
+		
+	
+		var util = new Util();
+		
+		ConnectionPool pool = new Pool().create();
+		var queries = new QueryHelper(pool);
+		
+		queries.truncateMatches()
+			.then((_) => queries.retrieveBans())
+			.then((list) {
+				new Dispatcher(list, queries);
+				return true;
+			});
+		
+	});
 	
 }

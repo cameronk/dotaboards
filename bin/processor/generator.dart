@@ -7,7 +7,7 @@ class Generator {
 	List bans;
 	Map<String, Map> boards;
 	List<List<int>> heroPlayCounts;
-	Map _PrecisionModifier;
+//	Map _PrecisionModifier;
 	
 	String htmlBasic  = "";
 	String htmlMobile = "";
@@ -22,9 +22,9 @@ class Generator {
 		this.process = process;
 		this.bans = bans;
 		this.heroPlayCounts = heroPlayCounts;
-		this._PrecisionModifier = PrecisionModifierMap;
+//		this._PrecisionModifier = ENV.PrecisionModifierMap;
 		
-		print(" | Instantiated generator for ${process.regionalShortcode}");
+		ENV.log("Instantiated generator for ${process.regionalShortcode}", type: 3);
 	}
 	
 	
@@ -33,9 +33,7 @@ class Generator {
 	 */
 	Generator makeBoards(Map store, Set recordedMatches, Map playerTopAppearances) {
 		
-		print("\n=========================================");
-		print("======== MakeBoards for ${this.process.regionalShortcode} =========");
-		print("=========================================\n");
+		ENV.log("MakeBoards for ${this.process.regionalShortcode}=", type: 1);
 		
 		/// Get a cached version of the current boards for rendering. ///
 		this.boards = this.process.getLiveBoards();
@@ -59,8 +57,7 @@ class Generator {
 		this.htmlBasic  += "</div><!-- end boards -->";
 		this.htmlMobile += "</div><!-- end boards -->";
 		
-		print("Completed MakeBoards for ${this.process.regionalShortcode} in ${new DateTime.now().difference(now)} ");
-		print("=========================================\n");
+		ENV.log("Completed MakeBoards for ${this.process.regionalShortcode} in ${new DateTime.now().difference(now)} ", type: 4);
 		
 		return this;
 	}
@@ -73,15 +70,15 @@ class Generator {
 		
 		this.htmlBasic += "<!-- Starting stats... --><div class='column'><div class='board' id='mod'><div class='first'><h1 class='reset'>Average stats needed <small>to reach the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
 		
-		for(String board in Boards.keys.toList()) {
+		for(String board in (ENV.Boards).keys.toList()) {
 			String value = (double.parse(statMap[board]) > 1000) ? (this.util.intToShort(double.parse(statMap[board])) + "k") : statMap[board];
-			this.htmlBasic += "<li><span>${BoardNames[board.toUpperCase()][0]}</span><div class='label'>$value</div></li>";
+			this.htmlBasic += "<li><span>${ENV.BoardNames[board.toUpperCase()][0]}</span><div class='label'>$value</div></li>";
 		}
 		
 		this.htmlBasic += "</ul><!--rest--></div><!--#scroll-wrapper for stats section--></div><!--.board--></div><!--.column--><div class='column'><div class='board'><div class='first'><h1 class='reset'>Hero popularity <small>in order of appearances on the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
 		
 		for(int heroID in heroPlaysMap.keys.toList()) {
-			this.htmlBasic += "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${Heroes[heroID.toString()][0]}_sb.png' /><span>${Heroes[heroID.toString()][1]}</span><div class='label'>${heroPlaysMap[heroID]}</div></li>";							 		
+			this.htmlBasic += "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID.toString()][0]}_sb.png' /><span>${ENV.Heroes[heroID.toString()][1]}</span><div class='label'>${heroPlaysMap[heroID]}</div></li>";							 		
 		}
 		
 		this.htmlBasic += "</ul></div></div></div><!-- Ending stats... -->";
@@ -94,8 +91,8 @@ class Generator {
 	 */
 	void renderBoardsHTML(Map board, Map store, String boardName, Map topAppearances) {
 		
-		print(" | Rendering boards HTML for ${this.process.regionalShortcode}-$boardName");
-		print(" | ...${board['raw'].length} on boards");
+		ENV.log("Rendering boards HTML for ${this.process.regionalShortcode}-$boardName", type: 3);
+		ENV.log("...${board['raw'].length} on boards", type: 3);
 		
 		/// 					  		///
 		/// Base HTML for this board. 	///
@@ -123,12 +120,12 @@ class Generator {
 		
 					
 					/// Lots of player information! ///
-					dynamic<double, String> value	= player[1] / this._PrecisionModifier[boardName];
+					dynamic<double, String> value	= player[1] / ENV.PrecisionModifierMap[boardName];
 					String name 					= user["name"].length > 0 ? this.htmlEntities(user["name"]) : "<em>no name provided</em>";
 					String id64						= this.util.to64(int.parse(player[0])).toString();
 					String pic 						= user['pic'];
 					
-					String realBoardName 	= BoardNames[boardName][1];
+					String realBoardName 	= ENV.BoardNames[boardName][1];
 					String playerDetails 	= "<span>${detailed['kills']} kills</span> &nbsp; <span>${detailed['deaths']} deaths</span> &nbsp; <span>${detailed['assists']} assists</span>";
 					String matchData		= " data-player-id='${player[0]}' data-match-id='${detailed['match']}'";
 					String location			= this.util.getCluster( detailed['loc'] );
@@ -136,9 +133,9 @@ class Generator {
 					int heroPlayIndex		= this.util.getHeroPlayIndex(detailed['hero'], this.heroPlayCounts);
 					String popularity 		= (heroPlayIndex + 1).toString() + this.util.intAddSuffix(heroPlayIndex + 1);
 					String playCount 		= this.util.intToShort(this.heroPlayCounts[heroPlayIndex][1]);
-					String heroPopup		= "class='popup' data-title='${Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount}k plays)' data-position='bottom center'";
+					String heroPopup		= "class='popup' data-title='${ENV.Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount}k plays)' data-position='bottom center'";
 					
-					print(" | #${position + 1} ${name}: ${value} as ${Heroes[heroID][1]}");
+					ENV.log("#${position + 1} ${name}: ${value} as ${ENV.Heroes[heroID][1]}", type: 3);
 					
 					/// Set variables based on board type. ///
 					switch(boardName) {
@@ -188,10 +185,10 @@ class Generator {
 						try {
 							
 							if(topAppearances.containsKey(player[0])) {
-								/*print("Player was found in topAppearances");
-								print("Player0 is string: ${player[0] is String}");
-								print("First key is String: ${topAppearances.keys.first is String}");
-								print("TopAppearances:player0 is int: ${topAppearances[player[0]] is int}");*/
+								/*ENV.log("Player was found in topAppearances");
+								ENV.log("Player0 is string: ${player[0] is String}");
+								ENV.log("First key is String: ${topAppearances.keys.first is String}");
+								ENV.log("TopAppearances:player0 is int: ${topAppearances[player[0]] is int}");*/
 								appearancesCount = topAppearances[player[0]];
 							} else appearancesCount = 1;
 						
@@ -205,7 +202,7 @@ class Generator {
 	
 							
 						} catch(e) {
-							print(e.toString());
+							ENV.log(e.toString(), type: 4);
 							throw e;
 						}
 					} else {
@@ -216,8 +213,8 @@ class Generator {
 							this.htmlMobile += "<ul class='rest'>";
 						}
 						
-						this.htmlBasic  += "<li${matchData}><img src='//cdn.dota2.com/apps/dota2/images/heroes/${Heroes[heroID][0]}_sb.png' ${heroPopup}/><span title='${name}'>${name}</span><div class='label'>${value}</div><div class='detailed'><span class='location-buff' data-loc='${location}'>${location}</span>${playerDetails}</div></li>";
-	                    this.htmlMobile	+= "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${Heroes[heroID][0]}_sb.png' /><span>${name}</span><div class='label'>${value}</div></li>";
+						this.htmlBasic  += "<li${matchData}><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' ${heroPopup}/><span title='${name}'>${name}</span><div class='label'>${value}</div><div class='detailed'><span class='location-buff' data-loc='${location}'>${location}</span>${playerDetails}</div></li>";
+	                    this.htmlMobile	+= "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' /><span>${name}</span><div class='label'>${value}</div></li>";
 	                    					
 						if(position == (board["raw"].length - discarded)) {
 							hasFinished = true;
@@ -240,13 +237,13 @@ class Generator {
 					/// so we should remove them from the boards to
 					/// make room for other people
 					this.playersToDiscard.add( player[0] );
-					print(" | Discarding ${player[0]} with: user(null)=${user==null} detailed(null)=${detailed==null}, banned=${this.bans.contains(player[0])}");
+					ENV.log("Discarding ${player[0]} with: user(null)=${user==null} detailed(null)=${detailed==null}, banned=${this.bans.contains(player[0])}", type: 3);
 					
 				}
 			} catch(e, stack) {
-				print(" | \n | ERROR:");
-				print(" | $e \n");
-				print(" | $stack");
+				ENV.log("ERROR:", type: 4);
+				ENV.log("$e \n", type: 3);
+				ENV.log("$stack", type: 3);
 				continue;
 			}
 		
@@ -259,7 +256,7 @@ class Generator {
 		
 		this.htmlBasic += "</div><!--[end .board]--></div><!--[end .column]-->";
 		
-		print(" | ...done rendering ${boardName}\n | \n | ====================== \n |");
+		ENV.log("...done rendering ${boardName}", type: 3);
 		
 	}
 	

@@ -9,7 +9,7 @@ class Statistics {
 	
 	Statistics(QueryHelper queries) {
 		this.queries = queries;
-		statsLogFile = new File(StorageDirectory + "statistics.txt");
+		statsLogFile = new File(ENV.StorageDirectory + "statistics.txt");
 	}
 	
 	
@@ -37,7 +37,7 @@ class Statistics {
 	
 	
 	
-	Future recordClean( Map cachedBoards, Map<String, int> appearances, Map<String, int> PrecisionModifierMap) {
+	Future recordClean( Map cachedBoards, Map<String, int> appearances) {
 		print(" | Recording stats for CLEAN.");
 		
 		Map<String, String> stats 	= new Map();
@@ -48,7 +48,7 @@ class Statistics {
 			double total = 0.00;
 			
 			for(List player in cachedBoards[board]["raw"]) {
-				total += (player[1] / PrecisionModifierMap[board]);
+				total += (player[1] / ENV.PrecisionModifierMap[board]);
 			}
 			
 			for(String player in cachedBoards[board]["det"].keys.toList()) {

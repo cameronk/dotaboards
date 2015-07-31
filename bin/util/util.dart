@@ -1,24 +1,16 @@
 library util;
 
 import "dart:io";
+import "dart:math";
+import "dart:async";
 import "package:mailer/mailer.dart";
 
 part "static.dart";
-
+part "environment.dart";
 
 
 class Util {
-	
-	File _logFile;
-	
-	
-	Util() {
-		File file = new File(StorageDirectory + "log.txt");
-		file.writeAsString("").then((file) {
-			this._logFile = file;
-		});
-	}
-	
+
 	
 	/**
 	 * Print an error
@@ -32,17 +24,6 @@ class Util {
 		print("======================================================\n");
 	}
 	
-	
-	/**
-	 * Print log info
-	 * 
-	 * Save to log file.
-	 */
-	void Log(dynamic stuff) {
-    	print(stuff.toString());
-    	this._logFile.writeAsString(stuff.toString() + "\n", mode: APPEND);
-    }
-
 	
 	
 	/**
