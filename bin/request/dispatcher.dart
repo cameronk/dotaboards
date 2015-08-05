@@ -14,7 +14,7 @@ part "dispatcherror.dart";
 
 class Dispatcher {
 	
-	List bans;
+	List<int> bans;
 	int DaemonLifetimeRecordedCount = 0;
 	Set recordedMatches 		= new Set();
 	int lastMatchSequenceNum;
@@ -40,6 +40,7 @@ class Dispatcher {
 	
 	Timer _pushTimer;
 	Timer _cleanTimer;
+	Timer _boardsDebugTimer;
 	Timer fetchRestartTimer;
 	DateTime lastClean = new DateTime.now();
 	
@@ -47,7 +48,7 @@ class Dispatcher {
 	/**
 	 * Instantiate a new dispatcher object.
 	 */
-	Dispatcher([List bans, QueryHelper queries]) {
+	Dispatcher(List bans, QueryHelper queries) {
 		
 		this.bans = bans;
 		this.queries = queries;
@@ -58,8 +59,14 @@ class Dispatcher {
 		this.util = new Util(); 
 		this.stats = new Statistics(this.queries);
 		
+		
 		ENV.log("\n\n\n\n");
-		ENV.log("STARTING", type: 1);
+		ENV.log("Instantiating a new Dispatcher.", type: 1);
+		
+		bans.forEach((id) {
+			ENV.log("Banned: ${id}", type: 3);
+		});
+		
 		this.getLatestMatchSeqNum().then((num) {
 			this.lastMatchSequenceNum = num;
 			this.start();
@@ -92,9 +99,10 @@ class Dispatcher {
 	 * Begin the first fetch, initialize timers.
 	 */
 	void start() {
-		ENV.log("at ${this.lastMatchSequenceNum.toString()}", type: 4);
+		ENV.log("Starting loop sequence at ${this.lastMatchSequenceNum.toString()}", type: 4);
 		/// Start loops ///
-		
+
+		ENV.log("\n\n\n\n");
 		this.fetch();
 		this.initTimers();
 	}
@@ -104,12 +112,22 @@ class Dispatcher {
 	 * Construct timers.
 	 */
 	void initTimers() {
+		
+		/// Push timer ///
 		this._pushTimer = new Timer.periodic(const Duration(seconds: 60), (_) {
 			DateTime now = new DateTime.now();
-			if([0, 20, 40].contains(now.minute)) {
-				this.waitingToPush = true;
+			if(ENV.pushMode == "quick") {
+				if([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].contains(now.minute)) {
+					this.waitingToPush = true;
+				}
+			} else {
+				if([0, 20, 40].contains(now.minute)) {
+					this.waitingToPush = true;
+				}
 			}
 		});
+		
+		/// Clean timer ///
 		this._cleanTimer = new Timer.periodic(const Duration(seconds: 60), (_) {
 			DateTime now = new DateTime.now();
 			if( (now.hour == 0 && now.minute == 0) || ( this.lastClean.difference(new DateTime.now()).inHours >= 24 )) {
@@ -117,6 +135,13 @@ class Dispatcher {
 				this.waitingToClean = true;
 			}
 		});
+		
+		/// Debug timer ///
+		if(ENV.pushMode == "quick") {
+			this._boardsDebugTimer = new Timer.periodic(const Duration(seconds: 60), (_) {
+    			ENV.log(JSON.encode(this.process.getLiveBoards()));
+    		});
+		}
 	}
 	
 	
@@ -146,7 +171,10 @@ class Dispatcher {
 					if(response.statusCode == 200) {
 						
 						this.requestSuccess();
-						this.fetchRestartTimer.cancel();
+						
+						if(this.fetchRestartTimer is Timer) {
+							this.fetchRestartTimer.cancel();
+						}
 						
 						//ENV.log("BODY: ${response.body.substring(0, 10)} ...");
 						final Map result = JSON.decode(response.body)["result"];
@@ -180,7 +208,10 @@ class Dispatcher {
 										for(Map player in match['players']) {
 											
 											/// 2.1: Check if player meets basic criteria. ///
-											if( (player['account_id'] != this._privatePlayer) && player['leaver_status'] == 0 && (ENV.Heroes).containsKey(player['hero_id'].toString()) && !this.bans.contains(player['account_id']) ) {
+											if( (player['account_id'] != this._privatePlayer) 
+												&& player['leaver_status'] == 0 
+												&& (ENV.Heroes).containsKey(player['hero_id'].toString()) 
+												&& !this.bans.contains(player['account_id']) ) {
 												
 												players[player['account_id']] = this.buildPlayerMap(player, match);
 												
@@ -427,7 +458,8 @@ class Dispatcher {
 			
 			ENV.log("Running generator for ${process.locationIdentifier}", type: 3);
 			Generator generator = new Generator(process, this.bans, heroPlayCounts).makeBoards(store, this.recordedMatches, playerTopAppearances);
-            						
+            				
+			ENV.log("Running discards for ${process.locationIdentifier}", type: 3);
 			for(String player in generator.playersToDiscard) {
 				process.discardPlayer(player);
 			}
@@ -610,8 +642,17 @@ class Dispatcher {
 	/**
 	 * Write data to file.
 	 */
-	Future<File> save(String file, dynamic<Map, List, String> data, {isJSON: true}) => new File(file).writeAsString(isJSON == true ? JSON.encode(data) : data);
+	Future<File> save(String f, dynamic<Map, List, String> data, {isJSON: true}) {
+    		
+		File file = new File(f);
+		
+		if(file.exists() == false) {
+			file.create().then((File file) {
+				file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+			});
+		} return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
 	
+	}
 	
 	/**
 	 * Assess the validity of a match.

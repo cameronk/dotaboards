@@ -33,7 +33,7 @@ class Generator {
 	 */
 	Generator makeBoards(Map store, Set recordedMatches, Map playerTopAppearances) {
 		
-		ENV.log("MakeBoards for ${this.process.regionalShortcode}=", type: 1);
+		ENV.log("MakeBoards for ${this.process.regionalShortcode}", type: 1);
 		
 		/// Get a cached version of the current boards for rendering. ///
 		this.boards = this.process.getLiveBoards();
@@ -91,8 +91,9 @@ class Generator {
 	 */
 	void renderBoardsHTML(Map board, Map store, String boardName, Map topAppearances) {
 		
-		ENV.log("Rendering boards HTML for ${this.process.regionalShortcode}-$boardName", type: 3);
-		ENV.log("...${board['raw'].length} on boards", type: 3);
+		ENV.log("Rendering boards HTML for ${this.process.regionalShortcode}-$boardName:", type: 2);
+		ENV.log("...${board['raw'].length} on boards", type: 4);
+//		ENV.log(JSON.encode(this.bans), type: 3);
 		
 		/// 					  		///
 		/// Base HTML for this board. 	///
@@ -116,8 +117,7 @@ class Generator {
 						
 				/// If user is in the store (safety precaution), detailed data was on boards ///
 				/// and the player isn't banned (does this work?)							 ///
-				if( (user != null) && (detailed != null) && (!this.bans.contains(player[0])) ) {
-		
+				if( (user != null) && (detailed != null) && (this.bans.contains(int.parse(player[0])) == false)) {
 					
 					/// Lots of player information! ///
 					dynamic<double, String> value	= player[1] / ENV.PrecisionModifierMap[boardName];
@@ -130,12 +130,20 @@ class Generator {
 					String matchData		= " data-player-id='${player[0]}' data-match-id='${detailed['match']}'";
 					String location			= this.util.getCluster( detailed['loc'] );
 					String heroID 			= detailed['hero'].toString();
-					int heroPlayIndex		= this.util.getHeroPlayIndex(detailed['hero'], this.heroPlayCounts);
+					int heroPlayIndex		= this.getHeroPlayIndex(detailed['hero']);
+					String playCount;
 					String popularity 		= (heroPlayIndex + 1).toString() + this.util.intAddSuffix(heroPlayIndex + 1);
-					String playCount 		= this.util.intToShort(this.heroPlayCounts[heroPlayIndex][1]);
-					String heroPopup		= "class='popup' data-title='${ENV.Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount}k plays)' data-position='bottom center'";
 					
-					ENV.log("#${position + 1} ${name}: ${value} as ${ENV.Heroes[heroID][1]}", type: 3);
+					if(heroPlayIndex == -1) {
+						ENV.log("WARNING: hero play index missing for $heroID", type:4, level: 2);
+						playCount = "?";
+					} else {
+						playCount = this.util.intToShort(this.heroPlayCounts[heroPlayIndex][1]) + "k";
+					}
+					
+					String heroPopup		= "class='popup' data-title='${ENV.Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount} plays)' data-position='bottom center'";
+					
+					ENV.log("#${position} ${name} [${player[0]}]: ${value} as ${ENV.Heroes[heroID][1]} ($popularity)", type: 3, level: 0);
 					
 					/// Set variables based on board type. ///
 					switch(boardName) {
@@ -266,5 +274,16 @@ class Generator {
 	 */
 	String htmlEntities(String str) => str.replaceAll(new RegExp(r"&"), '&amp;').replaceAll(new RegExp(r"<"), '&lt;').replaceAll(new RegExp(r">"), '&gt;').replaceAll(new RegExp("\""), '&quot;');
 	
-	
+
+	/**
+	 * Get the index of (hero) in the hero plays list.
+	 */
+	int getHeroPlayIndex(int hero) => this.heroPlayCounts.indexOf( 
+		this.heroPlayCounts.firstWhere( 
+			(element) => element[0] == hero 
+		, orElse: () {
+			return -1;
+		})
+	);
+		
 }

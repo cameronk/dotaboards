@@ -9,6 +9,7 @@ class Environment {
 	String hash;
 	File logFile;
 	IOSink sink;
+	String pushMode = "normal";
 	
 	
 	/**
@@ -687,16 +688,30 @@ class Environment {
 				this.db		= "dotaboards_main";
 				
 				break;
+			case "TESTING-RAZORBACK":
+
+				/// Setup storage directories ///
+				this.AppDirectory 		= "/home/razorback/web/app/";
+				this.StorageDirectory	= "/home/razorback/daemon/storage/";
 				
-			case "TESTING":
+				/// Setup MySQL connection ///
+				/// dbHost  = default
+				/// dbPort  = default
+				this.dbUser = "cameron-dota";
+				this.dbPass = "9238283762313586";
+				this.db		= "cameron-dota";
+				
+				break;
+				
+			case "TESTING-LANDER":
 
 				/// Setup storage directories ///
 				this.AppDirectory 		= "/home/cameron/web/app/";
 				this.StorageDirectory	= "/home/cameron/daemon/storage/";
 				
 				/// Setup MySQL connection ///
-				/// dbHost  = default
 				/// dbPort  = default
+				this.dbHost = "lander.muny.us";
 				this.dbUser = "cameron-dota";
 				this.dbPass = "9238283762313586";
 				this.db		= "cameron-dota";
@@ -715,6 +730,9 @@ class Environment {
 				this.dbUser = "cameron-dota";
 				this.dbPass = "9238283762313586";
 				this.db		= "cameron-dota";
+				
+				/// Push settings ///
+				this.pushMode = "quick";
 				
 				
 				break;

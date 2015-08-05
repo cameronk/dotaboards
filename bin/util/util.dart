@@ -46,9 +46,7 @@ class Util {
 	/**
 	 * Return a short (fixed double with precision 1) version of the integer.
 	 */
-	String intToShort(dynamic<int, double> i) {
-		return (i / 1000) > 1 ? (i / 1000).toStringAsFixed(1) : "<1";
-	}
+	String intToShort(dynamic<int, double> i) => (i / 1000) > 1 ? (i / 1000).toStringAsFixed(1) : "<1";
 
 	
 	/**
@@ -83,12 +81,6 @@ class Util {
 		else if (id >= 220 && id < 240) return "China";
 		else return "Unknown";
 	}
-	
-	
-	/**
-	 * Get the index of (hero) in the hero plays list.
-	 */
-	int getHeroPlayIndex(int hero, List<List<int>> heroPlayCounts) => heroPlayCounts.indexOf( heroPlayCounts.firstWhere( (element) => element[0] == hero ));
 	
 	
 	/**

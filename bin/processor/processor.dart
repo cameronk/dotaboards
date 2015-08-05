@@ -247,8 +247,8 @@ class Processor {
 	 */
 	void updateBoard(String board, Map player, double val) {
 		
-		print(" | ${player['id']} (${this.regionalShortcode}) -> $board");
-		//print("Before: " + JSON.encode(this._Boards[board]['raw']));
+		ENV.log("${player['id']} (${this.regionalShortcode}) -> $board", type: 4);
+		//ENV.log("Before: " + JSON.encode(this._Boards[board]['raw']));
 		
 		int value = (val * ENV.PrecisionModifierMap[board]).toInt();
 		
@@ -260,7 +260,7 @@ class Processor {
 			
 			/// Overwrite player's previous entry if lower than new one. ///
 			int currentRawBoardIndex = this.findRawIndexByID(board, player["id"]);
-			ENV.log("Found player ${player['id']} on ${this.regionalShortcode}-${board} at index ${currentRawBoardIndex.toString()}", type: 4);
+			ENV.log("Duplicate entry: Found player ${player['id']} on ${this.regionalShortcode}-${board} at index ${currentRawBoardIndex.toString()}", type: 4);
 			
 			if(value > this._Boards[board]["raw"][currentRawBoardIndex][1]) {
 				
@@ -286,8 +286,8 @@ class Processor {
 		}
 		
 
-		//print("After  :" +JSON.encode(this._Boards[board]['raw']));
-		//print("\n\n");
+		//ENV.log("After  :" +JSON.encode(this._Boards[board]['raw']));
+		//ENV.log("\n\n");
 	}
 	
 	
@@ -352,7 +352,7 @@ class Processor {
 	 * Discard a player from the boards.
 	 */
 	void discardPlayer(String id) {
-		print("==> Discarding $id");
+		ENV.log("Discarding $id from ${this.regionalShortcode}", type: 3);
 		for(String board in this._Boards.keys.toList()) {
 			
 			this._Boards[board]["raw"].removeWhere((List element) => element.contains(id));
@@ -409,7 +409,7 @@ class Processor {
 	 */
 	void updateCumulativeStatistics(Map player) {
 		
-		//print(" | Pushing ${player['id']} to cumstats (+${player['kills']})");
+		//ENV.log(" | Pushing ${player['id']} to cumstats (+${player['kills']})");
 		
 		this._CumulativeStatistics["current"]["kills"] += player["kills"];
 		this._CumulativeStatistics["current"]["deaths"] += player["deaths"];
@@ -478,7 +478,7 @@ class Processor {
 			
 			int requiredRequestCount = (id64List.length / 100).ceil();
 			for(int i = 1; i <= requiredRequestCount; i++) {
-				print("Delegating request ${i}...");
+				ENV.log("Delegating request ${i}...", type: 4);
 				
 				int stop;
 				int start = (i - 1) * 100;
@@ -504,7 +504,7 @@ class Processor {
 		int dupes = 0;
 		for(String board in this._Boards.keys) {
 			
-			print(" | Getting 64-bit id hashmap on ${this.regionalShortcode}-${board}");
+			ENV.log("Getting 64-bit id hashmap on ${this.regionalShortcode}-${board}", type: 4);
 			List<List<dynamic<String, int>>> rawBoard = this._Boards[board]["raw"];
 			
 			for(int i = 0; i < rawBoard.length; i++) {
@@ -524,7 +524,7 @@ class Processor {
 			
 		}
 		
-		print("...Returning ${ids.length} IDs");
+		ENV.log("...Returning ${ids.length} IDs", type: 4);
 		return ids;
 	}
 	

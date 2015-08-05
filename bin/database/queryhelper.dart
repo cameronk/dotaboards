@@ -44,10 +44,25 @@ class QueryHelper {
 	/**
 	 * Retreive list of bans from table.
 	 */
-	Future<List> retrieveBans() {
+	Future<List<int>> retrieveBans() {
 		ENV.log("QueryHelper::retrieveBans()", type: 3);
+		
+//		{
+//        				List ids = new List();
+//        				return results.forEach((row) {
+//        					ids.add(row.id);
+//        				}).then((_) {
+//        					return ids;
+//        				});
+//        				
+//        			}
+		
 		try {
-			return this._attempt(this.pool.query("SELECT `id` FROM `player-bans`")).then((results) => results.toList());
+			return this._attempt(this.pool.query("SELECT `id` FROM `player-bans`")).then(
+				(results) => results.toList().then(
+					(list) => list.map((row) => row[0]).toList()
+				) 
+			);
 		} catch(e) {
 			throw new QueryError("Failed to retrieve bans: " + e.toString());
 		}
