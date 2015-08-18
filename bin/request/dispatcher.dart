@@ -167,7 +167,10 @@ class Dispatcher {
 			
 			HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v0001/?key=${this._key}&matches_requested=25&start_at_match_seq_num=${this.lastMatchSequenceNum.toString()}")
 				.then((response) {
-					ENV.log("==> ${(new DateTime.now()).difference(fetchStart).inMilliseconds}ms", type: 3);
+				
+					int respTime = (new DateTime.now()).difference(fetchStart).inMilliseconds;
+				
+					ENV.log("==> ${respTime}ms", type: 3);
 					if(response.statusCode == 200) {
 						
 						this.requestSuccess();
@@ -182,7 +185,12 @@ class Dispatcher {
 						
 						if(result["status"] == 1 && result["matches"] != null) {
 						
+							/// Build our ultimate matches list :)
 							final List matches = result["matches"];
+							
+							/// Toss this request over to the monitor 
+        					this.monitor.fetchRequest(matches, respTime);
+        					
 							ENV.log("Got ${matches.length} matches.", type: 3);
 							
 							/// -1: Loop through all returned matches. ///
