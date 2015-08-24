@@ -688,11 +688,11 @@ class Environment {
 				this.db		= "dotaboards_main";
 				
 				break;
-			case "TESTING-RAZORBACK":
+			case "TESTING-ATLAS":
 
 				/// Setup storage directories ///
-				this.AppDirectory 		= "/home/razorback/web/app/";
-				this.StorageDirectory	= "/home/razorback/daemon/storage/";
+				this.AppDirectory 		= "/home/stage/dotaboards/web/app/";
+				this.StorageDirectory	= "/home/stage/dotaboards/daemon/storage/";
 				
 				/// Setup MySQL connection ///
 				/// dbHost  = default

@@ -3,14 +3,23 @@ part of process;
 class Monitor {
 	
 	
-	int matchesStashed;
+	/// Request-related
+	int rawMatchCount;
+	int fetchRequestsSent;
+	int totalFetchResponseTime;
+	
+	/// Match-related
+	int filteredMatchCount;
 	double matchProcessingDelay;
 	List<double> averageMatchProcessingDelays = new List();
 	
+	/// Downtime calculations
 	int downtimeSinceLastPush; /// in minutes
 	
+	/// How many matches have we rejected?
 	List rejectedMatchCounts;
 	
+	/// This is the list we'll write to the file.
 	List pushList = new List();
 	
 	/**
@@ -22,6 +31,24 @@ class Monitor {
 		this.reset();
 	}
 	
+	/**
+	 * Store data related to this fetch request.
+	 * @return void
+	 */
+	void fetchRequest(List<Map> matches, int responseTimeInMs) {
+		
+		this.fetchRequestsSent++;
+		
+		///		averageMatchesPerRequest		///
+		/// Calculate the average number of 	///
+		/// matches we fetch in a given request ///
+		/// (useful for monitoring peak times) 	///
+		
+		this.rawMatchCount += matches.length;
+		this.totalFetchResponseTime += responseTimeInMs;
+		
+	}
+	
 	
 	/**
 	 * Monitor this particular match.
@@ -29,7 +56,7 @@ class Monitor {
 	 */
 	void match(Map match) {
 		
-		matchesStashed++;
+		filteredMatchCount++;
 
 	
 		/// 		matchProcessingDelay			///
@@ -74,10 +101,28 @@ class Monitor {
 		
 		/// Build a map of new data to associate with this push loop. ///
 		Map newDataThisPush = {
+		                       
+		    /// Proprietary
 		    "recordedAt": now.toLocal().toString(),
-			"delay": this.matchProcessingDelay / this.matchesStashed,
+		    
+		    /// Request count for this loop
+		    "requests": this.fetchRequestsSent,
+		    
+		    /// Average matches per request
+		    "averageMatchesPerRequest": this.rawMatchCount / this.fetchRequestsSent,
+		    
+		    /// Average fetch response time
+		    "averageFetchResponseTime": this.totalFetchResponseTime / this.fetchRequestsSent,
+		    
+		    /// Average difference between match ending and match processing
+			"delay": this.matchProcessingDelay / this.filteredMatchCount,
+			
+			/// Total daemon downtime
 			"downtime": this.downtimeSinceLastPush,
+			
+			/// How many matches were rejected by the MVF in the past push loop
 			"rejectedMatchCounts": this.rejectedMatchCounts
+			
 		};
 		
 		
@@ -85,7 +130,7 @@ class Monitor {
 		this.pushList.add(newDataThisPush);
 		
 		/// Store in a file on the server ///
-		this.save(ENV.StorageDirectory + "monitors/monitor-${now.year}-${now.month}-${now.day}.json", this.pushList, isJSON: true);
+		this.save(ENV.StorageDirectory + "monitors/monitor-latest.json", this.pushList, isJSON: true);
 		
 		/// Reset push-based variables to 0 ///
 		this.reset();
@@ -112,7 +157,11 @@ class Monitor {
 	 */
 	void reset() {
 		
-		this.matchesStashed = 0;
+		this.fetchRequestsSent = 0;
+		this.rawMatchCount = 0;
+		this.totalFetchResponseTime = 0;
+		
+		this.filteredMatchCount = 0;
 		this.matchProcessingDelay = 0.00;
 		this.downtimeSinceLastPush = 0;
 		this.rejectedMatchCounts = [0, 0, 0, 0];
