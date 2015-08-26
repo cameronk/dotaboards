@@ -667,7 +667,7 @@ class Environment {
 
 	Environment(String $ENV) {
 		
-		print("Instantiating environment $ENV");
+		print("Instantiating environment ${ENV}");
 		
 		var rng = new Random();
 		
@@ -683,11 +683,10 @@ class Environment {
 				
 
 				/// Setup MySQL connection ///
-				/// dbHost  = default
-				/// dbPort  = default
-				this.dbUser = "root";
-				this.dbPass = r"uruza852@jk$uck$d1k";
-				this.db		= "dotaboards_main";
+				this.dbHost = "127.0.0.1";
+				this.dbUser = "dotaboards";
+				this.dbPass = r"24475771273875943445683205332641209486229296208190";
+				this.db		= "dotaboards/main";
 				
 				break;
 			case "TESTING-ATLAS":
@@ -697,12 +696,10 @@ class Environment {
 				this.StorageDirectory	= "/home/stage/dotaboards/daemon/storage/";
 				
 				/// Setup MySQL connection ///
-				/// dbHost  = default
-				/// dbPort  = default
-				this.dbHost = "lander.muny.us";
-				this.dbUser = "cameron-dota";
-				this.dbPass = "9238283762313586";
-				this.db		= "cameron-dota";
+				this.dbHost = "127.0.0.1";
+				this.dbUser = "dotaboards-stage";
+				this.dbPass = r"55184429011771861829418426776407260918862215905453";
+				this.db		= "dotaboards/staging-atlas";
 				
 				break;
 				
@@ -713,7 +710,6 @@ class Environment {
 				this.StorageDirectory	= "/home/cameron/daemon/storage/";
 				
 				/// Setup MySQL connection ///
-				/// dbPort  = default
 				this.dbHost = "lander.muny.us";
 				this.dbUser = "cameron-dota";
 				this.dbPass = "9238283762313586";
@@ -728,7 +724,6 @@ class Environment {
 				this.StorageDirectory 	= "storage/";
 
 				/// Setup MySQL connection ///
-				/// dbPort  = default
 				this.dbHost = "lander.muny.us";
 				this.dbUser = "cameron-dota";
 				this.dbPass = "9238283762313586";
@@ -750,7 +745,7 @@ class Environment {
 	Future setup() {
 		print("Setting up environment.");
 		return new Future(() {
-			String fileName = "log-${this.hash}_${new DateTime.now().toIso8601String().replaceAll(":", "")}.txt";
+			String fileName = "log_${new DateTime.now().toIso8601String().replaceAll(":", "")}.txt";
 			File log = new File(this.StorageDirectory + "logs/" + fileName);
 			
 			return log.exists().then((exists) {
@@ -760,7 +755,7 @@ class Environment {
 				if(exists == false) {
 					return log.create().then((File file) {
 						
-						print("Created logfile.");
+						print("Created logfile ${fileName}.");
 						
 						this.logFile = file;
 						this.sink = file.openWrite();
