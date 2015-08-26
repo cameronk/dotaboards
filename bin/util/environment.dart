@@ -667,6 +667,8 @@ class Environment {
 
 	Environment(String $ENV) {
 		
+		print("Instantiating environment $ENV");
+		
 		var rng = new Random();
 		
 		this.name = $ENV;
@@ -697,6 +699,7 @@ class Environment {
 				/// Setup MySQL connection ///
 				/// dbHost  = default
 				/// dbPort  = default
+				this.dbHost = "lander.muny.us";
 				this.dbUser = "cameron-dota";
 				this.dbPass = "9238283762313586";
 				this.db		= "cameron-dota";
@@ -745,13 +748,20 @@ class Environment {
 	}
 	
 	Future setup() {
+		print("Setting up environment.");
 		return new Future(() {
 			String fileName = "log-${this.hash}_${new DateTime.now().toIso8601String().replaceAll(":", "")}.txt";
 			File log = new File(this.StorageDirectory + "logs/" + fileName);
 			
 			return log.exists().then((exists) {
+				
+				print("Logfile exists: $exists");
+				
 				if(exists == false) {
 					return log.create().then((File file) {
+						
+						print("Created logfile.");
+						
 						this.logFile = file;
 						this.sink = file.openWrite();
 						return this;
