@@ -299,6 +299,7 @@ class Dispatcher {
 	 */
 	void push () {
 		
+		ENV.log("", type: 0);
 		ENV.log("Beginning push.", type: 1);
 		
 		Set currentRecordedMatches = this.recordedMatches;
@@ -644,21 +645,31 @@ class Dispatcher {
 	/**
 	 * Read and parse the given file.
 	 */
-	Future<Map> grab(String file) => new File(file).readAsString().then((String contents) => (contents.length > 0 ? JSON.decode(contents) : new Map()));
+	Future<Map> grab(String file) {
+		
+		ENV.log("Grabbing $file", type:4, level:0);
+		File fileToGrab = new File(file);
+		
+		if(fileToGrab.exists() == false) {
+			return new Future.value(new Map());
+		} else return fileToGrab.readAsString().then((String contents) => (contents.length > 0 ? JSON.decode(contents) : new Map()));
+		
+	}
 	
 	
 	/**
 	 * Write data to file.
 	 */
 	Future<File> save(String f, dynamic<Map, List, String> data, {isJSON: true}) {
-    		
+
+		ENV.log("Saving $f", type:4, level:0);
 		File file = new File(f);
 		
 		if(file.exists() == false) {
-			file.create().then((File file) {
-				file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+			return file.create().then((File file) {
+				return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
 			});
-		} return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+		} else return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
 	
 	}
 	

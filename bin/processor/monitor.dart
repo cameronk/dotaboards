@@ -145,10 +145,10 @@ class Monitor {
 		File file = new File(f);
 		
 		if(file.exists() == false) {
-			file.create().then((File file) {
-				file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+			return file.create().then((File file) {
+				return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
 			});
-		} return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+		} else return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
 	
 	}
 	
