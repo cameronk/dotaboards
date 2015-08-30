@@ -650,26 +650,20 @@ class Dispatcher {
 		ENV.log("Grabbing $file", type:4, level:0);
 		File fileToGrab = new File(file);
 		
-		if(fileToGrab.exists() == false) {
-			return new Future.value(new Map());
-		} else return fileToGrab.readAsString().then((String contents) => (contents.length > 0 ? JSON.decode(contents) : new Map()));
-		
+		return fileToGrab.exists().then(
+			(bool exists) => exists == false ? new Future.value(new Map()) : fileToGrab.readAsString().then(
+				(String contents) => contents.length > 0 ? JSON.decode(contents) : new Map())
+		);
 	}
 	
 	
 	/**
 	 * Write data to file.
 	 */
-	Future<File> save(String f, dynamic<Map, List, String> data, {isJSON: true}) {
+	Future<File> save(String file, dynamic<Map, List, String> data, {isJSON: true}) {
 
-		ENV.log("Saving $f", type:4, level:0);
-		File file = new File(f);
-		
-		if(file.exists() == false) {
-			return file.create().then((File file) {
-				return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
-			});
-		} else return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+		ENV.log("Saving $file", type:4, level:0);
+		return new File(file).writeAsString(isJSON == true ? JSON.encode(data) : data);
 	
 	}
 	
