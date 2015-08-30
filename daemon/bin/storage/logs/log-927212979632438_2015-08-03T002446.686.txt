@@ -1,0 +1,95 @@
+________          __        ___.                          .___      
+______    _____/  |______ _ |__   _________ _______  __| _/______
+ |    |   /  _    ____   | __  /  _ __  \_  __ / __ |/  ___/
+ |    `   (  <_> )  |  / __ | _ (  <_> ) __ |  | / /_/ |___  
+/_______  /____/|__| (____  /___  /____(____  /__|  ____ /____ >
+         /                 /    /           /           /    /
+====================================================================
+ENV: LOCAL, hash: 927212979632438
+====================================================================
+ > Initialized new pool instance.
+ | QueryHelper::truncateMatches()
+ | QueryHelper::retrieveBans()
+ > Instantiated monitor.
+ | Instantiated processor 237864934 with shortcode: global, ident: worldwide
+
+
+
+
+
+===================================================
+=====     Instantiating a new Dispatcher.     =====
+===================================================
+ | Banned: 126376259
+ | Banned: 192610450
+ | Banned: 201388981
+ | Banned: 202616372
+ | Banned: 202679658
+ | Banned: 211289385
+ > Starting loop sequence at 1499349206
+
+
+
+
+
+1499349206 [2015-08-03 00:24:48.281] >
+ | ==> 904ms
+ | Caught a request error for fetching from 1499349206.
+ | Running another loop in 15 seconds...
+ > RequestFailure (The null object does not have a getter 'isActive'.
+
+NoSuchMethodError: method not found: 'isActive'
+Receiver: null
+Arguments: [])
+1499349206 [2015-08-03 00:25:04.207] >
+ | ==> 834ms
+ | Got 25 matches.
+ | No valid players in 1499349209.
+ | No valid players in 1499349248.
+ | Done processing 1499349206. 9/25 disqualified
+ | Looping back to 1499349268...
+1499349268 [2015-08-03 00:25:06.209] >
+ | ==> 782ms
+ | Got 25 matches.
+ | Done processing 1499349268. 14/25 disqualified
+ | Looping back to 1499349314...
+1499349314 [2015-08-03 00:25:08.210] >
+ | ==> 867ms
+ | Got 25 matches.
+ | No valid players in 1499349327.
+ | Done processing 1499349314. 7/25 disqualified
+ | Looping back to 1499349360...
+1499349360 [2015-08-03 00:25:10.212] >
+ | ==> 789ms
+ | Got 25 matches.
+ | No valid players in 1499349372.
+ | No valid players in 1499349375.
+ | No valid players in 1499349382.
+ | Done processing 1499349360. 13/25 disqualified
+ | Looping back to 1499349399...
+1499349399 [2015-08-03 00:25:12.213] >
+ | ==> 842ms
+ | Got 25 matches.
+ | No valid players in 1499349414.
+ | No valid players in 1499349421.
+ | No valid players in 1499349435.
+ | No valid players in 1499349440.
+ | Done processing 1499349399. 13/25 disqualified
+ | Looping back to 1499349453...
+1499349453 [2015-08-03 00:25:14.215] >
+ | ==> 779ms
+ | Got 25 matches.
+ | No valid players in 1499349465.
+ | No valid players in 1499349473.
+ | Done processing 1499349453. 9/25 disqualified
+ | Looping back to 1499349504...
+1499349504 [2015-08-03 00:25:16.216] >
+ | ==> 834ms
+ | Got 25 matches.
+ | No valid players in 1499349520.
+ | No valid players in 1499349524.
+ | No valid players in 1499349528.
+ | No valid players in 1499349550.
+ | Done processing 1499349504. 13/25 disqualified
+ | Looping back to 1499349565...
+1499349565 [2015-08-03 00:25:18.217] >

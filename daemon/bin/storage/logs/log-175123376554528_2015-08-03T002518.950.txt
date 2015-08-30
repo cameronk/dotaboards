@@ -1,0 +1,1498 @@
+________          __        ___.                          .___      
+______    _____/  |______ _ |__   _________ _______  __| _/______
+ |    |   /  _    ____   | __  /  _ __  \_  __ / __ |/  ___/
+ |    `   (  <_> )  |  / __ | _ (  <_> ) __ |  | / /_/ |___  
+/_______  /____/|__| (____  /___  /____(____  /__|  ____ /____ >
+         /                 /    /           /           /    /
+====================================================================
+ENV: LOCAL, hash: 175123376554528
+====================================================================
+ > Initialized new pool instance.
+ | QueryHelper::truncateMatches()
+ | QueryHelper::retrieveBans()
+ > Instantiated monitor.
+ | Instantiated processor 531982508 with shortcode: global, ident: worldwide
+
+
+
+
+
+===================================================
+=====     Instantiating a new Dispatcher.     =====
+===================================================
+ | Banned: 126376259
+ | Banned: 192610450
+ | Banned: 201388981
+ | Banned: 202616372
+ | Banned: 202679658
+ | Banned: 211289385
+ > Starting loop sequence at 1499349206
+
+
+
+
+
+1499349206 [2015-08-03 00:25:20.860] >
+ | ==> 839ms
+ | Got 25 matches.
+ | No valid players in 1499349209.
+ | No valid players in 1499349248.
+ | Done processing 1499349206. 9/25 disqualified
+ | Looping back to 1499349268...
+1499349268 [2015-08-03 00:25:22.861] >
+ | ==> 862ms
+ | Got 25 matches.
+ | Done processing 1499349268. 14/25 disqualified
+ | Looping back to 1499349314...
+1499349314 [2015-08-03 00:25:24.862] >
+ | ==> 793ms
+ | Got 25 matches.
+ | No valid players in 1499349327.
+ | Done processing 1499349314. 7/25 disqualified
+ | Looping back to 1499349360...
+1499349360 [2015-08-03 00:25:26.863] >
+ | ==> 964ms
+ | Got 25 matches.
+ | No valid players in 1499349372.
+ | No valid players in 1499349375.
+ | No valid players in 1499349382.
+ | Done processing 1499349360. 13/25 disqualified
+ | Looping back to 1499349399...
+1499349399 [2015-08-03 00:25:28.865] >
+ | ==> 830ms
+ | Got 25 matches.
+ | No valid players in 1499349414.
+ | No valid players in 1499349421.
+ | No valid players in 1499349435.
+ | No valid players in 1499349440.
+ | Done processing 1499349399. 13/25 disqualified
+ | Looping back to 1499349453...
+1499349453 [2015-08-03 00:25:30.866] >
+ | ==> 873ms
+ | Got 25 matches.
+ | No valid players in 1499349465.
+ | No valid players in 1499349473.
+ | Done processing 1499349453. 9/25 disqualified
+ | Looping back to 1499349504...
+1499349504 [2015-08-03 00:25:32.867] >
+ | ==> 759ms
+ | Got 25 matches.
+ | No valid players in 1499349520.
+ | No valid players in 1499349524.
+ | No valid players in 1499349528.
+ | No valid players in 1499349550.
+ | Done processing 1499349504. 13/25 disqualified
+ | Looping back to 1499349565...
+1499349565 [2015-08-03 00:25:34.868] >
+ | ==> 721ms
+ | Got 25 matches.
+ | No valid players in 1499349582.
+ | No valid players in 1499349583.
+ | No valid players in 1499349586.
+ | No valid players in 1499349601.
+ | No valid players in 1499349607.
+ | No valid players in 1499349613.
+ | No valid players in 1499349618.
+ | Done processing 1499349565. 10/25 disqualified
+ | Looping back to 1499349624...
+1499349624 [2015-08-03 00:25:36.869] >
+ | ==> 890ms
+ | Got 25 matches.
+ | No valid players in 1499349633.
+ | No valid players in 1499349641.
+ | Done processing 1499349624. 14/25 disqualified
+ | Looping back to 1499349699...
+1499349699 [2015-08-03 00:25:38.870] >
+ | ==> 780ms
+ | Got 25 matches.
+ | No valid players in 1499349700.
+ | No valid players in 1499349713.
+ | Done processing 1499349699. 14/25 disqualified
+ | Looping back to 1499349750...
+1499349750 [2015-08-03 00:25:40.872] >
+ | ==> 908ms
+ | Got 25 matches.
+ | No valid players in 1499349773.
+ | No valid players in 1499349776.
+ | No valid players in 1499349780.
+ | No valid players in 1499349800.
+ | Done processing 1499349750. 13/25 disqualified
+ | Looping back to 1499349801...
+1499349801 [2015-08-03 00:25:42.873] >
+ | ==> 859ms
+ | Got 25 matches.
+ | No valid players in 1499349809.
+ | No valid players in 1499349810.
+ | Done processing 1499349801. 13/25 disqualified
+ | Looping back to 1499349845...
+1499349845 [2015-08-03 00:25:44.875] >
+ | ==> 820ms
+ | Got 25 matches.
+ | No valid players in 1499349855.
+ | No valid players in 1499349858.
+ | No valid players in 1499349864.
+ | Done processing 1499349845. 10/25 disqualified
+ | Looping back to 1499349897...
+1499349897 [2015-08-03 00:25:46.877] >
+ | ==> 1037ms
+ | Got 25 matches.
+ | Done processing 1499349897. 15/25 disqualified
+ | Looping back to 1499349943...
+1499349943 [2015-08-03 00:25:48.879] >
+ | ==> 969ms
+ | Got 25 matches.
+ | No valid players in 1499349951.
+ | No valid players in 1499349991.
+ | Done processing 1499349943. 17/25 disqualified
+ | Looping back to 1499350002...
+1499350002 [2015-08-03 00:25:50.881] >
+ | ==> 945ms
+ | Got 25 matches.
+ | Done processing 1499350002. 18/25 disqualified
+ | Looping back to 1499350043...
+1499350043 [2015-08-03 00:25:52.883] >
+ | ==> 816ms
+ | Got 25 matches.
+ | No valid players in 1499350102.
+ | Done processing 1499350043. 15/25 disqualified
+ | Looping back to 1499350108...
+1499350108 [2015-08-03 00:25:54.884] >
+ | ==> 1372ms
+ | Got 25 matches.
+ | No valid players in 1499350110.
+ | No valid players in 1499350120.
+ | No valid players in 1499350144.
+ | No valid players in 1499350145.
+ | Done processing 1499350108. 14/25 disqualified
+ | Looping back to 1499350150...
+1499350150 [2015-08-03 00:25:56.887] >
+ | ==> 1001ms
+ | Got 25 matches.
+ | No valid players in 1499350180.
+ | No valid players in 1499350182.
+ | Done processing 1499350150. 13/25 disqualified
+ | Looping back to 1499350203...
+1499350203 [2015-08-03 00:25:58.889] >
+ | ==> 838ms
+ | Got 25 matches.
+ | No valid players in 1499350213.
+ | No valid players in 1499350233.
+ | Done processing 1499350203. 10/25 disqualified
+ | Looping back to 1499350249...
+1499350249 [2015-08-03 00:26:00.890] >
+ | ==> 918ms
+ | Got 25 matches.
+ | No valid players in 1499350269.
+ | No valid players in 1499350272.
+ | No valid players in 1499350298.
+ | No valid players in 1499350301.
+ | Done processing 1499350249. 13/25 disqualified
+ | Looping back to 1499350305...
+1499350305 [2015-08-03 00:26:02.892] >
+ | ==> 808ms
+ | Got 25 matches.
+ | Done processing 1499350305. 13/25 disqualified
+ | Looping back to 1499350352...
+1499350352 [2015-08-03 00:26:04.894] >
+ | ==> 852ms
+ | Got 25 matches.
+ | No valid players in 1499350364.
+ | Done processing 1499350352. 15/25 disqualified
+ | Looping back to 1499350400...
+1499350400 [2015-08-03 00:26:06.895] >
+ | ==> 816ms
+ | Got 25 matches.
+ | No valid players in 1499350402.
+ | No valid players in 1499350442.
+ | Done processing 1499350400. 14/25 disqualified
+ | Looping back to 1499350445...
+1499350445 [2015-08-03 00:26:08.897] >
+ | ==> 912ms
+ | Got 25 matches.
+ | No valid players in 1499350460.
+ | No valid players in 1499350465.
+ | Done processing 1499350445. 16/25 disqualified
+ | Looping back to 1499350496...
+1499350496 [2015-08-03 00:26:10.899] >
+ | ==> 856ms
+ | Got 25 matches.
+ | No valid players in 1499350514.
+ | No valid players in 1499350523.
+ | No valid players in 1499350533.
+ | No valid players in 1499350534.
+ | No valid players in 1499350540.
+ | Done processing 1499350496. 15/25 disqualified
+ | Looping back to 1499350544...
+1499350544 [2015-08-03 00:26:12.901] >
+ | ==> 769ms
+ | Got 25 matches.
+ | No valid players in 1499350554.
+ | Done processing 1499350544. 13/25 disqualified
+ | Looping back to 1499350598...
+1499350598 [2015-08-03 00:26:14.902] >
+ | ==> 874ms
+ | Got 25 matches.
+ | No valid players in 1499350645.
+ | Done processing 1499350598. 15/25 disqualified
+ | Looping back to 1499350664...
+1499350664 [2015-08-03 00:26:16.904] >
+ | ==> 819ms
+ | Got 25 matches.
+ | No valid players in 1499350680.
+ | No valid players in 1499350688.
+ | No valid players in 1499350690.
+ | Done processing 1499350664. 12/25 disqualified
+ | Looping back to 1499350725...
+1499350725 [2015-08-03 00:26:18.906] >
+ | ==> 835ms
+ | Got 25 matches.
+ | No valid players in 1499350726.
+ | No valid players in 1499350734.
+ | No valid players in 1499350767.
+ | Done processing 1499350725. 14/25 disqualified
+ | Looping back to 1499350771...
+1499350771 [2015-08-03 00:26:20.907] >
+ | ==> 895ms
+ | Got 25 matches.
+ | No valid players in 1499350818.
+ | Done processing 1499350771. 13/25 disqualified
+ | Looping back to 1499350824...
+1499350824 [2015-08-03 00:26:22.909] >
+ | ==> 813ms
+ | Got 25 matches.
+ | No valid players in 1499350842.
+ | No valid players in 1499350853.
+ | Done processing 1499350824. 14/25 disqualified
+ | Looping back to 1499350869...
+1499350869 [2015-08-03 00:26:24.911] >
+ | ==> 835ms
+ | Got 25 matches.
+ | Done processing 1499350869. 13/25 disqualified
+ | Looping back to 1499350925...
+1499350925 [2015-08-03 00:26:26.913] >
+ | ==> 811ms
+ | Got 25 matches.
+ | No valid players in 1499350934.
+ | No valid players in 1499350963.
+ | Done processing 1499350925. 17/25 disqualified
+ | Looping back to 1499350994...
+1499350994 [2015-08-03 00:26:28.915] >
+ | ==> 794ms
+ | Got 25 matches.
+ | No valid players in 1499350998.
+ | No valid players in 1499351007.
+ | No valid players in 1499351015.
+ | No valid players in 1499351028.
+ | Done processing 1499350994. 13/25 disqualified
+ | Looping back to 1499351039...
+1499351039 [2015-08-03 00:26:30.916] >
+ | ==> 729ms
+ | Got 25 matches.
+ | No valid players in 1499351065.
+ | No valid players in 1499351078.
+ | No valid players in 1499351085.
+ | Done processing 1499351039. 11/25 disqualified
+ | Looping back to 1499351092...
+1499351092 [2015-08-03 00:26:32.917] >
+ | ==> 887ms
+ | Got 25 matches.
+ | No valid players in 1499351104.
+ | No valid players in 1499351120.
+ | Done processing 1499351092. 17/25 disqualified
+ | Looping back to 1499351147...
+1499351147 [2015-08-03 00:26:34.918] >
+ | ==> 805ms
+ | Got 25 matches.
+ | No valid players in 1499351155.
+ | No valid players in 1499351157.
+ | No valid players in 1499351193.
+ | Done processing 1499351147. 11/25 disqualified
+ | Looping back to 1499351198...
+1499351198 [2015-08-03 00:26:36.920] >
+ | ==> 771ms
+ | Got 25 matches.
+ | No valid players in 1499351200.
+ | No valid players in 1499351240.
+ | Done processing 1499351198. 13/25 disqualified
+ | Looping back to 1499351247...
+1499351247 [2015-08-03 00:26:38.922] >
+ | ==> 851ms
+ | Got 25 matches.
+ | No valid players in 1499351286.
+ | No valid players in 1499351297.
+ | Done processing 1499351247. 14/25 disqualified
+ | Looping back to 1499351300...
+1499351300 [2015-08-03 00:26:40.923] >
+ | ==> 746ms
+ | Got 25 matches.
+ | No valid players in 1499351356.
+ | Done processing 1499351300. 15/25 disqualified
+ | Looping back to 1499351358...
+1499351358 [2015-08-03 00:26:42.924] >
+ | ==> 806ms
+ | Got 25 matches.
+ | No valid players in 1499351374.
+ | Done processing 1499351358. 12/25 disqualified
+ | Looping back to 1499351401...
+1499351401 [2015-08-03 00:26:44.925] >
+ | ==> 841ms
+ | Got 25 matches.
+ | No valid players in 1499351423.
+ | No valid players in 1499351430.
+ | No valid players in 1499351432.
+ | No valid players in 1499351444.
+ | No valid players in 1499351456.
+ | Done processing 1499351401. 15/25 disqualified
+ | Looping back to 1499351462...
+1499351462 [2015-08-03 00:26:46.927] >
+ | ==> 764ms
+ | Got 25 matches.
+ | No valid players in 1499351469.
+ | No valid players in 1499351480.
+ | Done processing 1499351462. 15/25 disqualified
+ | Looping back to 1499351527...
+1499351527 [2015-08-03 00:26:48.929] >
+ | ==> 787ms
+ | Got 25 matches.
+ | No valid players in 1499351547.
+ | No valid players in 1499351553.
+ | No valid players in 1499351559.
+ | Done processing 1499351527. 15/25 disqualified
+ | Looping back to 1499351570...
+1499351570 [2015-08-03 00:26:50.931] >
+ | ==> 801ms
+ | Got 25 matches.
+ | No valid players in 1499351570.
+ | No valid players in 1499351574.
+ | Done processing 1499351570. 11/25 disqualified
+ | Looping back to 1499351614...
+1499351614 [2015-08-03 00:26:52.933] >
+ | ==> 771ms
+ | Got 25 matches.
+ | Done processing 1499351614. 15/25 disqualified
+ | Looping back to 1499351657...
+1499351657 [2015-08-03 00:26:54.935] >
+ | ==> 859ms
+ | Got 25 matches.
+ | No valid players in 1499351668.
+ | No valid players in 1499351681.
+ | No valid players in 1499351710.
+ | Done processing 1499351657. 15/25 disqualified
+ | Looping back to 1499351714...
+1499351714 [2015-08-03 00:26:56.936] >
+ | ==> 863ms
+ | Got 25 matches.
+ | No valid players in 1499351741.
+ | No valid players in 1499351772.
+ | Done processing 1499351714. 14/25 disqualified
+ | Looping back to 1499351774...
+1499351774 [2015-08-03 00:26:58.938] >
+ | ==> 793ms
+ | Got 25 matches.
+ | No valid players in 1499351825.
+ | Done processing 1499351774. 16/25 disqualified
+ | Looping back to 1499351830...
+1499351830 [2015-08-03 00:27:00.940] >
+ | ==> 911ms
+ | Got 25 matches.
+ | No valid players in 1499351871.
+ | Done processing 1499351830. 12/25 disqualified
+ | Looping back to 1499351873...
+1499351873 [2015-08-03 00:27:02.941] >
+ | ==> 788ms
+ | Got 25 matches.
+ | No valid players in 1499351911.
+ | Done processing 1499351873. 14/25 disqualified
+ | Looping back to 1499351916...
+1499351916 [2015-08-03 00:27:04.942] >
+ | ==> 786ms
+ | Got 25 matches.
+ | No valid players in 1499351918.
+ | No valid players in 1499351923.
+ | No valid players in 1499351931.
+ | No valid players in 1499351951.
+ | Done processing 1499351916. 14/25 disqualified
+ | Looping back to 1499351973...
+1499351973 [2015-08-03 00:27:06.943] >
+ | ==> 859ms
+ | Got 25 matches.
+ | No valid players in 1499351980.
+ | No valid players in 1499352017.
+ | Done processing 1499351973. 10/25 disqualified
+ | Looping back to 1499352023...
+1499352023 [2015-08-03 00:27:08.944] >
+ | ==> 825ms
+ | Got 25 matches.
+ | No valid players in 1499352049.
+ | No valid players in 1499352072.
+ | Done processing 1499352023. 11/25 disqualified
+ | Looping back to 1499352078...
+1499352078 [2015-08-03 00:27:10.945] >
+ | ==> 803ms
+ | Got 25 matches.
+ | No valid players in 1499352122.
+ | Done processing 1499352078. 17/25 disqualified
+ | Looping back to 1499352137...
+1499352137 [2015-08-03 00:27:12.947] >
+ | ==> 815ms
+ | Got 25 matches.
+ | No valid players in 1499352156.
+ | No valid players in 1499352158.
+ | Done processing 1499352137. 13/25 disqualified
+ | Looping back to 1499352184...
+1499352184 [2015-08-03 00:27:14.949] >
+ | ==> 814ms
+ | Got 25 matches.
+ | No valid players in 1499352189.
+ | No valid players in 1499352213.
+ | No valid players in 1499352220.
+ | Done processing 1499352184. 11/25 disqualified
+ | Looping back to 1499352227...
+1499352227 [2015-08-03 00:27:16.951] >
+ | ==> 838ms
+ | Got 25 matches.
+ | No valid players in 1499352234.
+ | No valid players in 1499352279.
+ | Done processing 1499352227. 15/25 disqualified
+ | Looping back to 1499352286...
+1499352286 [2015-08-03 00:27:18.952] >
+ | ==> 791ms
+ | Got 25 matches.
+ | No valid players in 1499352330.
+ | No valid players in 1499352331.
+ | Done processing 1499352286. 13/25 disqualified
+ | Looping back to 1499352337...
+1499352337 [2015-08-03 00:27:20.953] >
+ | ==> 758ms
+ | Got 25 matches.
+ | No valid players in 1499352344.
+ | No valid players in 1499352353.
+ | No valid players in 1499352368.
+ | No valid players in 1499352379.
+ | Done processing 1499352337. 11/25 disqualified
+ | Looping back to 1499352381...
+1499352381 [2015-08-03 00:27:22.954] >
+ | ==> 763ms
+ | Got 25 matches.
+ | No valid players in 1499352412.
+ | No valid players in 1499352435.
+ | Done processing 1499352381. 18/25 disqualified
+ | Looping back to 1499352450...
+1499352450 [2015-08-03 00:27:24.956] >
+ | ==> 862ms
+ | Got 25 matches.
+ | No valid players in 1499352454.
+ | No valid players in 1499352462.
+ | No valid players in 1499352463.
+ | No valid players in 1499352478.
+ | No valid players in 1499352485.
+ | No valid players in 1499352489.
+ | Done processing 1499352450. 12/25 disqualified
+ | Looping back to 1499352503...
+1499352503 [2015-08-03 00:27:26.958] >
+ | ==> 780ms
+ | Got 25 matches.
+ | No valid players in 1499352522.
+ | No valid players in 1499352530.
+ | Done processing 1499352503. 14/25 disqualified
+ | Looping back to 1499352546...
+1499352546 [2015-08-03 00:27:28.960] >
+ | ==> 897ms
+ | Got 25 matches.
+ | No valid players in 1499352562.
+ | No valid players in 1499352582.
+ | Done processing 1499352546. 11/25 disqualified
+ | Looping back to 1499352597...
+1499352597 [2015-08-03 00:27:30.962] >
+ | ==> 860ms
+ | Got 25 matches.
+ | No valid players in 1499352604.
+ | No valid players in 1499352630.
+ | Done processing 1499352597. 13/25 disqualified
+ | Looping back to 1499352649...
+1499352649 [2015-08-03 00:27:32.963] >
+ | ==> 835ms
+ | Got 25 matches.
+ | No valid players in 1499352666.
+ | No valid players in 1499352677.
+ | Done processing 1499352649. 15/25 disqualified
+ | Looping back to 1499352691...
+1499352691 [2015-08-03 00:27:34.965] >
+ | ==> 778ms
+ | Got 25 matches.
+ | No valid players in 1499352708.
+ | No valid players in 1499352726.
+ | No valid players in 1499352730.
+ | No valid players in 1499352732.
+ | Done processing 1499352691. 13/25 disqualified
+ | Looping back to 1499352734...
+1499352734 [2015-08-03 00:27:36.967] >
+ | ==> 770ms
+ | Got 25 matches.
+ | Done processing 1499352734. 12/25 disqualified
+ | Looping back to 1499352782...
+1499352782 [2015-08-03 00:27:38.969] >
+ | ==> 915ms
+ | Got 25 matches.
+ | No valid players in 1499352832.
+ | Done processing 1499352782. 14/25 disqualified
+ | Looping back to 1499352839...
+1499352839 [2015-08-03 00:27:40.970] >
+ | ==> 788ms
+ | Got 25 matches.
+ | No valid players in 1499352845.
+ | Done processing 1499352839. 14/25 disqualified
+ | Looping back to 1499352900...
+1499352900 [2015-08-03 00:27:42.971] >
+ | ==> 834ms
+ | Got 25 matches.
+ | No valid players in 1499352926.
+ | No valid players in 1499352931.
+ | Done processing 1499352900. 11/25 disqualified
+ | Looping back to 1499352965...
+1499352965 [2015-08-03 00:27:44.972] >
+ | ==> 736ms
+ | Got 25 matches.
+ | No valid players in 1499352984.
+ | No valid players in 1499352993.
+ | No valid players in 1499352996.
+ | No valid players in 1499352998.
+ | Done processing 1499352965. 14/25 disqualified
+ | Looping back to 1499353014...
+1499353014 [2015-08-03 00:27:46.974] >
+ | ==> 830ms
+ | Got 25 matches.
+ | No valid players in 1499353053.
+ | Done processing 1499353014. 14/25 disqualified
+ | Looping back to 1499353069...
+1499353069 [2015-08-03 00:27:48.975] >
+ | ==> 839ms
+ | Got 25 matches.
+ | No valid players in 1499353086.
+ | No valid players in 1499353096.
+ | No valid players in 1499353109.
+ | Done processing 1499353069. 11/25 disqualified
+ | Looping back to 1499353123...
+1499353123 [2015-08-03 00:27:50.977] >
+ | ==> 825ms
+ | Got 25 matches.
+ | No valid players in 1499353151.
+ | No valid players in 1499353166.
+ | No valid players in 1499353168.
+ | Done processing 1499353123. 12/25 disqualified
+ | Looping back to 1499353176...
+1499353176 [2015-08-03 00:27:52.978] >
+ | ==> 844ms
+ | Got 20 matches.
+ | No valid players in 1499353192.
+ | No valid players in 1499353193.
+ | No valid players in 1499353194.
+ | No valid players in 1499353199.
+ | No valid players in 1499353202.
+ | Done processing 1499353176. 10/20 disqualified
+ | Looping back to 1499353215...
+1499353215 [2015-08-03 00:27:54.980] >
+ | ==> 762ms
+ | Got 17 matches.
+ | No valid players in 1499353230.
+ | No valid players in 1499353241.
+ | Done processing 1499353215. 7/17 disqualified
+ | Looping back to 1499353256...
+1499353256 [2015-08-03 00:27:56.981] >
+ | ==> 659ms
+ | Got 17 matches.
+ | No valid players in 1499353262.
+ | No valid players in 1499353264.
+ | No valid players in 1499353282.
+ | Done processing 1499353256. 10/17 disqualified
+ | Looping back to 1499353283...
+1499353283 [2015-08-03 00:27:58.982] >
+ | ==> 808ms
+ | Got 23 matches.
+ | Done processing 1499353283. 16/23 disqualified
+ | Looping back to 1499353333...
+1499353333 [2015-08-03 00:28:00.983] >
+ | ==> 817ms
+ | Got 17 matches.
+ | No valid players in 1499353344.
+ | No valid players in 1499353369.
+ | Done processing 1499353333. 9/17 disqualified
+ | Looping back to 1499353377...
+1499353377 [2015-08-03 00:28:02.985] >
+ | ==> 887ms
+ | Got 18 matches.
+ | No valid players in 1499353402.
+ | No valid players in 1499353403.
+ | Done processing 1499353377. 10/18 disqualified
+ | Looping back to 1499353415...
+1499353415 [2015-08-03 00:28:04.987] >
+ | ==> 845ms
+ | Got 19 matches.
+ | No valid players in 1499353448.
+ | Done processing 1499353415. 8/19 disqualified
+ | Looping back to 1499353449...
+1499353449 [2015-08-03 00:28:06.989] >
+ | ==> 835ms
+ | Got 19 matches.
+ | Done processing 1499353449. 12/19 disqualified
+ | Looping back to 1499353497...
+1499353497 [2015-08-03 00:28:08.991] >
+ | ==> 1159ms
+ | Got 16 matches.
+ | No valid players in 1499353518.
+ | Done processing 1499353497. 10/16 disqualified
+ | Looping back to 1499353534...
+1499353534 [2015-08-03 00:28:10.992] >
+ | ==> 746ms
+ | Got 17 matches.
+ | No valid players in 1499353557.
+ | Done processing 1499353534. 11/17 disqualified
+ | Looping back to 1499353564...
+1499353564 [2015-08-03 00:28:12.994] >
+ | ==> 1041ms
+ | Got 25 matches.
+ | No valid players in 1499353590.
+ | No valid players in 1499353598.
+ | Done processing 1499353564. 13/25 disqualified
+ | Looping back to 1499353607...
+1499353607 [2015-08-03 00:28:14.996] >
+ | ==> 1440ms
+ | Got 16 matches.
+ | No valid players in 1499353612.
+ | No valid players in 1499353629.
+ | No valid players in 1499353641.
+ | Done processing 1499353607. 7/16 disqualified
+ | Looping back to 1499353645...
+1499353645 [2015-08-03 00:28:16.997] >
+ | ==> 1599ms
+ | Got 17 matches.
+ | No valid players in 1499353651.
+ | No valid players in 1499353670.
+ | Done processing 1499353645. 7/17 disqualified
+ | Looping back to 1499353686...
+1499353686 [2015-08-03 00:28:18.999] >
+ | ==> 880ms
+ | Got 23 matches.
+ | No valid players in 1499353694.
+ | No valid players in 1499353703.
+ | No valid players in 1499353713.
+ | Done processing 1499353686. 12/23 disqualified
+ | Looping back to 1499353721...
+1499353721 [2015-08-03 00:28:21.000] >
+ | ==> 812ms
+ | Got 22 matches.
+ | Done processing 1499353721. 14/22 disqualified
+ | Looping back to 1499353766...
+1499353766 [2015-08-03 00:28:23.001] >
+ | ==> 770ms
+ | Got 12 matches.
+ | Done processing 1499353766. 6/12 disqualified
+ | Looping back to 1499353797...
+1499353797 [2015-08-03 00:28:25.003] >
+ | ==> 900ms
+ | Got 18 matches.
+ | No valid players in 1499353823.
+ | Done processing 1499353797. 9/18 disqualified
+ | Looping back to 1499353838...
+1499353838 [2015-08-03 00:28:27.005] >
+ | ==> 738ms
+ | Got 17 matches.
+ | No valid players in 1499353877.
+ | Done processing 1499353838. 9/17 disqualified
+ | Looping back to 1499353878...
+1499353878 [2015-08-03 00:28:29.006] >
+ | ==> 869ms
+ | Got 21 matches.
+ | No valid players in 1499353885.
+ | No valid players in 1499353886.
+ | No valid players in 1499353895.
+ | No valid players in 1499353901.
+ | No valid players in 1499353909.
+ | Done processing 1499353878. 9/21 disqualified
+ | Looping back to 1499353920...
+1499353920 [2015-08-03 00:28:31.007] >
+ | ==> 829ms
+ | Got 16 matches.
+ | No valid players in 1499353934.
+ | Done processing 1499353920. 8/16 disqualified
+ | Looping back to 1499353944...
+1499353944 [2015-08-03 00:28:33.009] >
+ | ==> 853ms
+ | Got 23 matches.
+ | No valid players in 1499353953.
+ | Done processing 1499353944. 9/23 disqualified
+ | Looping back to 1499353978...
+1499353978 [2015-08-03 00:28:35.011] >
+ | ==> 790ms
+ | Got 16 matches.
+ | Done processing 1499353978. 9/16 disqualified
+ | Looping back to 1499354014...
+1499354014 [2015-08-03 00:28:37.013] >
+ | ==> 791ms
+ | Got 16 matches.
+ | Done processing 1499354014. 10/16 disqualified
+ | Looping back to 1499354044...
+1499354044 [2015-08-03 00:28:39.015] >
+ | ==> 747ms
+ | Got 16 matches.
+ | No valid players in 1499354087.
+ | Done processing 1499354044. 11/16 disqualified
+ | Looping back to 1499354088...
+1499354088 [2015-08-03 00:28:41.017] >
+ | ==> 759ms
+ | Got 18 matches.
+ | No valid players in 1499354106.
+ | Done processing 1499354088. 10/18 disqualified
+ | Looping back to 1499354128...
+1499354128 [2015-08-03 00:28:43.019] >
+ | ==> 823ms
+ | Got 24 matches.
+ | No valid players in 1499354133.
+ | No valid players in 1499354135.
+ | No valid players in 1499354139.
+ | No valid players in 1499354153.
+ | No valid players in 1499354162.
+ | Done processing 1499354128. 15/24 disqualified
+ | Looping back to 1499354167...
+1499354167 [2015-08-03 00:28:45.021] >
+ | ==> 748ms
+ | Got 9 matches.
+ | No valid players in 1499354170.
+ | Done processing 1499354167. 6/9 disqualified
+ | Looping back to 1499354188...
+1499354188 [2015-08-03 00:28:47.022] >
+ | ==> 1039ms
+ | Got 21 matches.
+ | No valid players in 1499354193.
+ | No valid players in 1499354229.
+ | Done processing 1499354188. 10/21 disqualified
+ | Looping back to 1499354230...
+1499354230 [2015-08-03 00:28:49.024] >
+ | ==> 817ms
+ | Got 20 matches.
+ | No valid players in 1499354236.
+ | No valid players in 1499354275.
+ | Done processing 1499354230. 10/20 disqualified
+ | Looping back to 1499354276...
+1499354276 [2015-08-03 00:28:51.025] >
+ | ==> 823ms
+ | Got 17 matches.
+ | No valid players in 1499354285.
+ | Done processing 1499354276. 9/17 disqualified
+ | Looping back to 1499354308...
+1499354308 [2015-08-03 00:28:53.027] >
+ | ==> 787ms
+ | Got 17 matches.
+ | No valid players in 1499354320.
+ | No valid players in 1499354324.
+ | Done processing 1499354308. 9/17 disqualified
+ | Looping back to 1499354336...
+1499354336 [2015-08-03 00:28:55.028] >
+ | ==> 799ms
+ | Got 16 matches.
+ | No valid players in 1499354345.
+ | Done processing 1499354336. 7/16 disqualified
+ | Looping back to 1499354385...
+1499354385 [2015-08-03 00:28:57.030] >
+ | ==> 822ms
+ | Got 11 matches.
+ | Done processing 1499354385. 7/11 disqualified
+ | Looping back to 1499354410...
+1499354410 [2015-08-03 00:28:59.032] >
+ | ==> 1010ms
+ | Got 23 matches.
+ | No valid players in 1499354429.
+ | No valid players in 1499354444.
+ | Done processing 1499354410. 10/23 disqualified
+ | Looping back to 1499354451...
+1499354451 [2015-08-03 00:29:01.033] >
+ | ==> 685ms
+ | Got 14 matches.
+ | No valid players in 1499354451.
+ | No valid players in 1499354464.
+ | No valid players in 1499354477.
+ | Done processing 1499354451. 6/14 disqualified
+ | Looping back to 1499354478...
+1499354478 [2015-08-03 00:29:03.035] >
+ | ==> 860ms
+ | Got 24 matches.
+ | No valid players in 1499354505.
+ | No valid players in 1499354517.
+ | No valid players in 1499354520.
+ | Done processing 1499354478. 12/24 disqualified
+ | Looping back to 1499354521...
+1499354521 [2015-08-03 00:29:05.037] >
+ | ==> 840ms
+ | Got 19 matches.
+ | No valid players in 1499354536.
+ | Done processing 1499354521. 11/19 disqualified
+ | Looping back to 1499354555...
+1499354555 [2015-08-03 00:29:07.039] >
+ | ==> 843ms
+ | Got 17 matches.
+ | No valid players in 1499354589.
+ | Done processing 1499354555. 10/17 disqualified
+ | Looping back to 1499354595...
+1499354595 [2015-08-03 00:29:09.040] >
+ | ==> 756ms
+ | Got 18 matches.
+ | No valid players in 1499354602.
+ | No valid players in 1499354617.
+ | Done processing 1499354595. 8/18 disqualified
+ | Looping back to 1499354642...
+1499354642 [2015-08-03 00:29:11.041] >
+ | ==> 767ms
+ | Got 15 matches.
+ | No valid players in 1499354659.
+ | Done processing 1499354642. 9/15 disqualified
+ | Looping back to 1499354672...
+1499354672 [2015-08-03 00:29:13.043] >
+ | ==> 701ms
+ | Got 18 matches.
+ | No valid players in 1499354673.
+ | No valid players in 1499354690.
+ | No valid players in 1499354691.
+ | No valid players in 1499354692.
+ | Done processing 1499354672. 9/18 disqualified
+ | Looping back to 1499354699...
+1499354699 [2015-08-03 00:29:15.045] >
+ | ==> 1222ms
+ | Got 25 matches.
+ | Done processing 1499354699. 12/25 disqualified
+ | Looping back to 1499354738...
+1499354738 [2015-08-03 00:29:17.046] >
+ | ==> 785ms
+ | Got 18 matches.
+ | No valid players in 1499354741.
+ | Done processing 1499354738. 10/18 disqualified
+ | Looping back to 1499354773...
+1499354773 [2015-08-03 00:29:19.049] >
+ | ==> 957ms
+ | Got 18 matches.
+ | No valid players in 1499354803.
+ | Done processing 1499354773. 11/18 disqualified
+ | Looping back to 1499354814...
+1499354814 [2015-08-03 00:29:21.050] >
+ | ==> 856ms
+ | Got 17 matches.
+ | No valid players in 1499354841.
+ | Done processing 1499354814. 10/17 disqualified
+ | Looping back to 1499354848...
+1499354848 [2015-08-03 00:29:23.051] >
+ | ==> 848ms
+ | Got 10 matches.
+ | No valid players in 1499354881.
+ | Done processing 1499354848. 7/10 disqualified
+ | Looping back to 1499354882...
+1499354882 [2015-08-03 00:29:25.052] >
+ | ==> 779ms
+ | Got 14 matches.
+ | No valid players in 1499354900.
+ | No valid players in 1499354918.
+ | Done processing 1499354882. 8/14 disqualified
+ | Looping back to 1499354919...
+1499354919 [2015-08-03 00:29:27.053] >
+ | ==> 1222ms
+ | Got 19 matches.
+ | No valid players in 1499354922.
+ | No valid players in 1499354934.
+ | No valid players in 1499354949.
+ | Done processing 1499354919. 11/19 disqualified
+ | Looping back to 1499354954...
+1499354954 [2015-08-03 00:29:29.055] >
+ | ==> 1559ms
+ | Got 17 matches.
+ | Done processing 1499354954. 11/17 disqualified
+ | Looping back to 1499354984...
+1499354984 [2015-08-03 00:29:31.057] >
+ | ==> 2433ms
+ | Got 22 matches.
+ | No valid players in 1499354985.
+ | No valid players in 1499354986.
+ | No valid players in 1499354989.
+ | No valid players in 1499355009.
+ | No valid players in 1499355019.
+ | Done processing 1499354984. 5/22 disqualified
+ | Looping back to 1499355022...
+1499355022 [2015-08-03 00:29:33.511] >
+ | ==> 718ms
+ | Got 11 matches.
+ | No valid players in 1499355036.
+ | Done processing 1499355022. 5/11 disqualified
+ | Looping back to 1499355052...
+1499355052 [2015-08-03 00:29:35.513] >
+ | ==> 784ms
+ | Got 19 matches.
+ | No valid players in 1499355061.
+ | Done processing 1499355052. 10/19 disqualified
+ | Looping back to 1499355090...
+1499355090 [2015-08-03 00:29:37.515] >
+ | ==> 719ms
+ | Got 10 matches.
+ | Done processing 1499355090. 7/10 disqualified
+ | Looping back to 1499355129...
+1499355129 [2015-08-03 00:29:39.516] >
+ | ==> 658ms
+ | Got 13 matches.
+ | Done processing 1499355129. 10/13 disqualified
+ | Looping back to 1499355163...
+1499355163 [2015-08-03 00:29:41.518] >
+ | ==> 790ms
+ | Got 14 matches.
+ | No valid players in 1499355166.
+ | No valid players in 1499355174.
+ | Done processing 1499355163. 6/14 disqualified
+ | Looping back to 1499355201...
+1499355201 [2015-08-03 00:29:43.519] >
+ | ==> 837ms
+ | Got 17 matches.
+ | No valid players in 1499355208.
+ | Done processing 1499355201. 10/17 disqualified
+ | Looping back to 1499355231...
+1499355231 [2015-08-03 00:29:45.520] >
+ | ==> 831ms
+ | Got 18 matches.
+ | No valid players in 1499355267.
+ | Done processing 1499355231. 6/18 disqualified
+ | Looping back to 1499355270...
+1499355270 [2015-08-03 00:29:47.521] >
+ | ==> 816ms
+ | Got 15 matches.
+ | No valid players in 1499355274.
+ | No valid players in 1499355285.
+ | Done processing 1499355270. 9/15 disqualified
+ | Looping back to 1499355306...
+1499355306 [2015-08-03 00:29:49.522] >
+ | ==> 779ms
+ | Got 18 matches.
+ | No valid players in 1499355311.
+ | Done processing 1499355306. 10/18 disqualified
+ | Looping back to 1499355344...
+1499355344 [2015-08-03 00:29:51.523] >
+ | ==> 752ms
+ | Got 20 matches.
+ | No valid players in 1499355349.
+ | No valid players in 1499355380.
+ | Done processing 1499355344. 11/20 disqualified
+ | Looping back to 1499355381...
+1499355381 [2015-08-03 00:29:53.524] >
+ | ==> 879ms
+ | Got 25 matches.
+ | No valid players in 1499355390.
+ | No valid players in 1499355405.
+ | Done processing 1499355381. 14/25 disqualified
+ | Looping back to 1499355422...
+1499355422 [2015-08-03 00:29:55.525] >
+ | ==> 819ms
+ | Got 19 matches.
+ | No valid players in 1499355430.
+ | Done processing 1499355422. 12/19 disqualified
+ | Looping back to 1499355460...
+1499355460 [2015-08-03 00:29:57.526] >
+ | ==> 678ms
+ | Got 12 matches.
+ | Done processing 1499355460. 7/12 disqualified
+ | Looping back to 1499355487...
+1499355487 [2015-08-03 00:29:59.527] >
+ | ==> 697ms
+ | Got 12 matches.
+ | No valid players in 1499355497.
+ | No valid players in 1499355498.
+ | No valid players in 1499355503.
+ | No valid players in 1499355505.
+ | Done processing 1499355487. 5/12 disqualified
+ | Looping back to 1499355515...
+1499355515 [2015-08-03 00:30:01.529] >
+ | ==> 875ms
+ | Got 19 matches.
+ | No valid players in 1499355536.
+ | No valid players in 1499355543.
+ | No valid players in 1499355547.
+ | Done processing 1499355515. 9/19 disqualified
+ | Looping back to 1499355555...
+1499355555 [2015-08-03 00:30:03.531] >
+ | ==> 1006ms
+ | Got 21 matches.
+ | No valid players in 1499355573.
+ | Done processing 1499355555. 10/21 disqualified
+ | Looping back to 1499355596...
+1499355596 [2015-08-03 00:30:05.533] >
+ | ==> 782ms
+ | Got 18 matches.
+ | No valid players in 1499355605.
+ | No valid players in 1499355630.
+ | Done processing 1499355596. 13/18 disqualified
+ | Looping back to 1499355631...
+1499355631 [2015-08-03 00:30:07.534] >
+ | ==> 671ms
+ | Got 14 matches.
+ | No valid players in 1499355640.
+ | No valid players in 1499355649.
+ | Done processing 1499355631. 8/14 disqualified
+ | Looping back to 1499355671...
+1499355671 [2015-08-03 00:30:09.536] >
+ | ==> 879ms
+ | Got 18 matches.
+ | Done processing 1499355671. 9/18 disqualified
+ | Looping back to 1499355707...
+1499355707 [2015-08-03 00:30:11.537] >
+ | ==> 1020ms
+ | Got 17 matches.
+ | No valid players in 1499355707.
+ | No valid players in 1499355714.
+ | No valid players in 1499355726.
+ | No valid players in 1499355728.
+ | No valid players in 1499355731.
+ | Done processing 1499355707. 8/17 disqualified
+ | Looping back to 1499355744...
+1499355744 [2015-08-03 00:30:13.538] >
+ | ==> 1180ms
+ | Got 14 matches.
+ | No valid players in 1499355750.
+ | No valid players in 1499355759.
+ | Done processing 1499355744. 6/14 disqualified
+ | Looping back to 1499355775...
+1499355775 [2015-08-03 00:30:15.540] >
+ | ==> 974ms
+ | Got 17 matches.
+ | No valid players in 1499355786.
+ | Done processing 1499355775. 10/17 disqualified
+ | Looping back to 1499355821...
+1499355821 [2015-08-03 00:30:17.542] >
+ | ==> 809ms
+ | Got 14 matches.
+ | No valid players in 1499355823.
+ | Done processing 1499355821. 9/14 disqualified
+ | Looping back to 1499355845...
+1499355845 [2015-08-03 00:30:19.543] >
+ | ==> 843ms
+ | Got 20 matches.
+ | Done processing 1499355845. 10/20 disqualified
+ | Looping back to 1499355894...
+1499355894 [2015-08-03 00:30:21.545] >
+ | ==> 692ms
+ | Got 14 matches.
+ | No valid players in 1499355899.
+ | No valid players in 1499355925.
+ | Done processing 1499355894. 5/14 disqualified
+ | Looping back to 1499355928...
+1499355928 [2015-08-03 00:30:23.546] >
+ | ==> 870ms
+ | Got 24 matches.
+ | No valid players in 1499355948.
+ | No valid players in 1499355952.
+ | No valid players in 1499355955.
+ | Done processing 1499355928. 11/24 disqualified
+ | Looping back to 1499355977...
+1499355977 [2015-08-03 00:30:25.547] >
+ | ==> 752ms
+ | Got 17 matches.
+ | No valid players in 1499356009.
+ | Done processing 1499355977. 10/17 disqualified
+ | Looping back to 1499356012...
+1499356012 [2015-08-03 00:30:27.548] >
+ | ==> 906ms
+ | Got 25 matches.
+ | No valid players in 1499356021.
+ | Done processing 1499356012. 13/25 disqualified
+ | Looping back to 1499356054...
+1499356054 [2015-08-03 00:30:29.549] >
+ | ==> 801ms
+ | Got 14 matches.
+ | No valid players in 1499356072.
+ | No valid players in 1499356084.
+ | Done processing 1499356054. 6/14 disqualified
+ | Looping back to 1499356086...
+1499356086 [2015-08-03 00:30:31.550] >
+ | ==> 1028ms
+ | Got 16 matches.
+ | No valid players in 1499356110.
+ | No valid players in 1499356115.
+ | Done processing 1499356086. 8/16 disqualified
+ | Looping back to 1499356123...
+1499356123 [2015-08-03 00:30:33.551] >
+ | ==> 863ms
+ | Got 21 matches.
+ | No valid players in 1499356135.
+ | No valid players in 1499356153.
+ | Done processing 1499356123. 8/21 disqualified
+ | Looping back to 1499356162...
+1499356162 [2015-08-03 00:30:35.553] >
+ | ==> 887ms
+ | Got 17 matches.
+ | No valid players in 1499356176.
+ | No valid players in 1499356178.
+ | Done processing 1499356162. 9/17 disqualified
+ | Looping back to 1499356191...
+1499356191 [2015-08-03 00:30:37.555] >
+ | ==> 979ms
+ | Got 24 matches.
+ | No valid players in 1499356201.
+ | No valid players in 1499356224.
+ | Done processing 1499356191. 15/24 disqualified
+ | Looping back to 1499356234...
+1499356234 [2015-08-03 00:30:39.556] >
+ | ==> 1330ms
+ | Got 22 matches.
+ | No valid players in 1499356245.
+ | No valid players in 1499356259.
+ | Done processing 1499356234. 14/22 disqualified
+ | Looping back to 1499356279...
+1499356279 [2015-08-03 00:30:41.558] >
+ | ==> 1338ms
+ | Got 18 matches.
+ | No valid players in 1499356282.
+ | No valid players in 1499356293.
+ | No valid players in 1499356294.
+ | No valid players in 1499356299.
+ | Done processing 1499356279. 5/18 disqualified
+ | Looping back to 1499356309...
+1499356309 [2015-08-03 00:30:43.559] >
+ | ==> 827ms
+ | Got 17 matches.
+ | No valid players in 1499356334.
+ | Done processing 1499356309. 8/17 disqualified
+ | Looping back to 1499356340...
+1499356340 [2015-08-03 00:30:45.561] >
+ | ==> 1112ms
+ | Got 19 matches.
+ | No valid players in 1499356343.
+ | No valid players in 1499356346.
+ | No valid players in 1499356356.
+ | No valid players in 1499356365.
+ | No valid players in 1499356366.
+ | No valid players in 1499356368.
+ | Done processing 1499356340. 7/19 disqualified
+ | Looping back to 1499356377...
+1499356377 [2015-08-03 00:30:47.563] >
+ | ==> 734ms
+ | Got 14 matches.
+ | No valid players in 1499356393.
+ | No valid players in 1499356398.
+ | No valid players in 1499356403.
+ | No valid players in 1499356405.
+ | Done processing 1499356377. 4/14 disqualified
+ | Looping back to 1499356411...
+1499356411 [2015-08-03 00:30:49.565] >
+ | ==> 854ms
+ | Got 10 matches.
+ | Done processing 1499356411. 5/10 disqualified
+ | Looping back to 1499356437...
+1499356437 [2015-08-03 00:30:51.567] >
+ | ==> 747ms
+ | Got 18 matches.
+ | No valid players in 1499356440.
+ | No valid players in 1499356444.
+ | No valid players in 1499356464.
+ | Done processing 1499356437. 11/18 disqualified
+ | Looping back to 1499356480...
+1499356480 [2015-08-03 00:30:53.568] >
+ | ==> 776ms
+ | Got 13 matches.
+ | No valid players in 1499356495.
+ | Done processing 1499356480. 5/13 disqualified
+ | Looping back to 1499356510...
+1499356510 [2015-08-03 00:30:55.570] >
+ | ==> 823ms
+ | Got 24 matches.
+ | No valid players in 1499356530.
+ | No valid players in 1499356551.
+ | Done processing 1499356510. 15/24 disqualified
+ | Looping back to 1499356557...
+1499356557 [2015-08-03 00:30:57.572] >
+ | ==> 725ms
+ | Got 20 matches.
+ | No valid players in 1499356576.
+ | No valid players in 1499356585.
+ | Done processing 1499356557. 12/20 disqualified
+ | Looping back to 1499356600...
+1499356600 [2015-08-03 00:30:59.573] >
+ | ==> 891ms
+ | Got 22 matches.
+ | No valid players in 1499356626.
+ | Done processing 1499356600. 12/22 disqualified
+ | Looping back to 1499356636...
+1499356636 [2015-08-03 00:31:01.574] >
+ | ==> 860ms
+ | Got 21 matches.
+ | No valid players in 1499356644.
+ | No valid players in 1499356649.
+ | Done processing 1499356636. 12/21 disqualified
+ | Looping back to 1499356679...
+1499356679 [2015-08-03 00:31:03.576] >
+ | ==> 709ms
+ | Got 11 matches.
+ | No valid players in 1499356687.
+ | Done processing 1499356679. 6/11 disqualified
+ | Looping back to 1499356707...
+1499356707 [2015-08-03 00:31:05.578] >
+ | ==> 818ms
+ | Got 24 matches.
+ | No valid players in 1499356725.
+ | No valid players in 1499356732.
+ | No valid players in 1499356737.
+ | No valid players in 1499356744.
+ | Done processing 1499356707. 10/24 disqualified
+ | Looping back to 1499356748...
+1499356748 [2015-08-03 00:31:07.580] >
+ | ==> 838ms
+ | Got 16 matches.
+ | Done processing 1499356748. 10/16 disqualified
+ | Looping back to 1499356786...
+1499356786 [2015-08-03 00:31:09.582] >
+ | ==> 942ms
+ | Got 19 matches.
+ | No valid players in 1499356791.
+ | No valid players in 1499356809.
+ | No valid players in 1499356810.
+ | Done processing 1499356786. 6/19 disqualified
+ | Looping back to 1499356823...
+1499356823 [2015-08-03 00:31:11.583] >
+ | ==> 762ms
+ | Got 17 matches.
+ | No valid players in 1499356835.
+ | No valid players in 1499356844.
+ | No valid players in 1499356851.
+ | No valid players in 1499356863.
+ | Done processing 1499356823. 8/17 disqualified
+ | Looping back to 1499356864...
+1499356864 [2015-08-03 00:31:13.584] >
+ | ==> 749ms
+ | Got 18 matches.
+ | No valid players in 1499356904.
+ | Done processing 1499356864. 13/18 disqualified
+ | Looping back to 1499356905...
+1499356905 [2015-08-03 00:31:15.585] >
+ | ==> 679ms
+ | Got 14 matches.
+ | No valid players in 1499356910.
+ | No valid players in 1499356937.
+ | Done processing 1499356905. 7/14 disqualified
+ | Looping back to 1499356938...
+1499356938 [2015-08-03 00:31:17.586] >
+ | ==> 867ms
+ | Got 23 matches.
+ | No valid players in 1499356944.
+ | No valid players in 1499356945.
+ | No valid players in 1499356966.
+ | Done processing 1499356938. 12/23 disqualified
+ | Looping back to 1499356974...
+1499356974 [2015-08-03 00:31:19.587] >
+ | ==> 952ms
+ | Got 24 matches.
+ | No valid players in 1499356994.
+ | Done processing 1499356974. 13/24 disqualified
+ | Looping back to 1499357008...
+1499357008 [2015-08-03 00:31:21.589] >
+ | ==> 706ms
+ | Got 16 matches.
+ | No valid players in 1499357014.
+ | No valid players in 1499357018.
+ | No valid players in 1499357020.
+ | No valid players in 1499357032.
+ | Done processing 1499357008. 6/16 disqualified
+ | Looping back to 1499357033...
+1499357033 [2015-08-03 00:31:23.590] >
+ | ==> 925ms
+ | Got 17 matches.
+ | Done processing 1499357033. 4/17 disqualified
+ | Looping back to 1499357067...
+1499357067 [2015-08-03 00:31:25.591] >
+ | ==> 822ms
+ | Got 19 matches.
+ | Done processing 1499357067. 10/19 disqualified
+ | Looping back to 1499357104...
+1499357104 [2015-08-03 00:31:27.592] >
+ | ==> 820ms
+ | Got 18 matches.
+ | No valid players in 1499357123.
+ | No valid players in 1499357124.
+ | No valid players in 1499357140.
+ | Done processing 1499357104. 6/18 disqualified
+ | Looping back to 1499357142...
+1499357142 [2015-08-03 00:31:29.594] >
+ | ==> 740ms
+ | Got 16 matches.
+ | No valid players in 1499357161.
+ | No valid players in 1499357166.
+ | Done processing 1499357142. 5/16 disqualified
+ | Looping back to 1499357176...
+1499357176 [2015-08-03 00:31:31.595] >
+ | ==> 807ms
+ | Got 17 matches.
+ | No valid players in 1499357187.
+ | No valid players in 1499357191.
+ | Done processing 1499357176. 7/17 disqualified
+ | Looping back to 1499357210...
+1499357210 [2015-08-03 00:31:33.596] >
+ | ==> 695ms
+ | Got 17 matches.
+ | Done processing 1499357210. 11/17 disqualified
+ | Looping back to 1499357251...
+1499357251 [2015-08-03 00:31:35.598] >
+ | ==> 957ms
+ | Got 20 matches.
+ | No valid players in 1499357279.
+ | No valid players in 1499357288.
+ | Done processing 1499357251. 9/20 disqualified
+ | Looping back to 1499357293...
+1499357293 [2015-08-03 00:31:37.599] >
+ | ==> 762ms
+ | Got 15 matches.
+ | No valid players in 1499357304.
+ | No valid players in 1499357309.
+ | Done processing 1499357293. 7/15 disqualified
+ | Looping back to 1499357323...
+1499357323 [2015-08-03 00:31:39.600] >
+ | ==> 597ms
+ | Got 8 matches.
+ | Done processing 1499357323. 2/8 disqualified
+ | Looping back to 1499357346...
+1499357346 [2015-08-03 00:31:41.602] >
+ | ==> 726ms
+ | Got 15 matches.
+ | No valid players in 1499357353.
+ | No valid players in 1499357372.
+ | No valid players in 1499357375.
+ | Done processing 1499357346. 9/15 disqualified
+ | Looping back to 1499357382...
+1499357382 [2015-08-03 00:31:43.603] >
+ | ==> 664ms
+ | Got 15 matches.
+ | No valid players in 1499357400.
+ | Done processing 1499357382. 8/15 disqualified
+ | Looping back to 1499357415...
+1499357415 [2015-08-03 00:31:45.605] >
+ | ==> 771ms
+ | Got 18 matches.
+ | No valid players in 1499357421.
+ | Done processing 1499357415. 11/18 disqualified
+ | Looping back to 1499357449...
+1499357449 [2015-08-03 00:31:47.606] >
+ | ==> 807ms
+ | Got 19 matches.
+ | No valid players in 1499357450.
+ | No valid players in 1499357457.
+ | No valid players in 1499357463.
+ | Done processing 1499357449. 11/19 disqualified
+ | Looping back to 1499357489...
+1499357489 [2015-08-03 00:31:49.607] >
+ | ==> 843ms
+ | Got 25 matches.
+ | No valid players in 1499357533.
+ | Done processing 1499357489. 15/25 disqualified
+ | Looping back to 1499357538...
+1499357538 [2015-08-03 00:31:51.609] >
+ | ==> 826ms
+ | Got 14 matches.
+ | No valid players in 1499357569.
+ | Done processing 1499357538. 5/14 disqualified
+ | Looping back to 1499357574...
+1499357574 [2015-08-03 00:31:53.611] >
+ | ==> 1196ms
+ | Got 19 matches.
+ | No valid players in 1499357580.
+ | No valid players in 1499357590.
+ | No valid players in 1499357600.
+ | No valid players in 1499357606.
+ | Done processing 1499357574. 10/19 disqualified
+ | Looping back to 1499357612...
+1499357612 [2015-08-03 00:31:55.613] >
+ | ==> 686ms
+ | Got 14 matches.
+ | Done processing 1499357612. 6/14 disqualified
+ | Looping back to 1499357639...
+1499357639 [2015-08-03 00:31:57.614] >
+ | ==> 746ms
+ | Got 13 matches.
+ | No valid players in 1499357661.
+ | No valid players in 1499357665.
+ | Done processing 1499357639. 7/13 disqualified
+ | Looping back to 1499357676...
+1499357676 [2015-08-03 00:31:59.615] >
+ | ==> 716ms
+ | Got 12 matches.
+ | No valid players in 1499357694.
+ | Done processing 1499357676. 7/12 disqualified
+ | Looping back to 1499357713...
+1499357713 [2015-08-03 00:32:01.617] >
+ | ==> 808ms
+ | Got 14 matches.
+ | No valid players in 1499357724.
+ | Done processing 1499357713. 5/14 disqualified
+ | Looping back to 1499357752...
+1499357752 [2015-08-03 00:32:03.619] >
+ | ==> 696ms
+ | Got 15 matches.
+ | Done processing 1499357752. 9/15 disqualified
+ | Looping back to 1499357788...
+1499357788 [2015-08-03 00:32:05.621] >
+ | ==> 847ms
+ | Got 12 matches.
+ | No valid players in 1499357812.
+ | Done processing 1499357788. 5/12 disqualified
+ | Looping back to 1499357823...
+1499357823 [2015-08-03 00:32:07.623] >
+ | ==> 770ms
+ | Got 10 matches.
+ | No valid players in 1499357832.
+ | Done processing 1499357823. 6/10 disqualified
+ | Looping back to 1499357848...
+1499357848 [2015-08-03 00:32:09.625] >
+ | ==> 853ms
+ | Got 22 matches.
+ | No valid players in 1499357879.
+ | Done processing 1499357848. 9/22 disqualified
+ | Looping back to 1499357891...
+1499357891 [2015-08-03 00:32:11.626] >
+ | ==> 828ms
+ | Got 25 matches.
+ | No valid players in 1499357903.
+ | Done processing 1499357891. 13/25 disqualified
+ | Looping back to 1499357933...
+1499357933 [2015-08-03 00:32:13.628] >
+ | ==> 880ms
+ | Got 18 matches.
+ | No valid players in 1499357946.
+ | Done processing 1499357933. 10/18 disqualified
+ | Looping back to 1499357973...
+1499357973 [2015-08-03 00:32:15.630] >
+ | ==> 833ms
+ | Got 12 matches.
+ | Done processing 1499357973. 10/12 disqualified
+ | Looping back to 1499358006...
+1499358006 [2015-08-03 00:32:17.631] >
+ | ==> 832ms
+ | Got 25 matches.
+ | No valid players in 1499358038.
+ | Done processing 1499358006. 10/25 disqualified
+ | Looping back to 1499358045...
+1499358045 [2015-08-03 00:32:19.632] >
+ | ==> 767ms
+ | Got 16 matches.
+ | No valid players in 1499358047.
+ | No valid players in 1499358069.
+ | Done processing 1499358045. 9/16 disqualified
+ | Looping back to 1499358083...
+1499358083 [2015-08-03 00:32:21.634] >
+ | ==> 854ms
+ | Got 8 matches.
+ | Done processing 1499358083. 3/8 disqualified
+ | Looping back to 1499358110...
+1499358110 [2015-08-03 00:32:23.635] >
+ | ==> 828ms
+ | Got 17 matches.
+ | Done processing 1499358110. 8/17 disqualified
+ | Looping back to 1499358144...
+1499358144 [2015-08-03 00:32:25.637] >
+ | ==> 902ms
+ | Got 16 matches.
+ | No valid players in 1499358148.
+ | No valid players in 1499358152.
+ | Done processing 1499358144. 9/16 disqualified
+ | Looping back to 1499358175...
+1499358175 [2015-08-03 00:32:27.638] >
+ | ==> 820ms
+ | Got 16 matches.
+ | Done processing 1499358175. 10/16 disqualified
+ | Looping back to 1499358218...

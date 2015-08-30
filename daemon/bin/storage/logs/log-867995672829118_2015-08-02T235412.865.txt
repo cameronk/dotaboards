@@ -1,0 +1,137 @@
+________          __        ___.                          .___      
+______    _____/  |______ _ |__   _________ _______  __| _/______
+ |    |   /  _    ____   | __  /  _ __  \_  __ / __ |/  ___/
+ |    `   (  <_> )  |  / __ | _ (  <_> ) __ |  | / /_/ |___  
+/_______  /____/|__| (____  /___  /____(____  /__|  ____ /____ >
+         /                 /    /           /           /    /
+====================================================================
+ENV: LOCAL, hash: 867995672829118
+====================================================================
+ > Initialized new pool instance.
+ | QueryHelper::truncateMatches()
+ | QueryHelper::retrieveBans()
+ > Instantiated monitor.
+ | Instantiated processor 985042820 with shortcode: global, ident: worldwide
+ > Instantiating: us
+ | Instantiated processor 536085751 with shortcode: us, ident: USA
+ > Instantiating: eu
+ | Instantiated processor 493860115 with shortcode: eu, ident: European
+ > Instantiating: asia
+ | Instantiated processor 845597304 with shortcode: asia, ident: Asian
+ > Instantiating: africa
+ | Instantiated processor 877956815 with shortcode: africa, ident: African
+ > Instantiating: russia
+ | Instantiated processor 960366919 with shortcode: russia, ident: Russian
+ > Instantiating: south-america
+ | Instantiated processor 796222670 with shortcode: south-america, ident: South American
+ > Instantiating: aus
+ | Instantiated processor 130187957 with shortcode: aus, ident: Australian
+
+
+
+
+
+===================================================
+=====     Instantiating a new Dispatcher.     =====
+===================================================
+[[126376259],[192610450],[201388981],[202616372],[202679658],[211289385]]
+ > at 1499315390
+1499315390 [2015-08-02 23:54:14.824] >
+ | ==> 875ms
+ | Caught a request error for fetching from 1499315390.
+ | Running another loop in 15 seconds...
+ > RequestFailure (The null object does not have a method 'cancel'.
+
+NoSuchMethodError: method not found: 'cancel'
+Receiver: null
+Arguments: [])
+1499315390 [2015-08-02 23:54:30.714] >
+ | ==> 794ms
+ | Got 25 matches.
+ | 64971026 --> us
+ | 84378433 --> us
+ | 58677948 --> us
+ | 105280181 --> us
+ | 167157898 --> us
+ | 154296269 --> us
+ | 91149351 --> us
+ | 157519231 --> us
+ | 115786079 --> us
+ | 137297920 --> asia
+ | 139571800 --> asia
+ | 136646634 --> asia
+ | 138586709 --> asia
+ | 135700589 --> asia
+ | 139715739 --> asia
+ | 134898507 --> asia
+ | 242286722 --> asia
+ | 198978113 --> asia
+ | 191557807 --> asia
+ | 167525670 --> south-america
+ | 117971898 --> south-america
+ | 121876617 --> south-america
+ | 98927519 --> south-america
+ | 167507662 --> south-america
+ | 103820619 --> south-america
+ | 156645868 --> south-america
+ | 149079385 --> south-america
+ | 151868076 --> south-america
+ | 201940217 --> south-america
+ | 181865840 --> asia
+ | 207205764 --> asia
+ | No valid players in 1499315431.
+ | No valid players in 1499315438.
+ | 156696054 --> south-america
+ | No valid players in 1499315445.
+ | Done processing 1499315390. 14/25 disqualified
+ | Looping back to 1499315447...
+1499315447 [2015-08-02 23:54:32.716] >
+ | ==> 849ms
+ | Got 25 matches.
+ | 120106913 --> south-america
+ | 106828842 --> south-america
+ | 267121580 --> asia
+ | 172209148 --> asia
+ | 151741207 --> asia
+ | 151625640 --> asia
+ | 192339892 --> asia
+ | 112361701 --> asia
+ | No valid players in 1499315487.
+ | 274018508 --> south-america
+ | 135156637 --> russia
+ | 128669244 --> russia
+ | 113636073 --> russia
+ | 132018127 --> russia
+ | 139823506 --> russia
+ | 202579751 --> russia
+ | 171591219 --> russia
+ | 129493904 --> russia
+ | 116058972 --> russia
+ | 114926307 --> russia
+ | 47254927 --> us
+ | 27066553 --> us
+ | 108222558 --> us
+ | 106402332 --> us
+ | 4523602 --> us
+ | 103951004 --> us
+ | 82296789 --> us
+ | 93505130 --> us
+ | 132919268 --> asia
+ | 181602104 --> asia
+ | 281802700 --> asia
+ | 252627800 --> asia
+ | 192029244 --> us
+ | 2141528 --> us
+ | 123104954 --> us
+ | 19966396 --> us
+ | 118131046 --> us
+ | 80428505 --> us
+ | 118133319 --> us
+ | 75041834 --> us
+ | 26356180 --> us
+ | 75628697 --> south-america
+ | 157940514 --> south-america
+ | 90783201 --> south-america
+ | 282302140 --> us
+ | Done processing 1499315447. 13/25 disqualified
+ | Looping back to 1499315509...

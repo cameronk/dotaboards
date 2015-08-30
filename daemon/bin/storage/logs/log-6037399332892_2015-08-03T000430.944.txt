@@ -1,0 +1,52 @@
+________          __        ___.                          .___      
+______    _____/  |______ _ |__   _________ _______  __| _/______
+ |    |   /  _    ____   | __  /  _ __  \_  __ / __ |/  ___/
+ |    `   (  <_> )  |  / __ | _ (  <_> ) __ |  | / /_/ |___  
+/_______  /____/|__| (____  /___  /____(____  /__|  ____ /____ >
+         /                 /    /           /           /    /
+====================================================================
+ENV: LOCAL, hash: 6037399332892
+====================================================================
+ > Initialized new pool instance.
+ | QueryHelper::truncateMatches()
+ | QueryHelper::retrieveBans()
+ > Instantiated monitor.
+ | Instantiated processor 781526387 with shortcode: global, ident: worldwide
+ > Instantiating: us
+ | Instantiated processor 361502914 with shortcode: us, ident: USA
+ > Instantiating: eu
+ | Instantiated processor 217948493 with shortcode: eu, ident: European
+ > Instantiating: asia
+ | Instantiated processor 464824717 with shortcode: asia, ident: Asian
+ > Instantiating: africa
+ | Instantiated processor 994497434 with shortcode: africa, ident: African
+ > Instantiating: russia
+ | Instantiated processor 237099678 with shortcode: russia, ident: Russian
+ > Instantiating: south-america
+ | Instantiated processor 262614210 with shortcode: south-america, ident: South American
+ > Instantiating: aus
+ | Instantiated processor 735372757 with shortcode: aus, ident: Australian
+
+
+
+
+
+===================================================
+=====     Instantiating a new Dispatcher.     =====
+===================================================
+[[126376259],[192610450],[201388981],[202616372],[202679658],[211289385]]
+
+
+
+
+
+ > at 1499326155
+1499326155 [2015-08-03 00:04:32.676] >
+ | ==> 804ms
+ | Caught a request error for fetching from 1499326155.
+ | Running another loop in 15 seconds...
+ > RequestFailure (The null object does not have a method 'cancel'.
+
+NoSuchMethodError: method not found: 'cancel'
+Receiver: null
+Arguments: [])

@@ -1,0 +1,7 @@
+2015-08-04 17:45:27.292: pushing currentRecordedMatches=1175, lastRetrievedMatchCount=0
+
+ playerStats:
+{current: {kills: 45935, deaths: 18182, assists: 40414, duration: 7966164}, total: {kills: 45935, deaths: 18182, assists: 40414, duration: 7966164}}2015-08-04 18:20:55.791: pushing currentRecordedMatches=1730, lastRetrievedMatchCount=0
+
+ playerStats:
+{current: {kills: 53915, deaths: 19553, assists: 43978, duration: 8857701}, total: {kills: 53915, deaths: 19553, assists: 43978, duration: 8857701}}

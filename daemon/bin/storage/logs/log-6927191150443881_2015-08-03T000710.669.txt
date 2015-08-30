@@ -1,0 +1,52 @@
+________          __        ___.                          .___      
+______    _____/  |______ _ |__   _________ _______  __| _/______
+ |    |   /  _    ____   | __  /  _ __  \_  __ / __ |/  ___/
+ |    `   (  <_> )  |  / __ | _ (  <_> ) __ |  | / /_/ |___  
+/_______  /____/|__| (____  /___  /____(____  /__|  ____ /____ >
+         /                 /    /           /           /    /
+====================================================================
+ENV: LOCAL, hash: 6927191150443881
+====================================================================
+ > Initialized new pool instance.
+ | QueryHelper::truncateMatches()
+ | QueryHelper::retrieveBans()
+ > Instantiated monitor.
+ | Instantiated processor 112028132 with shortcode: global, ident: worldwide
+ > Instantiating: us
+ | Instantiated processor 900760660 with shortcode: us, ident: USA
+ > Instantiating: eu
+ | Instantiated processor 720042118 with shortcode: eu, ident: European
+ > Instantiating: asia
+ | Instantiated processor 399817167 with shortcode: asia, ident: Asian
+ > Instantiating: africa
+ | Instantiated processor 519085990 with shortcode: africa, ident: African
+ > Instantiating: russia
+ | Instantiated processor 424571901 with shortcode: russia, ident: Russian
+ > Instantiating: south-america
+ | Instantiated processor 275969680 with shortcode: south-america, ident: South American
+ > Instantiating: aus
+ | Instantiated processor 71597269 with shortcode: aus, ident: Australian
+
+
+
+
+
+===================================================
+=====     Instantiating a new Dispatcher.     =====
+===================================================
+ | Banned: 126376259
+ | Banned: 192610450
+ | Banned: 201388981
+ | Banned: 202616372
+ | Banned: 202679658
+ | Banned: 211289385
+ > at 1499328503
+1499328503 [2015-08-03 00:07:12.318] >
+ | ==> 840ms
+ | Caught a request error for fetching from 1499328503.
+ | Running another loop in 15 seconds...
+ > RequestFailure (The null object does not have a method 'cancel'.
+
+NoSuchMethodError: method not found: 'cancel'
+Receiver: null
+Arguments: [])
