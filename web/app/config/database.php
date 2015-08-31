@@ -55,9 +55,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'dotaboards_main',
+			'database'  => 'dotaboards/main',
 			'username'  => 'dotaboards',
-			'password'  => 'C1qsP228Ns41F5204gpGH94WF0VJ33y525S68lzhL6lS71w30K95He9C6W5m8ZF',
+			'password'  => '24475771273875943445683205332641209486229296208190',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

@@ -21,9 +21,9 @@ class Statistics {
 	 * playerStats:              Equivalent of processor's _CumulativeStatistics, records player stats
 	 */
 	Future recordPush(Set currentRecordedMatches, int lastRetrievedMatchCount, Map<String, Map> playerStats) {
-		print("Recording stats for PUSH.");
+		ENV.log("Recording stats for PUSH.", type:3, level:1);
 		
-		this.statsLogFile.writeAsString("${new DateTime.now().toLocal()}: pushing currentRecordedMatches=${currentRecordedMatches.length}, lastRetrievedMatchCount=${lastRetrievedMatchCount}\n\n playerStats:\n${playerStats}", mode: APPEND);
+		this.statsLogFile.writeAsString("\n================================================\n${new DateTime.now().toLocal()}: pushing currentRecordedMatches=${currentRecordedMatches.length}, lastRetrievedMatchCount=${lastRetrievedMatchCount}\n playerStats:${playerStats}", mode: APPEND);
 		
 		List<Future> wait = [
 			queries.updateCurrentMatchCount( currentRecordedMatches.length ),
@@ -38,7 +38,7 @@ class Statistics {
 	
 	
 	Future recordClean( Map cachedBoards, Map<String, int> appearances) {
-		print(" | Recording stats for CLEAN.");
+		ENV.log(" Recording stats for CLEAN.", type:3, level:1);
 		
 		Map<String, String> stats 	= new Map();
 		Map<int, int> heroes 		= new Map();
@@ -61,7 +61,7 @@ class Statistics {
 			
 			String avg = (total / cachedBoards[board]["raw"].length).toStringAsFixed(5);
 			
-			print(" | Average for $board: $avg (total: $total)");
+			ENV.log("Average for $board: $avg", type:3, level:1);
 			
 			stats["avg_${board.toLowerCase()}"] = avg;
 			

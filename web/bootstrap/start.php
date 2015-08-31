@@ -24,11 +24,21 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+// $env = $app->detectEnvironment(array(
 
-	'local' => array('your-machine-name'),
+// 	'local' => array('your-machine-name'),
 
-));
+// ));
+
+$env = $app->detectEnvironment(function() 
+{
+
+	$split = explode("/", strtolower(__DIR__));
+	if(in_array("stage", $split)) {
+		return "staging-atlas";
+	} else return "production";
+
+});
 
 /*
 |--------------------------------------------------------------------------
