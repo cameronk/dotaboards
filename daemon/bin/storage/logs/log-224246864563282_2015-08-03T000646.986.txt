@@ -1,0 +1,195 @@
+________          __        ___.                          .___      
+______    _____/  |______ _ |__   _________ _______  __| _/______
+ |    |   /  _    ____   | __  /  _ __  \_  __ / __ |/  ___/
+ |    `   (  <_> )  |  / __ | _ (  <_> ) __ |  | / /_/ |___  
+/_______  /____/|__| (____  /___  /____(____  /__|  ____ /____ >
+         /                 /    /           /           /    /
+====================================================================
+ENV: LOCAL, hash: 224246864563282
+====================================================================
+ > Initialized new pool instance.
+ | QueryHelper::truncateMatches()
+ | QueryHelper::retrieveBans()
+ > Instantiated monitor.
+ | Instantiated processor 332876528 with shortcode: global, ident: worldwide
+ > Instantiating: us
+ | Instantiated processor 1051738560 with shortcode: us, ident: USA
+ > Instantiating: eu
+ | Instantiated processor 719167222 with shortcode: eu, ident: European
+ > Instantiating: asia
+ | Instantiated processor 386983512 with shortcode: asia, ident: Asian
+ > Instantiating: africa
+ | Instantiated processor 638830234 with shortcode: africa, ident: African
+ > Instantiating: russia
+ | Instantiated processor 353650510 with shortcode: russia, ident: Russian
+ > Instantiating: south-america
+ | Instantiated processor 539827904 with shortcode: south-america, ident: South American
+ > Instantiating: aus
+ | Instantiated processor 329018101 with shortcode: aus, ident: Australian
+
+
+
+
+
+===================================================
+=====     Instantiating a new Dispatcher.     =====
+===================================================
+[[126376259],[192610450],[201388981],[202616372],[202679658],[211289385]]
+ | Banned: 126376259
+ | Banned: 192610450
+ | Banned: 201388981
+ | Banned: 202616372
+ | Banned: 202679658
+ | Banned: 211289385
+
+
+
+
+
+ > at 1499328503
+1499328503 [2015-08-03 00:06:48.673] >
+ | ==> 762ms
+ | Caught a request error for fetching from 1499328503.
+ | Running another loop in 15 seconds...
+ > RequestFailure (The null object does not have a method 'cancel'.
+
+NoSuchMethodError: method not found: 'cancel'
+Receiver: null
+Arguments: [])
+1499328503 [2015-08-03 00:07:04.448] >
+ | ==> 901ms
+ | Got 25 matches.
+ | 11535333 --> us
+ | 249882289 --> asia
+ | 208669433 --> asia
+ | 205607415 --> asia
+ | 158272377 --> asia
+ | 201432555 --> asia
+ | 275434966 --> asia
+ | 260599716 --> asia
+ | 123223958 --> asia
+ | 92285920 --> asia
+ | 182898262 --> asia
+ | 281388254 --> asia
+ | 135998927 --> asia
+ | 249726553 --> asia
+ | 90084149 --> asia
+ | 227180054 --> us
+ | 237115839 --> us
+ | 125947581 --> us
+ | 221706030 --> us
+ | 43896405 --> us
+ | 165014275 --> us
+ | 189470603 --> asia
+ | 190510722 --> asia
+ | 203556158 --> asia
+ | 138610971 --> asia
+ | 139794766 --> asia
+ | 144174400 --> asia
+ | 191382875 --> asia
+ | 138109341 --> asia
+ | No valid players in 1499328530.
+ | 169209757 --> asia
+ | 101420960 --> asia
+ | 157801516 --> asia
+ | 138867507 --> asia
+ | 251965076 --> asia
+ | 189536981 --> us
+ | 118849984 --> asia
+ | No valid players in 1499328551.
+ | 587861 --> asia
+ | Done processing 1499328503. 13/25 disqualified
+ | Looping back to 1499328555...
+1499328555 [2015-08-03 00:07:06.449] >
+ | ==> 847ms
+ | Got 25 matches.
+ | No valid players in 1499328555.
+ | 61831260 --> asia
+ | 177541181 --> asia
+ | 4950760 --> us
+ | 160448654 --> us
+ | 102345676 --> us
+ | 161435392 --> us
+ | 102363966 --> us
+ | 261790380 --> us
+ | 169239686 --> eu
+ | 218585646 --> eu
+ | 185660290 --> eu
+ | 224941119 --> eu
+ | 181068008 --> eu
+ | 233846182 --> us
+ | 192151359 --> us
+ | 99378840 --> asia
+ | 92505067 --> aus
+ | 163321238 --> aus
+ | 180502238 --> aus
+ | 115401494 --> aus
+ | 74242214 --> aus
+ | 136005895 --> aus
+ | 63249215 --> us
+ | 59779282 --> us
+ | 71738363 --> us
+ | 100526182 --> south-america
+ | 115105214 --> south-america
+ | 100528217 --> south-america
+ | 136306831 --> south-america
+ | 114895946 --> asia
+ | 138341754 --> asia
+ | 245654541 --> russia
+ | 137981802 --> asia
+ | 104230135 --> asia
+ | Done processing 1499328555. 12/25 disqualified
+ | Looping back to 1499328608...
+1499328608 [2015-08-03 00:07:08.450] >
+ | ==> 784ms
+ | Got 25 matches.
+ | 142470267 --> asia
+ | 196575299 --> asia
+ | 136366793 --> asia
+ | 130234484 --> asia
+ | 103189638 --> us
+ | 152300325 --> us
+ | 142652769 --> asia
+ | 179469254 --> asia
+ | 158673836 --> asia
+ | 162325981 --> asia
+ | 177559658 --> asia
+ | 186281202 --> asia
+ | 141688237 --> asia
+ | 144135380 --> asia
+ | No valid players in 1499328614.
+ | 155573227 --> asia
+ | 169565978 --> asia
+ | 139677591 --> asia
+ | 136407651 --> asia
+ | 196015305 --> asia
+ | 248850336 --> asia
+ | 136515605 --> asia
+ | 246159059 --> asia
+ | 149513749 --> asia
+ | 170792491 --> asia
+ | 164980821 --> asia
+ | 213935757 --> asia
+ | 138402800 --> asia
+ | 136174787 --> asia
+ | 96169646 --> asia
+ | 240597273 --> asia
+ | No valid players in 1499328632.
+ | 119227126 --> us
+ | 182253790 --> south-america
+ | No valid players in 1499328636.
+ | No valid players in 1499328641.
+ | 143950695 --> south-america
+ | 82056250 --> south-america
+ | 179692084 --> south-america
+ | 140035434 --> south-america
+ | 61796335 --> south-america
+ | No valid players in 1499328649.
+ | 214881911 --> asia
+ | 146623693 --> asia
+ | 213170378 --> asia
+ | 239970039 --> asia
+ | 163229842 --> asia
+ | 141827857 --> asia
+ | Done processing 1499328608. 8/25 disqualified
+ | Looping back to 1499328655...

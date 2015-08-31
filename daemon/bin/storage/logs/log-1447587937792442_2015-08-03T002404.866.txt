@@ -1,0 +1,128 @@
+________          __        ___.                          .___      
+______    _____/  |______ _ |__   _________ _______  __| _/______
+ |    |   /  _    ____   | __  /  _ __  \_  __ / __ |/  ___/
+ |    `   (  <_> )  |  / __ | _ (  <_> ) __ |  | / /_/ |___  
+/_______  /____/|__| (____  /___  /____(____  /__|  ____ /____ >
+         /                 /    /           /           /    /
+====================================================================
+ENV: LOCAL, hash: 1447587937792442
+====================================================================
+ > Initialized new pool instance.
+ | QueryHelper::truncateMatches()
+ | QueryHelper::retrieveBans()
+ > Instantiated monitor.
+ | Instantiated processor 154284186 with shortcode: global, ident: worldwide
+
+
+
+
+
+===================================================
+=====     Instantiating a new Dispatcher.     =====
+===================================================
+ | Banned: 126376259
+ | Banned: 192610450
+ | Banned: 201388981
+ | Banned: 202616372
+ | Banned: 202679658
+ | Banned: 211289385
+ > Starting loop sequence at 1499346498
+
+
+
+
+
+1499346498 [2015-08-03 00:24:06.581] >
+ | ==> 780ms
+ | Caught a request error for fetching from 1499346498.
+ | Running another loop in 15 seconds...
+ > RequestFailure (The null object does not have a method 'cancel'.
+
+NoSuchMethodError: method not found: 'cancel'
+Receiver: null
+Arguments: [])
+1499346498 [2015-08-03 00:24:22.380] >
+ | ==> 895ms
+ | Got 25 matches.
+ | No valid players in 1499346505.
+ | Done processing 1499346498. 16/25 disqualified
+ | Looping back to 1499346545...
+1499346545 [2015-08-03 00:24:24.382] >
+ | ==> 837ms
+ | Got 25 matches.
+ | No valid players in 1499346560.
+ | No valid players in 1499346564.
+ | No valid players in 1499346571.
+ | Done processing 1499346545. 15/25 disqualified
+ | Looping back to 1499346596...
+1499346596 [2015-08-03 00:24:26.384] >
+ | ==> 879ms
+ | Got 25 matches.
+ | No valid players in 1499346637.
+ | Done processing 1499346596. 11/25 disqualified
+ | Looping back to 1499346647...
+1499346647 [2015-08-03 00:24:28.386] >
+ | ==> 788ms
+ | Got 25 matches.
+ | Done processing 1499346647. 12/25 disqualified
+ | Looping back to 1499346705...
+1499346705 [2015-08-03 00:24:30.388] >
+ | ==> 902ms
+ | Got 25 matches.
+ | No valid players in 1499346709.
+ | Done processing 1499346705. 15/25 disqualified
+ | Looping back to 1499346777...
+1499346777 [2015-08-03 00:24:32.390] >
+ | ==> 836ms
+ | Got 25 matches.
+ | No valid players in 1499346781.
+ | No valid players in 1499346788.
+ | No valid players in 1499346795.
+ | No valid players in 1499346807.
+ | No valid players in 1499346831.
+ | Done processing 1499346777. 13/25 disqualified
+ | Looping back to 1499346832...
+1499346832 [2015-08-03 00:24:34.392] >
+ | ==> 838ms
+ | Got 25 matches.
+ | No valid players in 1499346839.
+ | No valid players in 1499346851.
+ | No valid players in 1499346874.
+ | No valid players in 1499346876.
+ | Done processing 1499346832. 13/25 disqualified
+ | Looping back to 1499346890...
+1499346890 [2015-08-03 00:24:36.394] >
+ | ==> 825ms
+ | Got 25 matches.
+ | No valid players in 1499346894.
+ | No valid players in 1499346898.
+ | No valid players in 1499346901.
+ | No valid players in 1499346912.
+ | No valid players in 1499346919.
+ | Done processing 1499346890. 8/25 disqualified
+ | Looping back to 1499346931...
+1499346931 [2015-08-03 00:24:38.396] >
+ | ==> 842ms
+ | Got 25 matches.
+ | No valid players in 1499346965.
+ | No valid players in 1499346976.
+ | Done processing 1499346931. 13/25 disqualified
+ | Looping back to 1499346977...
+1499346977 [2015-08-03 00:24:40.397] >
+ | ==> 813ms
+ | Got 25 matches.
+ | Done processing 1499346977. 12/25 disqualified
+ | Looping back to 1499347036...
+1499347036 [2015-08-03 00:24:42.398] >
+ | ==> 769ms
+ | Got 25 matches.
+ | No valid players in 1499347036.
+ | Done processing 1499347036. 17/25 disqualified
+ | Looping back to 1499347082...
+1499347082 [2015-08-03 00:24:44.399] >
+ | ==> 831ms
+ | Got 25 matches.
+ | No valid players in 1499347102.
+ | No valid players in 1499347107.
+ | Done processing 1499347082. 9/25 disqualified
+ | Looping back to 1499347132...
