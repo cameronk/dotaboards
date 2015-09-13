@@ -1,7 +1,0 @@
-#/packages/
-#bin/packages/
-
-/bin/storage
-/.pub/
-/build
-pubspec.lock

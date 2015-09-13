@@ -34,7 +34,6 @@ class Dispatcher {
 	
 	Statistics stats;
 	
-	/// Directories are relative to the "daemon" directory ///
 	final String _key 			= "E03B7DAF68C03DFF4745BF4213BC8672";
 	final int _privatePlayer 	= 4294967295;
 	
