@@ -18,7 +18,7 @@ class PageController extends BaseController {
 				App::abort(500, "An internal error occurred.");
 				Log::error("players-processed.json not found");
 			} finally {
-				return View::make("regions-" . $this->agent, array('regions' => $contents));
+				return View::make("regions/" . $this->agent, array('regions' => $contents));
 			}
 		} else return Redirect::to("http://" . Cookie::get('region') . ".dotaboards.com");
 

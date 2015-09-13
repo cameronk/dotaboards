@@ -63,5 +63,5 @@ $data = $data[0];
 			</div>
 		</div>
 	</div>
-	@include("stats-latest-primary")
+	@include("stats/primary")
 </div>

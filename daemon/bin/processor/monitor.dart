@@ -93,7 +93,7 @@ class Monitor {
 	/**
 	 * Output the data we've collected so far.
 	 */
-	void push() {
+	void push(Processor mainProcess, Map<String, Processor> regionalProcessors) {
 		
 		ENV.log("[Monitor] running push sequence @ loop ${this.averageMatchProcessingDelays.length}", type: 4);
 		
@@ -121,10 +121,21 @@ class Monitor {
 			"downtime": this.downtimeSinceLastPush,
 			
 			/// How many matches were rejected by the MVF in the past push loop
-			"rejectedMatchCounts": this.rejectedMatchCounts
+			"rejectedMatchCounts": this.rejectedMatchCounts,
+			
+			/// Processor
+			"processors": {
+				"global": {
+					"playersProcessed": (mainProcess.playersProcessed - mainProcess.playersProcessedUpToLastFetch) / regionalProcessors.length
+				}
+			}
 			
 		};
 		
+		regionalProcessors.forEach((String name, Processor processor) {
+			newDataThisPush["processors"][name] = new Map();
+			newDataThisPush["processors"][name]["playersProcessed"] = processor.playersProcessed - processor.playersProcessedUpToLastFetch;
+		});
 		
 		/// Add the new data to our list of pushes ///
 		this.pushList.add(newDataThisPush);

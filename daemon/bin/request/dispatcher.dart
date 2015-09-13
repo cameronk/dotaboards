@@ -309,9 +309,9 @@ class Dispatcher {
 				
 				
 				/// Run the monitor ///
-				this.monitor.push();
+				this.monitor.push(this.process, this.regionalProcessors);
 				
-				this.util.text("Pushed ${currentRecordedMatches.length} @ ${new DateTime.now().toLocal()}.");
+//				this.util.text("Pushed ${currentRecordedMatches.length} @ ${new DateTime.now().toLocal()}.");
 				
 				this.lastRetrievedMatchCount = currentRecordedMatches.length;
 				this.process.resetCumulativeStatistics();
@@ -538,7 +538,7 @@ class Dispatcher {
 //					ENV.log("STATS: \n ${generator.htmlBasic}");
 					
 					List<Future> wait = [
-						this.save(ENV.AppDirectory + 'views/stats-latest-primary.blade.php', generator.htmlBasic, isJSON: false)
+						this.save(ENV.AppDirectory + 'views/stats/primary.blade.php', generator.htmlBasic, isJSON: false)
 					];
 					
 					Future.wait(wait).then((_) {
@@ -549,9 +549,10 @@ class Dispatcher {
 						
 						this.lastRetrievedMatchCount = 0;
 						this.DaemonLifetimeRecordedCount += this.recordedMatches.length;
+						
 						this.recordedMatches.clear();
 						
-						this.util.text("Clean complete @ ${new DateTime.now().toLocal()}. Pushed ${this.DaemonLifetimeRecordedCount} through daemon lifetime.");
+//						this.util.text("Clean complete @ ${new DateTime.now().toLocal()}. Pushed ${this.DaemonLifetimeRecordedCount} through daemon lifetime.");
 						
 						queries.retrieveBans().then((bans) {
 							this.lastClean = new DateTime.now();
@@ -759,7 +760,7 @@ class Dispatcher {
 			
 			if(this.steamPingAttempts >= 10) {
 				Duration down = this.steamDownStartTime.difference(new DateTime.now());
-				this.util.text("Steam API back up @ ${new DateTime.now().toLocal()} [${down.toString()}] after ${this.steamPingAttempts} attempts");
+//				this.util.text("Steam API back up @ ${new DateTime.now().toLocal()} [${down.toString()}] after ${this.steamPingAttempts} attempts");
 				
 				this.monitor.hasBeenDown(down.inMinutes);
 				
@@ -782,7 +783,7 @@ class Dispatcher {
 		
 		if(this.steamPingAttempts == 10) {
 			ENV.log("Putting the API down...", type: 4);
-			this.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
+//			this.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
 			
 			this.destroyTimers();
 			this.queries.steamStatus(0);
@@ -824,6 +825,12 @@ class Dispatcher {
 	/**
 	 * Return the average time in MS between this calls to this processor's .player() method
 	 */
-	int averageTimeBetweenPlayerProcessing(Processor proc) => ((1 / ((proc.playersProcessed - proc.playersProcessedUpToLastFetch) / 1200)) * 1000).toInt();
-
+	int averageTimeBetweenPlayerProcessing(Processor proc) {
+		try {
+			return ((1 / ((proc.playersProcessed - proc.playersProcessedUpToLastFetch) / 1200)) * 1000).toInt();
+		} catch(e) {
+			ENV.log(e, type:0, level:3);
+			return 0;
+		}
+	}
 }
