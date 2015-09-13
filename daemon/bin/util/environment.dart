@@ -699,7 +699,7 @@ class Environment {
 
 				/// Setup MySQL connection ///
 				this.dbHost = "razorback.us-c.geo.azuru.me";
-				this.dbUser = "dotaboards-stage";
+				this.dbUser = "root";
 				this.dbPass = r"55184429011771861829418426776407260918862215905453";
 				this.db		= "dotaboards/main-stage";
 				
