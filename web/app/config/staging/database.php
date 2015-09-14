@@ -11,9 +11,9 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'azuru.me',
-			'database'  => 'dotaboards/staging-atlas',
-			'username'  => 'dotaboards-stage',
+			'host'      => '10.0.0.14',
+			'database'  => 'dotaboards/main-stage',
+			'username'  => 'root',
 			'password'  => '55184429011771861829418426776407260918862215905453',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
