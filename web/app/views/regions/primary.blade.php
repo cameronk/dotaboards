@@ -21,7 +21,7 @@
     </div><div id="hero-collage"></div>
     
     
-    <div id="by">{{ App::environment() }}/{{ Config::get('app.domain') }} - Copyright © Azuru Networks 2014. <span>Dota 2 is a registered trademark of Valve Corporation.</span></div>
+    <div id="by">{{ App::environment() }}/{{ Config::get('app.domain') }} - Copyright © Azuru Networks 2014-2015. <span>Dota 2 is a registered trademark of Valve Corporation.</span></div>
 </div>
     
 <script type="text/javascript">var __regions = {{ $regions }};</script>

@@ -20,7 +20,7 @@ class PageController extends BaseController {
 			} finally {
 				return View::make("regions/" . $this->agent, array('regions' => $contents));
 			}
-		} else return Redirect::to("http://" . Cookie::get('region') . ".dotaboards.com");
+		} else return Redirect::to("http://" . Cookie::get('region') . "." . Config::get('app.domain'));
 
 		// return View::make("regions");
 	}
