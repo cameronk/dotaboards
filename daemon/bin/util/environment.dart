@@ -698,7 +698,7 @@ class Environment {
 				this.StorageDirectory	= "/home/dotaboards/daemon/storage/";
 
 				/// Setup MySQL connection ///
-				this.dbHost = "razorback.us-c.geo.azuru.me";
+				this.dbHost = "127.0.0.1";
 				this.dbUser = "root";
 				this.dbPass = r"55184429011771861829418426776407260918862215905453";
 				this.db		= "dotaboards/main-stage";
