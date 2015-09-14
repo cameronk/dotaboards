@@ -32,7 +32,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(function() 
 {
-
+	
 	return (file_exists(__DIR__ . '/../../.env.production') ? "production" : "staging");
 });
 

@@ -11,7 +11,9 @@
 |
 */
 
-Route::group(array('domain' => '{region}.dotaboards.com'), function() {
+$domain = str_replace(["http://", "https://"], "", Config::get('app.url'));
+
+Route::group(array('domain' => '{region}.' . $domain), function() {
 	Route::get('/', function($region) {
 		$region = strtolower($region);
 		$agent = !Agent::isMobile() ? 'primary' : 'mobile';
