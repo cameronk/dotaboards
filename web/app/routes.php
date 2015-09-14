@@ -11,7 +11,7 @@
 |
 */
 
-$domain = str_replace(["http://", "https://"], "", Config::get('app.url'));
+$domain = Config::get('app.domain');
 
 Route::group(array('domain' => '{region}.' . $domain), function() {
 	Route::get('/', function($region) {
@@ -39,9 +39,9 @@ Route::get('region/back', function() {
 	return Redirect::to("/")->withCookie(Cookie::forget('region'));
 });
 Route::get('region/set/{region}', function($region) {
-	return Redirect::to("http://" . $region . ".dotaboards.com")->withCookie(Cookie::make('region', $region));
+	return Redirect::to("http://" . $region . "." . $domain)->withCookie(Cookie::make('region', $region));
 });
 Route::get('region/nope/{region}', function($region) {
 	Session::put('asked.'. $region, true);
-	return Redirect::to("http://" . $region . ".dotaboards.com");
+	return Redirect::to("http://" . $region . "." . $domain);
 });

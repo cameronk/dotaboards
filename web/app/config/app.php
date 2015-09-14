@@ -27,6 +27,7 @@ return array(
 	*/
 
 	'url' => 'http://dotaboards.com',
+	'domain' => 'dotaboards.com',
 
 	/*
 	|--------------------------------------------------------------------------
