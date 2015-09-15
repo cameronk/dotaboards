@@ -29,7 +29,7 @@ class PageController extends BaseController {
 
 		$contents = "{}";
 		try {
-			$contents = File::get("../../daemon/storage/monitor.json");
+			$contents = File::get("../../daemon/storage/monitors/monitor-latest.json");
 		} catch(Exception $e) {
 			App::abort(500, "An internal error occurred.");
 			Log::error("monitor.json not found");
