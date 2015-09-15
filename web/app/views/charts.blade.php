@@ -45,7 +45,6 @@
 
 	.graph {
 		width: 100% !important;
-		margin-left: 5px;
 	}
 
 	small {
@@ -75,6 +74,9 @@
 
 	<h1>Downtime</h1>
 	<div id="graph-downtime" class="graph"></div>
+
+	<h1>Players Processed <small>by region</small></h1>
+	<div id="graph-ppr" class="graph"></div>
 </div>
 
 <script>
@@ -85,25 +87,9 @@
 	var mpr = [];
 	var rr = [];
 	var downtime = [];
+	var ppr = [];
 
 	data.map(function(pushLoop, index) {
-		// labels_time.push(pushLoop['recordedAt']);
-		// labels_index.push("-" + (data.length - index));
-
-
-		// // Delays //
-		// calc_delays_average += pushLoop['delay'];
-		// compile_delays.push(Math.round(pushLoop['delay']));
-
-		// // MPR //
-		// compile_mpr.push(pushLoop["averageMatchesPerRequest"]);
-
-		// // Request/response //
-		// compile_requests.push(pushLoop["requests"]);
-		// compile_responseTime.push(pushLoop["averageFetchResponseTime"]);
-
-
-
 
 		/**
 		 * Delays
@@ -127,6 +113,16 @@
 		 * Downtime
 		 */
 		downtime.push([ new Date(pushLoop['recordedAt']), Math.abs(pushLoop['downtime']) ]);
+
+		/**
+		 * PPR (playersProcessed)
+		 */
+		var procs = pushLoop['processors'];
+		var thisPushPlayerProcessed = [ new Date(pushLoop['recordedAt']) ];
+		for(var region in procs) {
+			thisPushPlayerProcessed.push(procs[region]["playersProcessed"]);
+		}
+		ppr.push(thisPushPlayerProcessed);
 
 	});
 
@@ -159,11 +155,20 @@
         fillGraph: true,
       });
 
-    // rr
+    // downtime
 	new Dygraph(document.getElementById("graph-downtime"),
       downtime,
       {
         labels: [ "Date", "Downtime" ],
+        showInRangeSelector: true,
+        fillGraph: true,
+      });
+
+ 	// downtime
+	new Dygraph(document.getElementById("graph-ppr"),
+      ppr,
+      {
+        labels: ["Date", "Global", "US", "EU", "Asia", "Africa", "Russia", "South America", "Australia"],
         showInRangeSelector: true,
         fillGraph: true,
       });

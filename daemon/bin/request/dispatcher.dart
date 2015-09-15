@@ -306,10 +306,24 @@ class Dispatcher {
 		void done() {
 			this.stats.recordPush(currentRecordedMatches, this.lastRetrievedMatchCount, this.process.getCumulativeStatistics()).then((_) {
 				
-				
 				/// Run the monitor ///
 				this.monitor.push(this.process, this.regionalProcessors);
 				
+				
+				/// Now update processor playersProcessed data ///
+				this.process.playersProcessedUpToLastFetch = this.process.playersProcessed;
+				for(String region in (ENV.RegionMap).keys.toList()) {
+					
+					if(this.regionalProcessors.containsKey(region)) {
+						Processor proc = this.regionalProcessors[region];
+						
+						proc.playersProcessedUpToLastFetch = proc.playersProcessed;
+						
+					}
+				}
+						
+										
+										
 //				this.util.text("Pushed ${currentRecordedMatches.length} @ ${new DateTime.now().toLocal()}.");
 				
 				this.lastRetrievedMatchCount = currentRecordedMatches.length;
@@ -394,8 +408,7 @@ class Dispatcher {
 
 								/// Calculate players processed and the avg time inbetween processings during the last fetch in ms /// 
 								playersProcessedMap["global"] = ["Worldwide", this.process.playersProcessed, this.averageTimeBetweenPlayerProcessing(this.process)]; 
-								
-								this.process.playersProcessedUpToLastFetch = this.process.playersProcessed;
+
 								
 								/// Apply generator to loaded regional processors ///
 								for(String region in (ENV.RegionMap).keys.toList()) {
@@ -408,7 +421,7 @@ class Dispatcher {
 										/// Calculate players processed and the avg time inbetween processings during the last fetch in ms /// 
 										playersProcessedMap[region] = [name, proc.playersProcessed, this.averageTimeBetweenPlayerProcessing(proc)]; 
 										
-										proc.playersProcessedUpToLastFetch = proc.playersProcessed;
+//										proc.playersProcessedUpToLastFetch = proc.playersProcessed;
 										
 										/// Add the generator future to the future map for wait() ///
 										generateBoards.add( this.generate(proc, heroPlayCounts, store) );
