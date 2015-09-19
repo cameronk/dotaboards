@@ -5,8 +5,9 @@ class Monitor {
 	
 	/// Request-related
 	int rawMatchCount;
-	int fetchRequestsSent;
+	int fetchRequestResponses;
 	int totalFetchResponseTime;
+	int totalRequestsSent = 0;
 	
 	/// Match-related
 	int filteredMatchCount;
@@ -31,13 +32,17 @@ class Monitor {
 		this.reset();
 	}
 	
+	void apiRequest() {
+		this.totalRequestsSent++;
+	}
+	
 	/**
 	 * Store data related to this fetch request.
 	 * @return void
 	 */
 	void fetchRequest(List<Map> matches, int responseTimeInMs) {
 		
-		this.fetchRequestsSent++;
+		this.fetchRequestResponses++;
 		
 		///		averageMatchesPerRequest		///
 		/// Calculate the average number of 	///
@@ -106,13 +111,16 @@ class Monitor {
 		    "recordedAt": now.toLocal().toString(),
 		    
 		    /// Request count for this loop
-		    "requests": this.fetchRequestsSent,
+		    "fetchRequestResponses": this.fetchRequestResponses,
+		    
+		    /// Total request count for this loop
+		    "totalRequests": this.totalRequestsSent,
 		    
 		    /// Average matches per request
-		    "averageMatchesPerRequest": this.rawMatchCount / this.fetchRequestsSent,
+		    "averageMatchesPerRequest": this.rawMatchCount / this.fetchRequestResponses,
 		    
 		    /// Average fetch response time
-		    "averageFetchResponseTime": this.totalFetchResponseTime / this.fetchRequestsSent,
+		    "averageFetchResponseTime": this.totalFetchResponseTime / this.fetchRequestResponses,
 		    
 		    /// Average difference between match ending and match processing
 			"delay": this.matchProcessingDelay / this.filteredMatchCount,
@@ -126,7 +134,7 @@ class Monitor {
 			/// Processor
 			"processors": {
 				"global": {
-					"playersProcessed": (mainProcess.playersProcessed - mainProcess.playersProcessedUpToLastFetch) / regionalProcessors.length
+					"playersProcessed": mainProcess.playersProcessed - mainProcess.playersProcessedUpToLastFetch
 				}
 			}
 			
@@ -168,7 +176,7 @@ class Monitor {
 	 */
 	void reset() {
 		
-		this.fetchRequestsSent = 0;
+		this.fetchRequestResponses = 0;
 		this.rawMatchCount = 0;
 		this.totalFetchResponseTime = 0;
 		

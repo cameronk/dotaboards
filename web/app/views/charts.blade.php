@@ -69,8 +69,11 @@
 	<h1>Matches returned per request</h1>
 	<div id="graph-mpr" class="graph"></div>	
 
-	<h1>Total requests vs. response time</h1>
+	<h1>Fetch requests vs. response time</h1>
 	<div id="graph-rr" class="graph"></div>
+	
+	<h1>Total requests</h1>
+	<div id="graph-tr" class="graph"></div>
 
 	<h1>Downtime</h1>
 	<div id="graph-downtime" class="graph"></div>
@@ -86,6 +89,7 @@
 	var delays = [];
 	var mpr = [];
 	var rr = [];
+	var tr = [];
 	var downtime = [];
 	var ppr = [];
 
@@ -106,7 +110,13 @@
 		/**
 		 * Request/response
 		 */
-		rr.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['requests']), Math.round(pushLoop['averageFetchResponseTime']) ]);
+		rr.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['fetchRequestResponses']), Math.round(pushLoop['averageFetchResponseTime']) ]);
+
+
+		/**
+		 * Total requests
+		 */
+		tr.push([ new Date(pushLoop['recordedAt']), pushLoop['totalRequests'] ]);
 
 
 		/**
@@ -155,6 +165,15 @@
         fillGraph: true,
       });
 
+	// tr
+	new Dygraph(document.getElementById("graph-tr"),
+      rr,
+      {
+        labels: [ "Date", "Requests" ],
+        showInRangeSelector: true,
+        fillGraph: true,
+      });
+
     // downtime
 	new Dygraph(document.getElementById("graph-downtime"),
       downtime,
@@ -164,7 +183,7 @@
         fillGraph: true,
       });
 
- 	// downtime
+ 	// ppr
 	new Dygraph(document.getElementById("graph-ppr"),
       ppr,
       {

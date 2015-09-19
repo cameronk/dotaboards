@@ -13,38 +13,112 @@ part "dispatcherror.dart";
 
 class Dispatcher {
 	
+	
+	/**
+	 * Players banned from the boards.
+	 */
 	List<int> bans;
+	
+	/**
+	 * Total match count during deamon lifetime.
+	 */
 	int DaemonLifetimeRecordedCount = 0;
+	
+	/**
+	 * All recorded match seq nums since last clean.
+	 */
 	Set recordedMatches 		= new Set();
+	
+	/**
+	 * The sequence number at which to begin the next fetch loop.
+	 */
 	int lastMatchSequenceNum;
+	
+	/**
+	 * The match count for the last push loop.
+	 * 
+	 * Used to calculate matches pushed in the current loop,
+	 * which is then used to update the total site count.
+	 */
 	int lastRetrievedMatchCount = 0;
+	
+	/**
+	 * Is the daemon waiting to push?
+	 */
 	bool waitingToPush 			= false;
+	
+	/**
+	 * Is the daemon waiting to clean?
+	 */
 	bool waitingToClean			= false;
 	
+	/**
+	 * DateTime object representing when steam's
+	 * API connection failed to respond to requests.
+	 */
 	DateTime steamDownStartTime;
+	
+	/**
+	 * How many times have we sent requests to the API
+	 * and failed to get a response?
+	 */
 	int steamPingAttempts 		= 0;
 	
-	Util util;
+	/**
+	 * QueryHelper object.
+	 */
 	QueryHelper queries;
-	Processor process;
-	Monitor monitor;
 	
+	/**
+	 * The global processor object.
+	 */
+	Processor process;
+	
+	/**
+	 * Regional processors.
+	 */
 	Map<String, Processor> regionalProcessors = new Map();
 	
+	
+	/**
+	 * Data monitoring object.
+	 */
+	Monitor monitor;
+	
+	/**
+	 * Statistics object.
+	 */
 	Statistics stats;
 	
+	/**
+	 * The Steam API Key.
+	 */
 	final String _key 			= "E03B7DAF68C03DFF4745BF4213BC8672";
+	
+	/**
+	 * Steam 32bit ID for a player whose profile is private.
+	 */
 	final int _privatePlayer 	= 4294967295;
 	
+	/**
+	 * Various loop timers.
+	 */
 	Timer _pushTimer;
 	Timer _cleanTimer;
 	Timer _boardsDebugTimer;
 	Timer fetchRestartTimer;
+	
+	
+	/**
+	 * DateTime object representing last clean loop completed.
+	 */
 	DateTime lastClean = new DateTime.now();
 	
 	
 	/**
 	 * Instantiate a new dispatcher object.
+	 * 
+	 * @return void
 	 */
 	Dispatcher(List bans, QueryHelper queries) {
 		
@@ -52,7 +126,6 @@ class Dispatcher {
 		this.queries = queries;
 		this.monitor = new Monitor();
 		
-		this.util = new Util(); 
 		this.stats = new Statistics(this.queries);
 		
 
@@ -76,6 +149,8 @@ class Dispatcher {
 	
 	/**
 	 * Instantiate processor objects based on a region map.
+	 * 
+	 * @return Future
 	 */
 	Future instantiateProcessors() {
 
@@ -102,6 +177,8 @@ class Dispatcher {
 	
 	/**
 	 * Begin the first fetch, initialize timers.
+	 * 
+	 * @return void
 	 */
 	void start() {
 		ENV.log("Starting loop sequence at ${this.lastMatchSequenceNum.toString()}", type: 4);
@@ -115,6 +192,8 @@ class Dispatcher {
 	
 	/**
 	 * Construct timers.
+	 * 
+	 * @return void
 	 */
 	void initTimers() {
 		
@@ -152,6 +231,8 @@ class Dispatcher {
 	
 	/**
 	 * Destroy active timers.
+	 * 
+	 * @return void
 	 */
 	void destroyTimers() {
 		this._pushTimer.cancel();
@@ -161,6 +242,8 @@ class Dispatcher {
 	
 	/**
 	 * Run the fetch loop.
+	 * 
+	 * @return void
 	 */
 	void fetch () {
 		if(this.waitingToPush == true) {
@@ -173,6 +256,9 @@ class Dispatcher {
 			HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v0001/?key=${this._key}&matches_requested=25&start_at_match_seq_num=${this.lastMatchSequenceNum.toString()}")
 				.then((response) {
 				
+					/// We got a response:
+					this.monitor.apiRequest();
+					
 					int respTime = (new DateTime.now()).difference(fetchStart).inMilliseconds;
 				
 					ENV.log("==> ${respTime}ms", type: 3);
@@ -252,13 +338,10 @@ class Dispatcher {
 												this.process.player(player);
 												
 												/// Dispatch this player to their specified region. ///
-												String region = ENV.RegionMapReverse[ this.util.getCluster(player['loc']) ];
+												String region = ENV.RegionMapReverse[ ENV.util.getCluster(player['loc']) ];
 												
 												if(regionalProcessors.containsKey(region)) {
-													ENV.log("${player['id']} --> $region", type: 3);
-													
 													regionsUsed.add(region);
-													
 													(this.regionalProcessors[region]).player(player);
 												}
 												
@@ -321,6 +404,8 @@ class Dispatcher {
 	
 	/**
 	 * Run the push loop.
+	 * 
+	 * @return void
 	 */
 	void push () {
 		
@@ -350,7 +435,7 @@ class Dispatcher {
 						
 										
 										
-//				this.util.text("Pushed ${currentRecordedMatches.length} @ ${new DateTime.now().toLocal()}.");
+//				ENV.util.text("Pushed ${currentRecordedMatches.length} @ ${new DateTime.now().toLocal()}.");
 				
 				this.lastRetrievedMatchCount = currentRecordedMatches.length;
 				this.process.resetCumulativeStatistics();
@@ -478,6 +563,8 @@ class Dispatcher {
 	
 	/**
 	 * Organize the boards generation.
+	 * 
+	 * @return Future
 	 */
 	Future generate(Processor process, heroPlayCounts, store) {
 		Map cached = process.getLiveBoards();
@@ -524,6 +611,8 @@ class Dispatcher {
 	
 	/**
 	 * Run the clean loop.
+	 * 
+	 * @return void
 	 */
 	void clean () {
 		
@@ -590,7 +679,7 @@ class Dispatcher {
 						
 						this.recordedMatches.clear();
 						
-//						this.util.text("Clean complete @ ${new DateTime.now().toLocal()}. Pushed ${this.DaemonLifetimeRecordedCount} through daemon lifetime.");
+//						ENV.util.text("Clean complete @ ${new DateTime.now().toLocal()}. Pushed ${this.DaemonLifetimeRecordedCount} through daemon lifetime.");
 						
 						queries.retrieveBans().then((bans) {
 							this.lastClean = new DateTime.now();
@@ -612,6 +701,8 @@ class Dispatcher {
 	
 	/**
 	 * Get the latest match seq num.
+	 * 
+	 * @return Future<int>
 	 */
 	Future<int> getLatestMatchSeqNum () {
 		
@@ -625,6 +716,10 @@ class Dispatcher {
 		} else {
 			/// No state stored. Get the most recent match seq num.
 			HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v001/?key=${this._key}&matches_requested=1").then((response) {
+				
+				/// We got a response:
+				this.monitor.apiRequest();
+				
 				if(response.statusCode == 200) {
 					completer.complete(JSON.decode(response.body)['result']['matches'][0]['match_seq_num']);
 				} else {
@@ -647,10 +742,16 @@ class Dispatcher {
 	
 	/**
 	 * Request user information from steam API
+	 * 
+	 * @return Future
 	 */
 	Future getUserData(Map<int, int> idMap, List<int> requestIDs) {
 		return HTTP.get("https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${this._key}&steamids=${requestIDs.join(",")}")
 			.then((response) {
+			
+				/// We got a response:
+				this.monitor.apiRequest();
+			
 				if(response.statusCode == 200) {
 					
 					List<Map<String, String>> players = JSON.decode(response.body)["response"]["players"];
@@ -682,7 +783,7 @@ class Dispatcher {
 			})
 			.catchError((Error error) {
 				this.requestFailure(error.toString());
-				this.util.printError(error);
+				ENV.util.printError(error);
 				ENV.log("Set timer for next request...\n\n\n");
 				return new Future.delayed(const Duration(seconds:5), () => this.getUserData(idMap, requestIDs));
 			});
@@ -690,6 +791,8 @@ class Dispatcher {
 	
 	/**
 	 * Assess the validity of a match.
+	 * 
+	 * @return bool
 	 */
 	bool MVF (Map<String, dynamic> match) {
 		Map<String, Map<String, int>> teams = { 
@@ -774,13 +877,15 @@ class Dispatcher {
 
 	/**
 	 * Receieved a successful request.
+	 * 
+	 * @return void
 	 */
 	void requestSuccess() {
 		if(this.steamPingAttempts > 0) {
 			
 			if(this.steamPingAttempts >= 10) {
 				Duration down = this.steamDownStartTime.difference(new DateTime.now());
-//				this.util.text("Steam API back up @ ${new DateTime.now().toLocal()} [${down.toString()}] after ${this.steamPingAttempts} attempts");
+//				ENV.util.text("Steam API back up @ ${new DateTime.now().toLocal()} [${down.toString()}] after ${this.steamPingAttempts} attempts");
 				
 				this.monitor.hasBeenDown(down.inMinutes);
 				
@@ -795,6 +900,8 @@ class Dispatcher {
 	
 	/**
 	 * Request failed.
+	 * 
+	 * @return void
 	 */
 	void requestFailure([String reason="unknown"]) {
 		ENV.log("RequestFailure ($reason)", type: 4);
@@ -803,7 +910,7 @@ class Dispatcher {
 		
 		if(this.steamPingAttempts == 10) {
 			ENV.log("Putting the API down...", type: 4);
-//			this.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
+//			ENV.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
 			
 			this.destroyTimers();
 			this.queries.steamStatus(0);
@@ -816,6 +923,8 @@ class Dispatcher {
 
 	/**
 	 * Return a player map with required information for future processing.
+	 * 
+	 * @return Map<String, dynamic>
 	 */
 	Map<String, dynamic> buildPlayerMap(Map player, Map match) {
 		return {
@@ -844,6 +953,8 @@ class Dispatcher {
 	
 	/**
 	 * Return the average time in MS between this calls to this processor's .player() method
+	 * 
+	 * @return int
 	 */
 	int averageTimeBetweenPlayerProcessing(Processor proc) {
 		try {
@@ -855,4 +966,5 @@ class Dispatcher {
 			return 10;
 		}
 	}
+	
 }

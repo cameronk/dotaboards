@@ -135,7 +135,8 @@ class Processor {
 	 * Dispatch a player map to all proecssor functions.
 	 */
 	void player(Map player) {
-		
+		ENV.log("${player['id']} --> ${this.regionalShortcode}", type: 3);
+													
 		this.playersProcessed++;
 		
 		this.KDA(player);
@@ -251,7 +252,7 @@ class Processor {
 	 */
 	void updateBoard(String board, Map player, double val) {
 		
-		ENV.log("         --> $board", type: 3);
+		ENV.log("          --> $board", type: 3);
 		//ENV.log("Before: " + JSON.encode(this.Boards[board]['raw']));
 		
 		int value = (val * ENV.PrecisionModifierMap[board]).toInt();

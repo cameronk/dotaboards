@@ -693,7 +693,6 @@ class Environment {
 				
 				break;
 				
-				
 			case "STAGING":
 				
 				/// Setup storage directories ///
@@ -707,34 +706,6 @@ class Environment {
 				this.db		= "dotaboards/main-stage";
 				
 				break;
-				
-//			case "TESTING-ATLAS":
-//
-//				/// Setup storage directories ///
-//				this.AppDirectory 		= "/home/stage/dotaboards/web/app/";
-//				this.StorageDirectory	= "/home/stage/dotaboards/daemon/storage/";
-//				
-//				/// Setup MySQL connection ///
-//				this.dbHost = "127.0.0.1";
-//				this.dbUser = "dotaboards-stage";
-//				this.dbPass = r"55184429011771861829418426776407260918862215905453";
-//				this.db		= "dotaboards/staging-atlas";
-//				
-//				break;
-//				
-//			case "TESTING-LANDER":
-//
-//				/// Setup storage directories ///
-//				this.AppDirectory 		= "/home/cameron/web/app/";
-//				this.StorageDirectory	= "/home/cameron/daemon/storage/";
-//				
-//				/// Setup MySQL connection ///
-//				this.dbHost = "lander.muny.us";
-//				this.dbUser = "cameron-dota";
-//				this.dbPass = "9238283762313586";
-//				this.db		= "cameron-dota";
-//				
-//				break;
 				
 			case "LOCAL":
 				
