@@ -30,7 +30,8 @@ class Generator {
 	 * Build a HTML boards string.
 	 */
 	Generator makeBoards(Map store, Set recordedMatches, Map playerTopAppearances) {
-		
+
+		ENV.log("");
 		ENV.log("MakeBoards for ${this.process.regionalShortcode}", type: 1);
 		
 		/// Get a cached version of the current boards for rendering. ///
@@ -89,6 +90,7 @@ class Generator {
 	 */
 	void renderBoardsHTML(Map board, Map store, String boardName, Map topAppearances) {
 		
+		ENV.log("");
 		ENV.log("Rendering boards HTML for ${this.process.regionalShortcode}-$boardName:", type: 2);
 		ENV.log("...${board['raw'].length} on boards", type: 4);
 //		ENV.log(JSON.encode(this.bans), type: 3);

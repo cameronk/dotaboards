@@ -167,7 +167,7 @@
 
 	// tr
 	new Dygraph(document.getElementById("graph-tr"),
-      rr,
+      tr,
       {
         labels: [ "Date", "Requests" ],
         showInRangeSelector: true,

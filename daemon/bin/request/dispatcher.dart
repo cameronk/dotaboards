@@ -578,7 +578,7 @@ class Dispatcher {
 			if(cached[board]["raw"].length > 0) {
 				String first = cached[board]["raw"][0][0];
 				ENV.log("First player for $board: $first", type: 4);
-				wait.add(this.queries.getAppearancesForPlayerID(first));
+				wait.add(this.queries.getAppearancesForPlayerID(first, board));
 			} else {
 				wait.add(new Future(() { return {"none": 0}; }));
 			}
