@@ -7,10 +7,12 @@ class Environment {
 	 */
 	String name;
 	String hash;
+	Util util;
+	
 	File logFile;
 	IOSink sink;
 	String pushMode = "normal";
-	
+	State state;
 	
 	/**
 	 * Storage locations
@@ -673,6 +675,7 @@ class Environment {
 		
 		this.name = $ENV;
 		this.hash = new List.generate(8, (_) => rng.nextInt(100)).join();
+		this.util = new Util();
 		
 		switch($ENV) {
 			case "PRODUCTION":
@@ -740,10 +743,10 @@ class Environment {
 				this.StorageDirectory 	= "storage/";
 
 				/// Setup MySQL connection ///
-				this.dbHost = "lander.muny.us";
-				this.dbUser = "cameron-dota";
-				this.dbPass = "9238283762313586";
-				this.db		= "cameron-dota";
+				this.dbHost = "10.0.0.14";
+				this.dbUser = "root";
+				this.dbPass = r"55184429011771861829418426776407260918862215905453";;
+				this.db		= "dotaboards/main-stage";
 				
 				/// Push settings ///
 				this.pushMode = "quick";
@@ -784,7 +787,35 @@ class Environment {
 			});
 		});
 	}
+
+
+	/**
+	 * Write data to file.
+	 */
+	Future<File> save(String file, dynamic<Map, List, String> data, {isJSON: true}) {
+
+		ENV.log("Saving $file", type:4, level:0);
+		return new File(file).writeAsString(isJSON == true ? JSON.encode(data) : data);
 	
+	}
+	
+	/**
+	 * Read and parse the given file.
+	 */
+	Future<Map> grab(String file) {
+		
+		ENV.log("Grabbing $file", type:4, level:0);
+		File fileToGrab = new File(file);
+		
+		return fileToGrab.exists().then(
+			(bool exists) => exists == false ? new Future.value(new Map()) : fileToGrab.readAsString().then(
+				(String contents) => contents.length > 0 ? JSON.decode(contents) : new Map())
+		);
+	}
+	
+	/**
+	 * Log some data.
+	 */
 	void log(String msg, {int type: 0, int level: 1}) {
 		
 		/**
@@ -841,7 +872,7 @@ class Environment {
 				
 			}
 			
-			this.sink.write(message + "\n");
+			this.sink.write(message.toString() + "\n");
 			
 			if(this.name == "LOCAL") {
 				print(message);

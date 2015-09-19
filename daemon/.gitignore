@@ -1,5 +1,6 @@
 build/
 packages/
+bin/storage/
 .buildlog
 .packages
 .project

@@ -18,7 +18,7 @@ class Processor {
 	 * Heirarchy:
 	 * 
 	 * 
-	 * _Boards {
+	 * Boards {
 	 * 		|Board Name|: {
 	 * 			raw: [ [|Player ID|, |Value|], 			... ],
 	 * 			det: { |Player ID|: { |Player Data| }, 	... }
@@ -51,15 +51,14 @@ class Processor {
 				>
 			>
 		>
-	> 									_Boards;
-	Map<String, Map<String, int>>		_CumulativeStatistics;
+	> 									Boards;
+	Map<String, Map<String, int>>		CumStats;
 	
 	int									playersProcessedUpToLastFetch = 0;
 	int 								playersProcessed = 0;
 	
-	Map<String, int> 					_Appearances;
-	Set<String>							_RecentlyRetrievedPlayers;
-	Util 								util;
+	Map<String, int> 					Appearances;
+//	Set<String>							_RecentlyRetrievedPlayers;
 	
 	String regionalShortcode;
 	String locationIdentifier;
@@ -75,49 +74,54 @@ class Processor {
 		
 		ENV.log("Instantiated processor ${this.hashCode} with shortcode: ${regionalShortcode}, ident: ${locationIdentifier}", type: 3);
 		
-		/// MUST STAY HERE because of weird object pointing bug ///
-		this._Boards =  {
-             // Kill-death-assist, gold per min, xp per min, creep score //
-        	"KDA": {
-        		"raw": [],
-        		"det": {}
-        	},
-        	"GPM": {
-        		"raw": [],
-        		"det": {}
-        	},
-        	"XPM": {
-        		"raw": [],
-        		"det": {}
-        	},
-        	"CS": {
-        		"raw": [],
-        		"det": {}
-        	},
-
-        	// hero damage, tower damage, credit to team //
-        	"HD": {
-        		"raw": [],
-        		"det": {}
-        	},
-        	"TD": {
-        		"raw": [],
-        		"det": {}
-        	},
-        	"C2T": {
-        		"raw": [],
-        		"det": {}
-        	}
-        };
+		this.Boards =  {
+			// Kill-death-assist, gold per min, xp per min, creep score //
+			"KDA": {
+				"raw": [],
+				"det": {}
+			},
+			"GPM": {
+				"raw": [],
+				"det": {}
+			},
+			"XPM": {
+				"raw": [],
+				"det": {}
+			},
+			"CS": {
+				"raw": [],
+				"det": {}
+			},
+			
+			// hero damage, tower damage, credit to team //
+			"HD": {
+				"raw": [],
+				"det": {}
+			},
+			"TD": {
+				"raw": [],
+				"det": {}
+			},
+			"C2T": {
+				"raw": [],
+				"det": {}
+			}
+		};
 		
-		this._CumulativeStatistics 		= new Map<String, Map<String, int>>.from(ENV.CumulativeStatistics);
+		this.CumStats 		= new Map<String, Map<String, int>>.from(ENV.CumulativeStatistics);
 		
-		this._Appearances				= new Map<String, int>();
-		this._RecentlyRetrievedPlayers 	= new Set<String>();
-		this.util 						= new Util();
+		this.Appearances				= new Map<String, int>();
+//		this._RecentlyRetrievedPlayers 	= new Set<String>();
+		
 		
 		this.regionalShortcode 			= regionalShortcode;
 		this.locationIdentifier			= locationIdentifier;
+		
+	}
+	
+	Future setup() {
+		
+		return ENV.state.RestoreProcessor(this);
 		
 	}
 	
@@ -247,8 +251,8 @@ class Processor {
 	 */
 	void updateBoard(String board, Map player, double val) {
 		
-		ENV.log("${player['id']} (${this.regionalShortcode}) -> $board", type: 4);
-		//ENV.log("Before: " + JSON.encode(this._Boards[board]['raw']));
+		ENV.log("         --> $board", type: 3);
+		//ENV.log("Before: " + JSON.encode(this.Boards[board]['raw']));
 		
 		int value = (val * ENV.PrecisionModifierMap[board]).toInt();
 		
@@ -262,10 +266,10 @@ class Processor {
 			int currentRawBoardIndex = this.findRawIndexByID(board, player["id"]);
 			ENV.log("Duplicate entry: Found player ${player['id']} on ${this.regionalShortcode}-${board} at index ${currentRawBoardIndex.toString()}", type: 4);
 			
-			if(value > this._Boards[board]["raw"][currentRawBoardIndex][1]) {
+			if(value > this.Boards[board]["raw"][currentRawBoardIndex][1]) {
 				
-				this._Boards[board]["raw"][currentRawBoardIndex][1] = value;
-				this._Boards[board]["det"][player['id']]			= player;
+				this.Boards[board]["raw"][currentRawBoardIndex][1] = value;
+				this.Boards[board]["det"][player['id']]			= player;
 				this.sortBoard(board); /// Re-sort after modifying a value to ensure it's correctly placed.
 				
 			}
@@ -273,20 +277,20 @@ class Processor {
 		} else {
 			
 			/// Boards are full, remove lowest player ///
-			if( this._Boards[board]["raw"].length >= 100 ) {
+			if( this.Boards[board]["raw"].length >= 100 ) {
 				
 				this.sortBoard(board); /// Sort to ensure we remove the correct (last-place) value.
 
-				this._Boards[board]["det"].remove(this._Boards[board]["raw"].last[0]);
-				this._Boards[board]["raw"].removeLast();
+				this.Boards[board]["det"].remove(this.Boards[board]["raw"].last[0]);
+				this.Boards[board]["raw"].removeLast();
 				
 			}
-			this._Boards[board]["raw"].add([ player['id'], value ]);
-			this._Boards[board]["det"][player["id"]] = player;
+			this.Boards[board]["raw"].add([ player['id'], value ]);
+			this.Boards[board]["det"][player["id"]] = player;
 		}
 		
 
-		//ENV.log("After  :" +JSON.encode(this._Boards[board]['raw']));
+		//ENV.log("After  :" +JSON.encode(this.Boards[board]['raw']));
 		//ENV.log("\n\n");
 	}
 	
@@ -299,7 +303,7 @@ class Processor {
 //		this.sortBoards(); /// Run a complete sort before output.
 //		
 //		Future<File> doSave(File file) {
-//			var json = JSON.encode(this._Boards);
+//			var json = JSON.encode(this.Boards);
 //			
 //			try { 
 //				return file.writeAsString(json);
@@ -327,23 +331,23 @@ class Processor {
 	 */
 	double getBase(String board, int def) {
 		this.sortBoard(board); /// Sort to ensure we're returning the true 'last' value.
-		return (this._Boards[board]["raw"].length >= 100) ? (this._Boards[board]["raw"].last[1].toDouble() / ENV.PrecisionModifierMap[board]) : def.toDouble();
+		return (this.Boards[board]["raw"].length >= 100) ? (this.Boards[board]["raw"].last[1].toDouble() / ENV.PrecisionModifierMap[board]) : def.toDouble();
 	}
 	
 	
 	/** 
 	 * Check if a player is listed in the specified board.
 	 */
-	bool playerExistsOnBoard(String board, String id) => this._Boards[board]["det"].containsKey(id);
+	bool playerExistsOnBoard(String board, String id) => this.Boards[board]["det"].containsKey(id);
 	
 	
 	/** 
 	 * Find a player's current index in the specified raw board.
 	 */
 	dynamic findRawIndexByID(String board, String id) {
-		var element = this._Boards[board]["raw"].firstWhere((List element) => element.contains(id), orElse: () => null);
+		var element = this.Boards[board]["raw"].firstWhere((List element) => element.contains(id), orElse: () => null);
 		if(element != null) 
-			return this._Boards[board]["raw"].indexOf(element);
+			return this.Boards[board]["raw"].indexOf(element);
 		else return null;
 	}
 	
@@ -353,10 +357,10 @@ class Processor {
 	 */
 	void discardPlayer(String id) {
 		ENV.log("Discarding $id from ${this.regionalShortcode}", type: 3);
-		for(String board in this._Boards.keys.toList()) {
+		for(String board in this.Boards.keys.toList()) {
 			
-			this._Boards[board]["raw"].removeWhere((List element) => element.contains(id));
-			this._Boards[board]["det"].remove(id);
+			this.Boards[board]["raw"].removeWhere((List element) => element.contains(id));
+			this.Boards[board]["det"].remove(id);
 			
 		}
 	}
@@ -365,19 +369,19 @@ class Processor {
 	/**
 	 * Clear the recently retrieved players set.
 	 */
-	void clearRecentlyRetrievedPlayers() => this._RecentlyRetrievedPlayers.clear(); 
+//	void clearRecentlyRetrievedPlayers() => this._RecentlyRetrievedPlayers.clear(); 
 	
 	
 	/**
 	 * Sort the boards.
 	 */
-	void sortBoard(String board) => this._Boards[board]["raw"].sort((List a, List b) =>  (b[1] - a[1]) );
+	void sortBoard(String board) => this.Boards[board]["raw"].sort((List a, List b) =>  (b[1] - a[1]) );
 	
 	
 	/**
 	 * Sort ALL boards.
 	 */
-	void sortBoards() => this._Boards.keys.forEach((key) => this.sortBoard(key));
+	void sortBoards() => this.Boards.keys.forEach((key) => this.sortBoard(key));
 	
 	
 	
@@ -391,12 +395,12 @@ class Processor {
 	 */
 	void playerAppeared(String id) {
 		
-		this._RecentlyRetrievedPlayers.add(id);
+//		this._RecentlyRetrievedPlayers.add(id);
 		
-		if(this._Appearances.containsKey(id)) {
-			this._Appearances[id] = this._Appearances[id];
+		if(this.Appearances.containsKey(id)) {
+			this.Appearances[id] = this.Appearances[id];
 		} else {
-			this._Appearances[id] = 1;
+			this.Appearances[id] = 1;
 		}
 	}
 	
@@ -411,22 +415,22 @@ class Processor {
 		
 		//ENV.log(" | Pushing ${player['id']} to cumstats (+${player['kills']})");
 		
-		this._CumulativeStatistics["current"]["kills"] += player["kills"];
-		this._CumulativeStatistics["current"]["deaths"] += player["deaths"];
-		this._CumulativeStatistics["current"]["assists"] += player["assists"];
-		this._CumulativeStatistics["current"]["duration"] += player["duration"];
+		this.CumStats["current"]["kills"] += player["kills"];
+		this.CumStats["current"]["deaths"] += player["deaths"];
+		this.CumStats["current"]["assists"] += player["assists"];
+		this.CumStats["current"]["duration"] += player["duration"];
 
-		this._CumulativeStatistics["total"]["kills"] += player["kills"];
-		this._CumulativeStatistics["total"]["deaths"] += player["deaths"];
-		this._CumulativeStatistics["total"]["assists"] += player["assists"];
-		this._CumulativeStatistics["total"]["duration"] += player["duration"];
+		this.CumStats["total"]["kills"] += player["kills"];
+		this.CumStats["total"]["deaths"] += player["deaths"];
+		this.CumStats["total"]["assists"] += player["assists"];
+		this.CumStats["total"]["duration"] += player["duration"];
 	}
 	
 	
 	/**
 	 * Get cumulative statistics map.
 	 */
-	Map getCumulativeStatistics() => this._CumulativeStatistics;
+	Map getCumulativeStatistics() => this.CumStats;
 	
 	
 	/**
@@ -434,8 +438,8 @@ class Processor {
 	 * our addition is accurate next time around
 	 */
 	void resetCumulativeStatistics() {
-		for(String stat in this._CumulativeStatistics["total"].keys.toList()) {
-			this._CumulativeStatistics["total"][stat] = 0;
+		for(String stat in this.CumStats["total"].keys.toList()) {
+			this.CumStats["total"][stat] = 0;
 		}
 	}
 	
@@ -443,14 +447,14 @@ class Processor {
 	/**
 	 * Get the live boards.
 	 */
-	Map getLiveBoards() => this._Boards;
+	Map getLiveBoards() => this.Boards;
 	
 	
 	/** 
 	 * Get appearances.
 	 */
 	Map<String, int> getAppearances() {
-		return this._Appearances;
+		return this.Appearances;
 	}
 
 	
@@ -502,10 +506,10 @@ class Processor {
 	Map<int, int> get64BitIDList(List<String> exclude) {
 		Map<int, int> ids = new Map();
 		int dupes = 0;
-		for(String board in this._Boards.keys) {
+		for(String board in this.Boards.keys) {
 			
 			ENV.log("Getting 64-bit id hashmap on ${this.regionalShortcode}-${board}", type: 4);
-			List<List<dynamic<String, int>>> rawBoard = this._Boards[board]["raw"];
+			List<List<dynamic<String, int>>> rawBoard = this.Boards[board]["raw"];
 			
 			for(int i = 0; i < rawBoard.length; i++) {
 				
@@ -516,7 +520,7 @@ class Processor {
 				/// if the id64:id32 pair has already been stored
 				/// (probably from a previous board)
 				if(!exclude.contains(id32.toString()) && !ids.containsValue(id32)) {
-					int id64 = this.util.to64(id32);
+					int id64 = ENV.util.to64(id32);
 					ids[id64] = id32;
 				}
 			}

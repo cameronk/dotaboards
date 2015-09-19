@@ -2,7 +2,6 @@ part of process;
 
 class Generator {
 	
-	Util util;
 	Processor process;
 	List bans;
 	Map<String, Map> boards;
@@ -18,7 +17,6 @@ class Generator {
 	 * Instantiate a new Generator.
 	 */
 	Generator(Processor process, [List bans, List<List<int>> heroPlayCounts]) { 
-		this.util = new Util();
 		this.process = process;
 		this.bans = bans;
 		this.heroPlayCounts = heroPlayCounts;
@@ -71,7 +69,7 @@ class Generator {
 		this.htmlBasic += "<!-- Starting stats... --><div class='column'><div class='board' id='mod'><div class='first'><h1 class='reset'>Average stats needed <small>to reach the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
 		
 		for(String board in (ENV.Boards).keys.toList()) {
-			String value = (double.parse(statMap[board]) > 1000) ? (this.util.intToShort(double.parse(statMap[board])) + "k") : statMap[board];
+			String value = (double.parse(statMap[board]) > 1000) ? (ENV.util.intToShort(double.parse(statMap[board])) + "k") : statMap[board];
 			this.htmlBasic += "<li><span>${ENV.BoardNames[board.toUpperCase()][0]}</span><div class='label'>$value</div></li>";
 		}
 		
@@ -122,23 +120,23 @@ class Generator {
 					/// Lots of player information! ///
 					dynamic<double, String> value	= player[1] / ENV.PrecisionModifierMap[boardName];
 					String name 					= user["name"].length > 0 ? this.htmlEntities(user["name"]) : "<em>no name provided</em>";
-					String id64						= this.util.to64(int.parse(player[0])).toString();
+					String id64						= ENV.util.to64(int.parse(player[0])).toString();
 					String pic 						= user['pic'];
 					
 					String realBoardName 	= ENV.BoardNames[boardName][1];
 					String playerDetails 	= "<span>${detailed['kills']} kills</span> &nbsp; <span>${detailed['deaths']} deaths</span> &nbsp; <span>${detailed['assists']} assists</span>";
 					String matchData		= " data-player-id='${player[0]}' data-match-id='${detailed['match']}'";
-					String location			= this.util.getCluster( detailed['loc'] );
+					String location			= ENV.util.getCluster( detailed['loc'] );
 					String heroID 			= detailed['hero'].toString();
 					int heroPlayIndex		= this.getHeroPlayIndex(detailed['hero']);
 					String playCount;
-					String popularity 		= (heroPlayIndex + 1).toString() + this.util.intAddSuffix(heroPlayIndex + 1);
+					String popularity 		= (heroPlayIndex + 1).toString() + ENV.util.intAddSuffix(heroPlayIndex + 1);
 					
 					if(heroPlayIndex == -1) {
 						ENV.log("WARNING: hero play index missing for $heroID", type:4, level: 2);
 						playCount = "?";
 					} else {
-						playCount = this.util.intToShort(this.heroPlayCounts[heroPlayIndex][1]) + "k";
+						playCount = ENV.util.intToShort(this.heroPlayCounts[heroPlayIndex][1]) + "k";
 					}
 					
 					String heroPopup		= "class='popup' data-title='${ENV.Heroes[heroID][1]}' data-content='Popularity: ${popularity} (${playCount} plays)' data-position='bottom center'";
@@ -153,8 +151,8 @@ class Generator {
 							
 						case "GPM":
 							value = value.toStringAsFixed(0);
-							String goldEarned = this.util.intToShort( (detailed['duration'] / 60) * detailed['gpm'] );
-							playerDetails = "<span>${goldEarned}k gold earned</span> <span>over ${this.util.secondsToTime(detailed['duration'])}</span>";
+							String goldEarned = ENV.util.intToShort( (detailed['duration'] / 60) * detailed['gpm'] );
+							playerDetails = "<span>${goldEarned}k gold earned</span> <span>over ${ENV.util.secondsToTime(detailed['duration'])}</span>";
 							break;
 						
 						case "XPM":
@@ -163,18 +161,18 @@ class Generator {
 							
 						case "CS":
 							value = value.toStringAsFixed(2);
-							playerDetails = "<span>${detailed['last_hits']}</span>-<span>${detailed['denies']}</span> <span>over ${this.util.secondsToTime(detailed['duration'])}</span>";
+							playerDetails = "<span>${detailed['last_hits']}</span>-<span>${detailed['denies']}</span> <span>over ${ENV.util.secondsToTime(detailed['duration'])}</span>";
 							break;
 							
 						case "HD": 
 						case "TD":
-							value = this.util.intToShort(value) + "k";
+							value = ENV.util.intToShort(value) + "k";
 							break;
 							
 						case "C2T":
 							value = value.toStringAsFixed(2);
-							String help = this.util.intToShort( detailed['tower_damage'] + detailed['hero_damage'] );
-							playerDetails = "<span>${help}k total damage</span> &nbsp; <span>${this.util.intToShort(detailed['hero_healing'])}k healing</span>";
+							String help = ENV.util.intToShort( detailed['tower_damage'] + detailed['hero_damage'] );
+							playerDetails = "<span>${help}k total damage</span> &nbsp; <span>${ENV.util.intToShort(detailed['hero_healing'])}k healing</span>";
 	                        break;
 	                        
 						default: 
