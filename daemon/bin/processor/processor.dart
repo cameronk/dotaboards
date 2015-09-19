@@ -471,6 +471,8 @@ class Processor {
 	List<List<int>> splitIDsForRequest(Map<int, int> idMap) {
 		List<int> id64List  = idMap.keys.toList();
 		List<List<int>> getIDs = new List();
+
+		ENV.log("Splitting ${id64List.length} IDs:", type: 4);
 		
 		if(idMap.length > 0) {
 			
@@ -483,7 +485,7 @@ class Processor {
 			
 			int requiredRequestCount = (id64List.length / 100).ceil();
 			for(int i = 1; i <= requiredRequestCount; i++) {
-				ENV.log("Delegating request ${i}...", type: 4);
+				ENV.log("Delegating request ${i}...", type: 3);
 				
 				int stop;
 				int start = (i - 1) * 100;
@@ -509,7 +511,7 @@ class Processor {
 		int dupes = 0;
 		for(String board in this.Boards.keys) {
 			
-			ENV.log("Getting 64-bit id hashmap on ${this.regionalShortcode}-${board}", type: 4);
+			ENV.log("Getting 64-bit id hashmap on ${this.regionalShortcode}-${board}", type: 3);
 			List<List<dynamic<String, int>>> rawBoard = this.Boards[board]["raw"];
 			
 			for(int i = 0; i < rawBoard.length; i++) {
@@ -529,7 +531,7 @@ class Processor {
 			
 		}
 		
-		ENV.log("...Returning ${ids.length} IDs", type: 4);
+		ENV.log("...${this.regionalShortcode} needs data for ${ids.length} ids", type: 4);
 		return ids;
 	}
 	

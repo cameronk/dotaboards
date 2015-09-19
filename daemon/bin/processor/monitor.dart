@@ -100,7 +100,7 @@ class Monitor {
 	 */
 	void push(Processor mainProcess, Map<String, Processor> regionalProcessors) {
 		
-		ENV.log("[Monitor] running push sequence @ loop ${this.averageMatchProcessingDelays.length}", type: 4);
+		ENV.log("Monitor: running push sequence.", type: 4);
 		
 		DateTime now = new DateTime.now();
 		
@@ -139,6 +139,21 @@ class Monitor {
 			}
 			
 		};
+		
+		newDataThisPush.forEach((String key, dynamic value) {
+			if(key == "processors") {
+				Map procs = value;
+				
+				procs.forEach((String region, Map data) {
+					ENV.log("processors.$region:", type: 3);
+					data.forEach((String key, dynamic val) {
+						ENV.log(" -> $key = ${val.toString()}", type:3);
+					});
+				});
+			} else {
+				ENV.log("$key = ${value.toString()}", type: 3);
+			}
+		});
 		
 		regionalProcessors.forEach((String name, Processor processor) {
 			newDataThisPush["processors"][name] = new Map();

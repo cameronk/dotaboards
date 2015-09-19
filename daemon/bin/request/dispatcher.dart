@@ -568,8 +568,9 @@ class Dispatcher {
 	 */
 	Future generate(Processor process, heroPlayCounts, store) {
 		Map cached = process.getLiveBoards();
-        				
-		ENV.log("Dispatching generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches", type: 2);
+        			
+		ENV.log("");
+		ENV.log("Running a generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches", type: 2);
 		
 		List<Future> wait = new List();
 		

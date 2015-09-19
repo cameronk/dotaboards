@@ -6,6 +6,8 @@ NOW=$(date +"%m-%d-%Y")
 echo ""
 echo "Processing daemon start with env $ENV"
 
+./clear-state.sh
+
 # Store the old monitor data
 echo "Moving old monitor file..."
 cd ../daemon/storage/monitors
