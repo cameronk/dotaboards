@@ -108,7 +108,7 @@ class Monitor {
 		Map newDataThisPush = {
 		                       
 		    /// Proprietary
-		    "recordedAt": now.toLocal().toString(),
+		    "recordedAt": now.toIso8601String(),
 		    
 		    /// Request count for this loop
 		    "fetchRequestResponses": this.fetchRequestResponses,
