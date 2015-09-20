@@ -30,13 +30,10 @@
     $split = explode(".", substr(Request::url(), 7));
     $region = $split[0];
     $site = Site::where('id', '0')->first(); 
-    $poppedModal = false;
 ?>
 
 @if($site->steam_online == 0)
-    <?php
-        $poppedModal = true;
-    ?>
+
     <script>
     $(function() { 
         $("#steam-down-modal").modal('show'); 
@@ -53,12 +50,9 @@
             <div class="ui green button">Got it!</div>
         </div>
     </div>
-@endif
 
-@if(!Request::cookie('region') && !Session::has('asked.' . $region) && $poppedModal == false) 
-    <?php
-        $poppedModal = true;
-    ?>
+@elseif(!Request::cookie('region') && !Session::has('asked.' . $region)) 
+
     <script>
         $(function() {
             $("#set-region-modal")
@@ -74,7 +68,7 @@
                         });
                     },
                     onDeny: function() {
-                        $.post("/region/set", { _token: "{{ csrf_token() }}", region: "{{ $region }}" }, function(response) {
+                        $.post("/region/nope", { _token: "{{ csrf_token() }}", region: "{{ $region }}" }, function(response) {
                             if(response.success == true) {
                                 $("#set-region-modal")
                                     .modal('hide')
@@ -95,13 +89,13 @@
             </div>
         </div>
         <div class="actions">
-            <button class="ui approve button">Sure!</div></a>
-            <a href="http://dotaboards.com/region/nope/{{ $region }}"><div class="ui red button deny">No thanks</div></a>
+            <div class="ui green approve button">Sure!</div>
+            <div class="ui red deny button">Sure!</div>
         </div>
     </div>
-@endif
 
-@if(!Session::has('user.warning') && $poppedModal == false)
+@@elseif(!Session::has('user.warning'))
+
     <?php Session::push('user.warning', 'true'); ?>
     <script>
     $(function() { $("#warning-modal").modal('show'); });
@@ -116,6 +110,7 @@
             <div class="ui green button">Got it!</div>
         </div>
     </div>
+
 @endif
 
 <div class="ui small basic modal" id="not-found-modal">
