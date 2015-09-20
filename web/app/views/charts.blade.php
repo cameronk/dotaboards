@@ -1,7 +1,8 @@
 <html>
 <head>
 	<title>Charts | Dotaboards</title>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.1/dygraph-combined.js"></script>
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="//cdn.azuru.me/db/js/highcharts.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
 	<style>
 	body {
@@ -11,14 +12,10 @@
 		font-family: "Lato", sans-serif;
 	}
 
-
-
 	.contain {
 		width: 960px;
 		margin: 0 auto;
 	}
-
-
 
 	#header {
 		height: 80px;
@@ -80,10 +77,10 @@
 
 	<h1>Players Processed <small>by region</small></h1>
 	<div id="graph-ppr" class="graph"></div>
+
 </div>
 
 <script>
-
 	var data = {{ $regions }};
 
 	var delays = [];
@@ -99,6 +96,7 @@
 		 * Delays
 		 */
 		delays.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['delay']) ]);
+
 
 
 		/**
@@ -137,62 +135,130 @@
 	});
 
 
+	$(document).ready(function() {
 
-	// delay
-	new Dygraph(document.getElementById("graph-delay"),
-      delays,
-      {
-        labels: [ "Date", "Delay" ],
-        showInRangeSelector: true,
-        fillGraph: true,
-      });
+		$("#graph-delay").highcharts({
+			chart: {
+				zoomType: 'x',
+			},
 
-	// mpr
-	new Dygraph(document.getElementById("graph-mpr"),
-      mpr,
-      {
-        labels: [ "Date", "Matches per request" ],
-        showInRangeSelector: true,
-        fillGraph: true,
-      });
+			// titles
+			title: {
+				text: "Delay over time"
+			},
+			subtitle: {
+				text: "difference between match completion and recording times"
+			},
 
-	// rr
-	new Dygraph(document.getElementById("graph-rr"),
-      rr,
-      {
-        labels: [ "Date", "Requests", "Avg. fetch response time" ],
-        showInRangeSelector: true,
-        fillGraph: true,
-      });
+			// axes
+			xAxis: {
+				type: 'datetime',
+				title: {
+					text: 'Date'
+				}
+			},
+			yAxis: {
+				title: {
+					text: 'Difference (min)'
+				}
+			},
 
-	// tr
-	new Dygraph(document.getElementById("graph-tr"),
-      tr,
-      {
-        labels: [ "Date", "Requests" ],
-        showInRangeSelector: true,
-        fillGraph: true,
-      });
+			legend: {
+				enabled: false
+			},
+            plotOptions: {
+                area: {
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    },
+                    marker: {
+                        radius: 2
+                    },
+                    lineWidth: 1,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    threshold: null
+                }
+            },
 
-    // downtime
-	new Dygraph(document.getElementById("graph-downtime"),
-      downtime,
-      {
-        labels: [ "Date", "Downtime" ],
-        showInRangeSelector: true,
-        fillGraph: true,
-      });
+            series: [
+            	{
+            		type: 'area',
+            		name: 'Delay',
+            		data: delays
+            	}
+            ]
+		});
 
- 	// ppr
-	new Dygraph(document.getElementById("graph-ppr"),
-      ppr,
-      {
-        labels: ["Date", "Global", "US", "EU", "Asia", "Africa", "Russia", "South America", "Australia"],
-        showInRangeSelector: true,
-        fillGraph: true,
-      });
+	});
 
+	// // delay
+	// new Dygraph(document.getElementById("graph-delay"),
+ //      delays,
+ //      {
+ //        labels: [ "Date", "Delay" ],
+ //        showInRangeSelector: true,
+ //        fillGraph: true,
+ //      });
 
+	// // mpr
+	// new Dygraph(document.getElementById("graph-mpr"),
+ //      mpr,
+ //      {
+ //        labels: [ "Date", "Matches per request" ],
+ //        showInRangeSelector: true,
+ //        fillGraph: true,
+ //      });
+
+	// // rr
+	// new Dygraph(document.getElementById("graph-rr"),
+ //      rr,
+ //      {
+ //        labels: [ "Date", "Requests", "Avg. fetch response time" ],
+ //        showInRangeSelector: true,
+ //        fillGraph: true,
+ //      });
+
+	// // tr
+	// new Dygraph(document.getElementById("graph-tr"),
+ //      tr,
+ //      {
+ //        labels: [ "Date", "Requests" ],
+ //        showInRangeSelector: true,
+ //        fillGraph: true,
+ //      });
+
+ //    // downtime
+	// new Dygraph(document.getElementById("graph-downtime"),
+ //      downtime,
+ //      {
+ //        labels: [ "Date", "Downtime" ],
+ //        showInRangeSelector: true,
+ //        fillGraph: true,
+ //      });
+
+ // 	// ppr
+	// new Dygraph(document.getElementById("graph-ppr"),
+ //      ppr,
+ //      {
+ //        labels: ["Date", "Global", "US", "EU", "Asia", "Africa", "Russia", "South America", "Australia"],
+ //        showInRangeSelector: true,
+ //        fillGraph: true,
+ //      });
+
+	
 
 </script>
 </body>
