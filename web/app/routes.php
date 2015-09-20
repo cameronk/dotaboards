@@ -34,14 +34,30 @@ Route::get('stats', array('uses' => 'PageController@stats'));
 Route::get('down', function() { return View::make('down'); });
 Route::get('charts', array('uses' => 'PageController@charts'));
 
-Route::get('region/back', function() {
-	Session::forget('asked');
-	return Redirect::to("/")->withCookie(Cookie::forget('region'));
+
+Route::group(array('prefix' => 'region'), function() {
+	Route::get('back', function() {
+		Session::forget('asked');
+		return Redirect::to("/")->withCookie(Cookie::forget('region'));
+	});
+	Route::post('set', function() {
+		$region = Input::get('region');
+		return Response::json(array('success' => true))->withCookie(Cookie::forever('region', $region));
+	});
+	Route::post('nope', function() {
+		$region = Input::get('region');
+		Session::put('asked.'. $region, true);
+		return Response::json(array('success' => true));
+	});
 });
-Route::get('region/set/{region}', function($region) {
-	return Redirect::to("http://" . $region . "." . $domain)->withCookie(Cookie::make('region', $region));
-});
-Route::get('region/nope/{region}', function($region) {
-	Session::put('asked.'. $region, true);
-	return Redirect::to("http://" . $region . "." . $domain);
-});
+// Route::get('region/back', function() {
+// 	Session::forget('asked');
+// 	return Redirect::to("/")->withCookie(Cookie::forget('region'));
+// });
+// Route::get('region/set/{region}', function($region) {
+// 	return Redirect::to("http://" . $region . "." . $domain)->withCookie(Cookie::make('region', $region));
+// });
+// Route::get('region/nope/{region}', function($region) {
+// 	Session::put('asked.'. $region, true);
+// 	return Redirect::to("http://" . $region . "." . $domain);
+// });

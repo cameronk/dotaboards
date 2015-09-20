@@ -29,15 +29,59 @@
     ];
     $split = explode(".", substr(Request::url(), 7));
     $region = $split[0];
+    $site = Site::where('id', '0')->first(); 
+    $poppedModal = false;
 ?>
 
+@if($site->steam_online == 0)
+    <?php
+        $poppedModal = true;
+    ?>
+    <script>
+    $(function() { 
+        $("#steam-down-modal").modal('show'); 
+        $("a.signin").attr('disabled', true);
+    });
+    </script>
+    <div class="ui small modal" id="steam-down-modal">
+        <i class="close icon"></i>
+        <div class="header"><i class='warning icon'></i> Uh oh!</div>
+        <div class="content">
+            <p>Steam went down about <i>{{{ $site->steam_down_at->diffForHumans() }}}</i>. <br/><br/><strong>DotaBoards</strong> is still online, but new matches will not be recorded until it returns.</p>
+        </div>
+        <div class="actions">
+            <div class="ui green button">Got it!</div>
+        </div>
+    </div>
+@endif
 
-@if(!Request::cookie('region') && !Session::has('asked.' . $region)) 
+@if(!Request::cookie('region') && !Session::has('asked.' . $region) && $poppedModal == false) 
+    <?php
+        $poppedModal = true;
+    ?>
     <script>
         $(function() {
             $("#set-region-modal")
                 .modal({
-                    closable: false
+                    closable: false,
+                    onApprove: function() {
+                        $.post("/region/set", { _token: "{{ csrf_token() }}", region: "{{ $region }}" }, function(response) {
+                            if(response.success == true) {
+                                $("#set-region-modal")
+                                    .modal('hide')
+                                ;
+                            }
+                        });
+                    },
+                    onDeny: function() {
+                        $.post("/region/set", { _token: "{{ csrf_token() }}", region: "{{ $region }}" }, function(response) {
+                            if(response.success == true) {
+                                $("#set-region-modal")
+                                    .modal('hide')
+                                ;
+                            }
+                        });
+                    }
                 })
                 .modal('show');
         });
@@ -47,12 +91,29 @@
         <div class="header"></div>
         <div class="content">
             <div class="left">
-                <p>Would you like to make <strong>{{ $regions[$region]; }}</strong> your preferred region? We'll remember this region next time you visit DotaBoards - you can change it at any time by clicking the flag in the header controls.</p>
+                <p>Would you like to make <strong>{{ $regions[$region] }}</strong> your preferred region? We'll remember this region next time you visit DotaBoards - you can change it at any time by clicking the flag in the header controls.</p>
             </div>
         </div>
         <div class="actions">
-            <a href="http://dotaboards.com/region/set/{{ $region }}"><div class="ui green button">Sure!</div></a>
+            <button class="ui approve button">Sure!</div></a>
             <a href="http://dotaboards.com/region/nope/{{ $region }}"><div class="ui red button deny">No thanks</div></a>
+        </div>
+    </div>
+@endif
+
+@if(!Session::has('user.warning') && $poppedModal == false)
+    <?php Session::push('user.warning', 'true'); ?>
+    <script>
+    $(function() { $("#warning-modal").modal('show'); });
+    </script>
+    <div class="ui small modal" id="warning-modal">
+        <i class="close icon"></i>
+        <div class="header"><i class='warning icon'></i> Heads up!</div>
+        <div class="content">
+            <p><strong>DotaBoards</strong> is currently in <em>beta</em>. We're still refining our algorithms and calculation methods &mdash; if you believe a certain player should have reached the boards, please don't hesitate to <a href="http://azuru.me/contact" class="link">shoot us a message</a>.</p>
+        </div>
+        <div class="actions">
+            <div class="ui green button">Got it!</div>
         </div>
     </div>
 @endif
@@ -119,49 +180,6 @@
         <div class="ui button cancel">Close</div>
     </div>
 </div>
-
-@if(!Session::has('user.warning'))
-    <?php Session::push('user.warning', 'true'); ?>
-    <script>
-    $(function() { $("#warning-modal").modal('show'); });
-    </script>
-    <div class="ui small modal" id="warning-modal">
-        <i class="close icon"></i>
-        <div class="header"><i class='warning icon'></i> Heads up!</div>
-        <div class="content">
-            <p><strong>DotaBoards</strong> is currently in <em>beta</em>. We're still refining our algorithms and calculation methods &mdash; if you believe a certain player should have reached the boards, please don't hesitate to <a href="http://azuru.me/contact" class="link">shoot us a message</a>.</p>
-        </div>
-        <div class="actions">
-            <div class="ui green button">Got it!</div>
-        </div>
-    </div>
-@endif
-
-<?php $site = Site::where('id', '0')->first(); ?>
-@if($site->steam_online == 0)
-    <script>
-    $(function() { 
-        $("#steam-down-modal").modal('show'); 
-        $("a.signin").attr('disabled', true);
-    });
-    </script>
-    <div class="ui small modal" id="steam-down-modal">
-        <i class="close icon"></i>
-        <div class="header"><i class='warning icon'></i> Uh oh!</div>
-        <div class="content">
-            <p>Steam went down about <i>{{{ $site->steam_down_at->diffForHumans() }}}</i>. <br/><br/><strong>DotaBoards</strong> is still online, but new matches will not be recorded until it returns.</p>
-        </div>
-        <div class="actions">
-            <div class="ui green button">Got it!</div>
-        </div>
-    </div>
-@endif
-
-
-
-
-
-
 
 
 <!-- Begin page content. -->
