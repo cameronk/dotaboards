@@ -90,7 +90,7 @@
         </div>
         <div class="actions">
             <div class="ui green approve button">Sure!</div>
-            <div class="ui red deny button">Sure!</div>
+            <div class="ui red deny button">No thanks...</div>
         </div>
     </div>
 
@@ -180,7 +180,7 @@
 <!-- Begin page content. -->
 <div class="block-header">
     <div id="logo-contain">
-        <a href="/"><div class="logo noselect t200"><strong></strong>DotaBoards</div></a>
+        <a href="//{{ Config::get('app.domain') }}"><div class="logo noselect t200"><strong></strong>DotaBoards</div></a>
         <div class="nav notifs noselect">
             <div class="beta">BETA</div>
             @if(@$index == true)
