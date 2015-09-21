@@ -94,7 +94,7 @@
         </div>
     </div>
 
-@@elseif(!Session::has('user.warning'))
+@elseif(!Session::has('user.warning'))
 
     <?php Session::push('user.warning', 'true'); ?>
     <script>
@@ -180,7 +180,7 @@
 <!-- Begin page content. -->
 <div class="block-header">
     <div id="logo-contain">
-        <a href="http://dotaboards.com/"><div class="logo noselect t200"><strong></strong>DotaBoards</div></a>
+        <a href="/"><div class="logo noselect t200"><strong></strong>DotaBoards</div></a>
         <div class="nav notifs noselect">
             <div class="beta">BETA</div>
             @if(@$index == true)
@@ -190,10 +190,10 @@
         </div>
         <div class="nav main noselect">
             <div class="region action ap-ct" data-content="Change region" data-position="bottom center">
-                <a href="http://dotaboards.com/region/back"><img src="http://cdn.azuru.me/apps/dotaboards/flags/64/{{ $region }}.png" /></a>
+                <a href="{{ url('region/back') }}"><img src="http://cdn.azuru.me/apps/dotaboards/flags/64/{{ $region }}.png" /></a>
             </div>
             @if(@$index == true)
-                <div class="stats action"><a href="http://global.dotaboards.com/stats"><i class="tasks icon"></i> Statistics</a></div>
+                <div class="stats action"><a href="{{ url('stats') }}"><i class="tasks icon"></i> Statistics</a></div>
                 <div class="expand action"><i class="expand icon"></i> <span>Expand<span></div>
                 <div class="about action"><i class="question mark icon"></i> How it works</div>
             @endif

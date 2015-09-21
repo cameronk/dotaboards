@@ -205,8 +205,8 @@ class Generator {
 							else 
 								pic = "http://media.steampowered.com/steamcommunity/public/images/avatars/" + pic;
 							
-							this.htmlBasic  += "<div class='first' id='player-expand-details'${matchData} data-player-id-64='${id64}' data-player-name='${name}' data-player-appearances='${appearancesCount.toString()}' data-profile-pic='${pic}'><div class='ui instant fade reveal'><img class='hidden content' src='${pic}' /><img class='visible content' src='//cdn.azuru.me/apps/dotaboards/heroes/[${heroID}].png' /></div><div class='stats'><strong title='${name}'>${name}</strong><div class='info detailed'>${playerDetails}</div></div><div class='tag'>${realBoardName}</div><div class='tag value'>${value.toString()}</div></div>";
-							this.htmlMobile += "<div class='first'><img src='//cdn.azuru.me/apps/dotaboards/heroes/[${heroID}].png' /><div class='stats'><strong>${name}</strong><div class='info'><strong>${value}</strong></div></div><div class='tag'>${realBoardName}</div></div>";
+							this.htmlBasic  += "<div class='first' id='player-expand-details'${matchData} data-player-id-64='${id64}' data-player-name='${name}' data-player-appearances='${appearancesCount.toString()}' data-profile-pic='${pic}'><div class='ui instant fade reveal'><img class='hidden content' src='${pic}' /><img class='visible content' src='//cdn.azuru.me/apps/dotaboards/heroes/[${heroID}].png' /></div><div class='stats'><strong title='${name}'><span>#1</span> ${name}</strong><div class='info detailed'>${playerDetails}</div></div><div class='tag'>${realBoardName}</div><div class='tag value'>${value.toString()}</div></div>";
+							this.htmlMobile += "<div class='first'><img src='//cdn.azuru.me/apps/dotaboards/heroes/[${heroID}].png' /><div class='stats'><strong><span>#1</span> ${name}</strong><div class='info'><strong>${value}</strong></div></div><div class='tag'>${realBoardName}</div></div>";
 	
 							
 						} catch(e) {
@@ -221,8 +221,8 @@ class Generator {
 							this.htmlMobile += "<ul class='rest'>";
 						}
 						
-						this.htmlBasic  += "<li${matchData}><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' ${heroPopup}/><span title='${name}'>${name}</span><div class='label'>${value}</div><div class='detailed'><span class='location-buff' data-loc='${location}'>${location}</span>${playerDetails}</div></li>";
-	                    this.htmlMobile	+= "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' /><span>${name}</span><div class='label'>${value}</div></li>";
+						this.htmlBasic  += "<li${matchData}><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' ${heroPopup}/><span title='${name}'><span>#${position}</span> ${name}</span><div class='label'>${value}</div><div class='detailed'><span class='location-buff' data-loc='${location}'>${location}</span>${playerDetails}</div></li>";
+	                    this.htmlMobile	+= "<li><img src='//cdn.dota2.com/apps/dota2/images/heroes/${ENV.Heroes[heroID][0]}_sb.png' /><span><span>#${position}</span> ${name}</span><div class='label'>${value}</div></li>";
 	                    					
 						if(position == (board["raw"].length - discarded)) {
 							hasFinished = true;

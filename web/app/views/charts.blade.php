@@ -3,6 +3,7 @@
 	<title>Charts | Dotaboards</title>
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="//cdn.azuru.me/db/js/highcharts.js"></script>
+	<script src="//cdn.azuru.me/db/js/highcharts-show-last-points.min.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
 	<style>
 	body {
@@ -523,6 +524,7 @@
 	            },
 			},
 			yAxis: {
+        		showRects: true,
 				title: {
 					text: 'Players (#)'
 				},
