@@ -232,7 +232,7 @@
     <div class="ui two column grid">
         <div class="row">
             <div class="column">
-                <div class="copyright">Copyright &copy; Azuru Networks 2014. <small>Dota 2 is a registered trademark of Valve Corporation.</small></div>
+                <div class="copyright">Copyright &copy; Azuru Networks 2014-2015. <small>Dota 2 is a registered trademark of Valve Corporation.</small></div>
             </div>
             <div class="column">
                 <div class="azuru-watermark"><a href="http://azuru.me/" target="_blank">Azuru.</a></div>

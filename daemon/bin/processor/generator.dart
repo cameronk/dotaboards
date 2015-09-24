@@ -67,11 +67,12 @@ class Generator {
 	 */
 	Generator makeStats(Map<String, String> statMap, Map<int, int> heroPlaysMap) {
 		
-		this.htmlBasic += "<!-- Starting stats... --><div class='column'><div class='board' id='mod'><div class='first'><h1 class='reset'>Average stats needed <small>to reach the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
+		this.htmlBasic += "<!-- Starting stats... --><div class='column'><div class='board' id='mod'><div class='first' data-no-interact><h1 class='reset'>Average stats needed <small>to reach the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
 		
 		for(String board in (ENV.Boards).keys.toList()) {
-			String value = (double.parse(statMap[board]) > 1000) ? (ENV.util.intToShort(double.parse(statMap[board])) + "k") : statMap[board];
-			this.htmlBasic += "<li><span>${ENV.BoardNames[board.toUpperCase()][0]}</span><div class='label'>$value</div></li>";
+//			String value = (double.parse(statMap[board]) > 1000) ? (ENV.util.intToShort(double.parse(statMap[board])) + "k") : statMap[board];
+			String value = double.parse(statMap[board]).toString().replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+			this.htmlBasic += "<li><span>${ENV.BoardNames[board.toUpperCase()][0]}</span><div class='label'>${value}</div></li>";
 		}
 		
 		this.htmlBasic += "</ul><!--rest--></div><!--#scroll-wrapper for stats section--></div><!--.board--></div><!--.column--><div class='column'><div class='board'><div class='first'><h1 class='reset'>Hero popularity <small>in order of appearances on the boards</small></h1></div><div id='scroll-wrapper'><ul class='rest reset'>";
