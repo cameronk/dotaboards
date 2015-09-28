@@ -29,8 +29,8 @@
 	}
 
 	#content {
-		background: #ddd;
-		border: 1px solid #777;
+		background: #e4e4e4;
+		border: 1px solid #999;
 		border-top: none;
 		margin-bottom: 50px;
 		padding-bottom: 10px;
@@ -45,6 +45,7 @@
 
 	.graph {
 		width: 100% !important;
+		background: #f5f5f5;
 	}
 
 	small {
@@ -87,6 +88,8 @@
 	var data = {{ $regions }};
 
 	var delays = [];
+
+	var delaysAverage = 0;
 	var mpr = [];
 	var rr = [];
 	var tr = [];
@@ -99,6 +102,7 @@
 		 * Delays
 		 */
 		delays.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['delay']) ]);
+		delaysAverage += pushLoop['delay'];
 
 
 		/**
@@ -136,65 +140,95 @@
 
 	});
 
-
+	var compiledAverage = Math.round(delaysAverage / data.length);
+	delays.map(function(delay, index) {
+		delays[index].push(compiledAverage);
+	});
 
 	// delay
 	new Dygraph(document.getElementById("graph-delay"),
       delays,
       {
-        labels: [ "Date", "Delay" ],
+	    ylabel: "Delay (minutes)",
+        labels: [ "Date", "Delay", "Average" ],
         showInRangeSelector: true,
         fillGraph: true,
-      });
+      }
+    );
 
 	// mpr
 	new Dygraph(document.getElementById("graph-mpr"),
       mpr,
       {
+	    ylabel: "# of matches",
         labels: [ "Date", "Matches per request" ],
         showInRangeSelector: true,
         fillGraph: true,
-      });
+      }
+    );
 
 	// rr
 	new Dygraph(document.getElementById("graph-rr"),
       rr,
       {
+	    ylabel: "Requests (#) / avg response time (ms)",
         labels: [ "Date", "Requests", "Avg. fetch response time" ],
         showInRangeSelector: true,
         fillGraph: true,
-      });
+      }
+    );
 
 	// tr
 	new Dygraph(document.getElementById("graph-tr"),
       tr,
       {
+	    ylabel: "# of requests",
+      	axes: {
+      		y: {
+      			axisLabelFormatter: function(x) {
+      				return Math.round(x / 1000) + "k";
+      			}
+      		}
+      	},
         labels: [ "Date", "Requests" ],
         showInRangeSelector: true,
         fillGraph: true,
-      });
+      }
+    );
 
     // downtime
 	new Dygraph(document.getElementById("graph-downtime"),
       downtime,
       {
+	    ylabel: "Downtime (min)",
         labels: [ "Date", "Downtime" ],
         showInRangeSelector: true,
         fillGraph: true,
-      });
+      }
+    );
 
  	// ppr
 	var pprGraph = new Dygraph(document.getElementById("graph-ppr"),
 		ppr,
 		{
-	      	ylabel: "# of Players",
-	      	rollPeriod: 2,
+	      	ylabel: "# of players",
+	      	rollPeriod: 3,
+	      	showRoller: true,
+
+	      	axes: {
+	      		y: {
+	      			axisLabelFormatter: function(x) {
+	      				return Math.round(x / 1000) + "k";
+	      			}
+	      		}
+	      	},
 
 	      	series: {
 	      		Global: {
-	      			strokeWidth: 7
+	      			strokeWidth: 4
 	      		}
 	      	},
+
 	      	highlightSeriesOpts: {
 	          strokeWidth: 3,
 	          strokeBorderWidth: 1,
@@ -207,7 +241,7 @@
 
 	        underlayCallback: function(canvas, area, g) {
 
-	            canvas.fillStyle = "rgba(255, 255, 255, 0.3)";
+	            canvas.fillStyle = "rgba(0,0,0,0.4)";
 
 	            function highlight_period(x_start, x_end) {
 	              var canvas_left_x = g.toDomXCoord(x_start);
@@ -252,7 +286,7 @@
 	            }
 	        }
       	}
-      );
+    );
 
 	var pprOnclick = function(ev) {
 		if (pprGraph.isSeriesLocked()) {
