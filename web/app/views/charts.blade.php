@@ -1,8 +1,7 @@
 <html>
 <head>
 	<title>Charts | Dotaboards</title>
-	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="//cdn.azuru.me/db/js/highcharts.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.1/dygraph-combined.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
 	<style>
 	body {
@@ -12,10 +11,14 @@
 		font-family: "Lato", sans-serif;
 	}
 
+
+
 	.contain {
 		width: 960px;
 		margin: 0 auto;
 	}
+
+
 
 	#header {
 		height: 80px;
@@ -26,16 +29,15 @@
 	}
 
 	#content {
-		background: #f4f4f4;
-		border: 1px solid #aaa;
+		background: #ddd;
+		border: 1px solid #777;
 		border-top: none;
 		margin-bottom: 50px;
 		padding-bottom: 10px;
 	}
 
 		#content h1 {
-			border-bottom: 1px solid #aaa;
-			border-top: 1px solid #aaa;
+			border-bottom: 1px solid #777;
 			margin: 0;
 			padding: 10px;
 		}
@@ -44,9 +46,7 @@
 	.graph {
 		width: 100% !important;
 	}
-	#graph-ppr {
-		height: 750px !important;
-	}
+
 	small {
 		font-weight: lighter;
 		font-size: 20px;
@@ -75,15 +75,15 @@
 	<h1>Total requests</h1>
 	<div id="graph-tr" class="graph"></div>
 
-	<!-- <h1>Downtime</h1>
-	<div id="graph-downtime" class="graph"></div> -->
+	<h1>Downtime</h1>
+	<div id="graph-downtime" class="graph"></div>
 
 	<h1>Players Processed <small>by region</small></h1>
 	<div id="graph-ppr" class="graph"></div>
-
 </div>
 
 <script>
+
 	var data = {{ $regions }};
 
 	var delays = [];
@@ -93,35 +93,30 @@
 	var downtime = [];
 	var ppr = [];
 
-
-
-	var playersProcessed = { };
-	var requestResponse = [{ name: 'Fetch request responses', data: [] }, { name: 'Average fetch response time', yAxis: 1, data: []}];
 	data.map(function(pushLoop, index) {
 
 		/**
 		 * Delays
 		 */
-		delays.push([ Date.parse(pushLoop['recordedAt']), Math.round(pushLoop['delay']) ]);
+		delays.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['delay']) ]);
+
 
 		/**
 		 * MPR
 		 */
-		mpr.push([ Date.parse(pushLoop['recordedAt']), Math.round(pushLoop['averageMatchesPerRequest']) ]);
+		mpr.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['averageMatchesPerRequest']) ]);
 
 	
 		/**
 		 * Request/response
 		 */
-		// rr.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['fetchRequestResponses']), Math.round(pushLoop['averageFetchResponseTime']) ]);
-		requestResponse[0].data.push([ Date.parse(pushLoop['recordedAt']), Math.round(pushLoop['fetchRequestResponses']) ]);
-		requestResponse[1].data.push([ Date.parse(pushLoop['recordedAt']), Math.round(pushLoop['averageFetchResponseTime']) ]);
+		rr.push([ new Date(pushLoop['recordedAt']), Math.round(pushLoop['fetchRequestResponses']), Math.round(pushLoop['averageFetchResponseTime']) ]);
 
 
 		/**
 		 * Total requests
 		 */
-		tr.push([ Date.parse(pushLoop['recordedAt']), pushLoop['totalRequests'] ]);
+		tr.push([ new Date(pushLoop['recordedAt']), pushLoop['totalRequests'] ]);
 
 
 		/**
@@ -132,495 +127,142 @@
 		/**
 		 * PPR (playersProcessed)
 		 */
-		// var procs = pushLoop['processors'];
-		// var thisPushPlayerProcessed = [ Date.parse(pushLoop['recordedAt']) ];
-		// for(var region in procs) {
-		// 	thisPushPlayerProcessed.push(procs[region]["playersProcessed"]);
-		// }
-		// ppr.push(thisPushPlayerProcessed);
-
-		for(var region in pushLoop['processors']) {
-			if(!playersProcessed.hasOwnProperty(region)) {
-				playersProcessed[region] = { 'name': region, 'data': []};
-			}
-
-			playersProcessed[region]['data'].push([ Date.parse(pushLoop['recordedAt']), pushLoop['processors'][region]['playersProcessed'] ]);
+		var procs = pushLoop['processors'];
+		var thisPushPlayerProcessed = [ new Date(pushLoop['recordedAt']) ];
+		for(var region in procs) {
+			thisPushPlayerProcessed.push(procs[region]["playersProcessed"]);
 		}
+		ppr.push(thisPushPlayerProcessed);
 
 	});
 
 
 
-	$(document).ready(function() {
+	// delay
+	new Dygraph(document.getElementById("graph-delay"),
+      delays,
+      {
+        labels: [ "Date", "Delay" ],
+        showInRangeSelector: true,
+        fillGraph: true,
+      });
 
-		/**
-	     * In order to synchronize tooltips and crosshairs, override the 
-	     * built-in events with handlers defined on the parent element.
-	     */
-	    $('#content').bind('mousemove touchmove', function (e) {
-	        var chart,
-	            point,
-	            i;
+	// mpr
+	new Dygraph(document.getElementById("graph-mpr"),
+      mpr,
+      {
+        labels: [ "Date", "Matches per request" ],
+        showInRangeSelector: true,
+        fillGraph: true,
+      });
 
-	        for (i = 0; i < Highcharts.charts.length; i++) {
-	            chart = Highcharts.charts[i];
-	            e = chart.pointer.normalize(e); // Find coordinates within the chart
-	            point = chart.series[0].searchPoint(e, true); // Get the hovered point
+	// rr
+	new Dygraph(document.getElementById("graph-rr"),
+      rr,
+      {
+        labels: [ "Date", "Requests", "Avg. fetch response time" ],
+        showInRangeSelector: true,
+        fillGraph: true,
+      });
 
-	            if (point) {
-	                point.onMouseOver(); // Show the hover marker
-	                chart.tooltip.refresh(point); // Show the tooltip
-	                chart.xAxis[0].drawCrosshair(e, point); // Show the crosshair
+	// tr
+	new Dygraph(document.getElementById("graph-tr"),
+      tr,
+      {
+        labels: [ "Date", "Requests" ],
+        showInRangeSelector: true,
+        fillGraph: true,
+      });
+
+    // downtime
+	new Dygraph(document.getElementById("graph-downtime"),
+      downtime,
+      {
+        labels: [ "Date", "Downtime" ],
+        showInRangeSelector: true,
+        fillGraph: true,
+      });
+
+ 	// ppr
+	var pprGraph = new Dygraph(document.getElementById("graph-ppr"),
+		ppr,
+		{
+	      	ylabel: "# of Players",
+	      	rollPeriod: 2,
+
+	      	series: {
+	      		Global: {
+	      			strokeWidth: 7
+	      		}
+	      	},
+	      	highlightSeriesOpts: {
+	          strokeWidth: 3,
+	          strokeBorderWidth: 1,
+	          highlightCircleSize: 5
+	        },
+
+	        labels: ["Date", "Global", "US", "EU", "Asia", "Africa", "Russia", "South America", "Australia"],
+	        showInRangeSelector: true,
+	        stackedGraph: true,
+
+	        underlayCallback: function(canvas, area, g) {
+
+	            canvas.fillStyle = "rgba(255, 255, 255, 0.3)";
+
+	            function highlight_period(x_start, x_end) {
+	              var canvas_left_x = g.toDomXCoord(x_start);
+	              var canvas_right_x = g.toDomXCoord(x_end);
+	              var canvas_width = canvas_right_x - canvas_left_x;
+	              canvas.fillRect(canvas_left_x, area.y, canvas_width, area.h);
+	            }
+
+	            var min_data_x = g.getValue(0,0);
+	            var max_data_x = g.getValue(g.numRows()-1,0);
+
+	            // get day of week
+	            var d = new Date(min_data_x);
+	            var dow = d.getUTCDay();
+
+	            var w = min_data_x;
+	            // starting on Sunday is a special case
+	            if (dow === 0) {
+	              highlight_period(w,w+12*3600*1000);
+	            }
+	            // find first saturday
+	            while (dow != 6) {
+	              w += 24*3600*1000;
+	              d = new Date(w);
+	              dow = d.getUTCDay();
+	            }
+	            // shift back 1/2 day to center highlight around the point for the day
+	            w -= 12*3600*1000;
+	            while (w < max_data_x) {
+	              var start_x_highlight = w;
+	              var end_x_highlight = w + 2*24*3600*1000;
+	              // make sure we don't try to plot outside the graph
+	              if (start_x_highlight < min_data_x) {
+	                start_x_highlight = min_data_x;
+	              }
+	              if (end_x_highlight > max_data_x) {
+	                end_x_highlight = max_data_x;
+	              }
+	              highlight_period(start_x_highlight,end_x_highlight);
+	              // calculate start of highlight for next Saturday 
+	              w += 7*24*3600*1000;
 	            }
 	        }
-	    });
-	    /**
-	     * Override the reset function, we don't need to hide the tooltips and crosshairs.
-	     */
-	    Highcharts.Pointer.prototype.reset = function () {};
+      	}
+      );
 
-	    /**
-	     * Synchronize zooming through the setExtremes event handler.
-	     */
-	    function syncExtremes(e) {
-	        var thisChart = this.chart;
-
-	        Highcharts.each(Highcharts.charts, function (chart) {
-	            if (chart !== thisChart) {
-	                if (chart.xAxis[0].setExtremes) { // It is null while updating
-	                    chart.xAxis[0].setExtremes(e.min, e.max);
-	                }
-	            }
-	        });
-	    }
-
-	    /**
-	     * Delay
-	     */
-		$("#graph-delay").highcharts({
-			chart: {
-				zoomType: 'x',
-				type: 'area'
-			},
-
-			// titles
-			title: {
-				text: "Delay over time"
-			},
-			subtitle: {
-				text: "difference between match completion and recording times"
-			},
-
-			// axes
-			xAxis: {
-				type: 'datetime',
-				crosshair: true,
-				title: {
-					text: 'Date'
-				},
-                events: {
-                    setExtremes: syncExtremes
-                },
-
-			},
-			yAxis: {
-				title: {
-					text: 'Difference (min)'
-				},
-				plotBands: [{
-					from: 0,
-					to: 20,
-					color: Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0.2).get('rgba')
-				}]
-			},
-
-			legend: {
-				enabled: false
-			},
-            plotOptions: {
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                        ]
-                    },
-                    marker: {
-                        radius: 2
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-                    threshold: null
-                }
-            },
-
-            series: [
-            	{
-            		name: 'Delay',
-            		data: delays
-            	}
-            ]
-		});
-	
-		
-		/** 
-		 * Matches per request
-		 */
-		$("#graph-mpr").highcharts({
-			chart: {
-				zoomType: 'x',
-				type: 'area'
-			},
-
-			// titles
-			title: {
-				text: "Matches per request"
-			},
-
-			// axes
-			xAxis: {
-				type: 'datetime',
-				crosshair: true,
-				title: {
-					text: 'Date'
-				},
-                events: {
-                    setExtremes: syncExtremes
-                },
-
-			},
-			yAxis: {
-				title: {
-					text: 'Matches (#)'
-				}
-			},
-
-			legend: {
-				enabled: false
-			},
-            plotOptions: {
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                        ]
-                    },
-                    marker: {
-                        radius: 2
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-                    threshold: null
-                }
-            },
-
-            series: [
-            	{
-            		name: 'Matches per request',
-            		data: mpr
-            	}
-            ]
-		});
-		
-		/** 
-		 * Request / response
-		 */
-		$("#graph-rr").highcharts({
-			chart: {
-				zoomType: 'x',
-				type: 'spline'
-			},
-
-			// titles
-			title: {
-				text: "Request / response"
-			},
-
-			// axes
-			xAxis: {
-				type: 'datetime',
-				crosshair: true,
-				title: {
-					text: 'Date'
-				},
-                events: {
-                    setExtremes: syncExtremes
-                },
-
-			},
-			yAxis: [
-				{
-					title: {
-						text: 'Matches (#)'
-					}
-				},
-				{
-					title: {
-						text: 'Response time'
-					},
-					labels: {
-						format: '{value} ms'
-					},
-					opposite: true
-				}
-			],
-			tooltip: {
-				shared: true
-			},
-			legend: {
-				enabled: true
-			},
-            plotOptions: {
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                        ]
-                    },
-                    marker: {
-                        radius: 2
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-                    threshold: null
-                }
-            },
-
-            series: requestResponse
-		});
-
-
-
-		/** 
-		 * Total requests
-		 */
-		$("#graph-tr").highcharts({
-			chart: {
-				zoomType: 'x',
-				type: 'area'
-			},
-
-			// titles
-			title: {
-				text: "Total requests"
-			},
-
-			// axes
-			xAxis: {
-				type: 'datetime',
-				crosshair: true,
-				title: {
-					text: 'Date'
-				},
-                events: {
-                    setExtremes: syncExtremes
-                },
-
-			},
-			yAxis: {
-				title: {
-					text: 'Requests (#)'
-				}
-			},
-
-			legend: {
-				enabled: false
-			},
-            plotOptions: {
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                        ]
-                    },
-                    marker: {
-                        radius: 2
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-                    threshold: null
-                }
-            },
-
-            series: [
-            	{
-            		name: 'Total requests',
-            		data: tr
-            	}
-            ]
-		});
-
-		var pprSeries = [];
-
-		for(var region in playersProcessed) {
-			pprSeries.push(playersProcessed[region]);
+	var pprOnclick = function(ev) {
+		if (pprGraph.isSeriesLocked()) {
+			pprGraph.clearSelection();
+		} else {
+			pprGraph.setSelection(pprGraph.getSelection(), pprGraph.getHighlightSeries(), true);
 		}
+	};
+	pprGraph.updateOptions({clickCallback: pprOnclick}, true);
 
-		$("#graph-ppr").highcharts({
-			chart: {
-				zoomType: 'x',
-				type: 'spline'
-			},
-
-			// titles
-			title: {
-				text: "Players processed"
-			},
-			subtitle: {
-				text: "how many players each proc. instance has processed"
-			},
-
-			// axes
-			xAxis: {
-                crosshair: true,
-				type: 'datetime',
-				title: {
-					text: 'Date'
-				},
-	            events: {
-	                setExtremes: syncExtremes
-	            },
-			},
-			yAxis: {
-        		showRects: true,
-				title: {
-					text: 'Players (#)'
-				},
-				min: 0
-			},
-
-			legend: {
-				// enabled: false
-			},
-            plotOptions: {
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                        ]
-                    },
-                    marker: {
-                        radius: 2
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-                    threshold: null
-                }
-            },
-
-            series: pprSeries
-		});
-	});
-
-	// // delay
-	// new Dygraph(document.getElementById("graph-delay"),
- //      delays,
- //      {
- //        labels: [ "Date", "Delay" ],
- //        showInRangeSelector: true,
- //        fillGraph: true,
- //      });
-
-	// // mpr
-	// new Dygraph(document.getElementById("graph-mpr"),
- //      mpr,
- //      {
- //        labels: [ "Date", "Matches per request" ],
- //        showInRangeSelector: true,
- //        fillGraph: true,
- //      });
-
-	// // rr
-	// new Dygraph(document.getElementById("graph-rr"),
- //      rr,
- //      {
- //        labels: [ "Date", "Requests", "Avg. fetch response time" ],
- //        showInRangeSelector: true,
- //        fillGraph: true,
- //      });
-
-	// // tr
-	// new Dygraph(document.getElementById("graph-tr"),
- //      tr,
- //      {
- //        labels: [ "Date", "Requests" ],
- //        showInRangeSelector: true,
- //        fillGraph: true,
- //      });
-
- //    // downtime
-	// new Dygraph(document.getElementById("graph-downtime"),
- //      downtime,
- //      {
- //        labels: [ "Date", "Downtime" ],
- //        showInRangeSelector: true,
- //        fillGraph: true,
- //      });
-
- // 	// ppr
-	// new Dygraph(document.getElementById("graph-ppr"),
- //      ppr,
- //      {
- //        labels: ["Date", "Global", "US", "EU", "Asia", "Africa", "Russia", "South America", "Australia"],
- //        showInRangeSelector: true,
- //        fillGraph: true,
- //      });
-
-	
 
 </script>
 </body>
