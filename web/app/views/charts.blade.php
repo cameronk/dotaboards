@@ -30,14 +30,15 @@
 
 	#content {
 		background: #e4e4e4;
-		border: 1px solid #999;
+		border: 1px solid #aaa;
 		border-top: none;
 		margin-bottom: 50px;
 		padding-bottom: 10px;
 	}
 
 		#content h1 {
-			border-bottom: 1px solid #777;
+			border-bottom: 1px solid #999;
+			border-top: 1px solid #999;
 			margin: 0;
 			padding: 10px;
 		}
@@ -88,7 +89,6 @@
 	var data = {{ $regions }};
 
 	var delays = [];
-
 	var delaysAverage = 0;
 	var mpr = [];
 	var rr = [];
@@ -127,6 +127,7 @@
 		 * Downtime
 		 */
 		downtime.push([ new Date(pushLoop['recordedAt']), Math.abs(pushLoop['downtime']) ]);
+
 
 		/**
 		 * PPR (playersProcessed)
@@ -237,11 +238,11 @@
 
 	        labels: ["Date", "Global", "US", "EU", "Asia", "Africa", "Russia", "South America", "Australia"],
 	        showInRangeSelector: true,
-	        stackedGraph: true,
+	        // stackedGraph: true,
 
 	        underlayCallback: function(canvas, area, g) {
 
-	            canvas.fillStyle = "rgba(0,0,0,0.4)";
+	            canvas.fillStyle = "rgba(0,0,0,0.1)";
 
 	            function highlight_period(x_start, x_end) {
 	              var canvas_left_x = g.toDomXCoord(x_start);

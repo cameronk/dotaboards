@@ -38,7 +38,7 @@ Route::get('charts', array('uses' => 'PageController@charts'));
 Route::group(array('prefix' => 'region'), function() {
 	Route::get('back', function() {
 		Session::forget('asked');
-		return Redirect::to("/")->withCookie(Cookie::forget('region'));
+		return Redirect::to( Config::get('app.url') )->withCookie(Cookie::forget('region'));
 	});
 	Route::post('set', function() {
 		$region = Input::get('region');

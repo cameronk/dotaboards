@@ -27,7 +27,5 @@
 <script type="text/javascript">var __regions = {{ $regions }};</script>
 <script type="text/javascript" src="//cdn.azuru.me/db/js/regions-primary.js"></script>   
 
-<!-- TEST -->
-
 </body>
 </html>

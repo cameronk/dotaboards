@@ -189,10 +189,10 @@
             @endif
         </div>
         <div class="nav main noselect">
-            <div class="region action ap-ct" data-content="Change region" data-position="bottom center">
-                <a href="{{ url('region/back') }}"><img src="http://cdn.azuru.me/apps/dotaboards/flags/64/{{ $region }}.png" /></a>
-            </div>
             @if(@$index == true)
+                <div class="region action ap-ct" data-content="Change region" data-position="bottom center">
+                    <a href="{{ url('region/back') }}"><img src="http://cdn.azuru.me/apps/dotaboards/flags/64/{{ $region }}.png" /></a>
+                </div>
                 <div class="stats action"><a href="{{ url('stats') }}"><i class="tasks icon"></i> Statistics</a></div>
                 <div class="expand action"><i class="expand icon"></i> <span>Expand<span></div>
                 <div class="about action"><i class="question mark icon"></i> How it works</div>
