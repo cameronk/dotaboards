@@ -88,6 +88,56 @@
 
 	var data = {{ $regions }};
 
+	var highlightWeekends = function(canvas, area, g) {
+
+        canvas.fillStyle = "rgba(0,0,0,0.2)";
+
+        function highlight_period(x_start, x_end) {
+          var canvas_left_x = g.toDomXCoord(x_start);
+          var canvas_right_x = g.toDomXCoord(x_end);
+          var canvas_width = canvas_right_x - canvas_left_x;
+          canvas.fillRect(canvas_left_x, area.y, canvas_width, area.h);
+        }
+
+        var min_data_x = g.getValue(0,0);
+        var max_data_x = g.getValue(g.numRows()-1,0);
+
+        // get day of week
+        var d = new Date(min_data_x);
+        var dow = d.getUTCDay();
+
+        var w = min_data_x;
+        // starting on Sunday is a special case
+        if (dow === 0) {
+          highlight_period(w,w+12*3600*1000);
+        }
+        // find first saturday
+        while (dow != 6) {
+          w += 24*3600*1000;
+          d = new Date(w);
+          dow = d.getUTCDay();
+        }
+        // shift back 1/2 day to center highlight around the point for the day
+        w -= 12*3600*1000;
+        while (w < max_data_x) {
+          var start_x_highlight = w;
+          var end_x_highlight = w + 2*24*3600*1000;
+          // make sure we don't try to plot outside the graph
+          if (start_x_highlight < min_data_x) {
+            start_x_highlight = min_data_x;
+          }
+          if (end_x_highlight > max_data_x) {
+            end_x_highlight = max_data_x;
+          }
+          highlight_period(start_x_highlight,end_x_highlight);
+          // calculate start of highlight for next Saturday 
+          w += 7*24*3600*1000;
+        }
+    };
+    var fullDate = function(date) {
+    	return "<strong>"{ 0: "Sun",  1: "Mon", 2: "Tues", 3: "Wed", 4: "Thurs", 5: "Fri", 6: "Sat" }[date.getDay()] + "</strong><br/>" + date.getDate() + " " + { 0: "Jan", 1: "Feb", 2: "Mar", 3: "Apr", 4: "May", 5: "Jun", 6: "Jul", 7: "Aug", 8: "Sep", 9: "Oct", 10: "Nov", 11: "Dec" }[date.getMonth()];
+    };
+
 	var delays = [];
 	var delaysAverage = 0;
 	var mpr = [];
@@ -147,14 +197,28 @@
 	});
 
 	// delay
-	new Dygraph(document.getElementById("graph-delay"),
-      delays,
-      {
-	    ylabel: "Delay (minutes)",
-        labels: [ "Date", "Delay", "Average" ],
-        showInRangeSelector: true,
-        fillGraph: true,
-      }
+	var delayGraph = new Dygraph(document.getElementById("graph-delay"),
+		delays,
+		{
+  			legend: 'always',
+			ylabel: "Delay (hours)",
+			labels: [ "Date", "Delay", "Average" ],
+			showInRangeSelector: true,
+			// fillGraph: true,
+
+	      	axes: {
+	      		x: {
+	      			axisLabelFormatter: fullDate
+	      		},
+	      		y: {
+	      			axisLabelFormatter: function(x) {
+	      				return x / 60;
+	      			}
+	      		}
+	      	},
+
+	   		underlayCallback: highlightWeekends
+      	}
     );
 
 	// mpr
@@ -170,13 +234,14 @@
 
 	// rr
 	new Dygraph(document.getElementById("graph-rr"),
-      rr,
-      {
-	    ylabel: "Requests (#) / avg response time (ms)",
-        labels: [ "Date", "Requests", "Avg. fetch response time" ],
-        showInRangeSelector: true,
-        fillGraph: true,
-      }
+		rr,
+		{
+			legend: 'always',
+			ylabel: "Requests (#) / avg response time (ms)",
+			labels: [ "Date", "Requests", "Avg. fetch response time" ],
+			showInRangeSelector: true,
+			fillGraph: true,
+      	}
     );
 
 	// tr
@@ -212,11 +277,15 @@
 	var pprGraph = new Dygraph(document.getElementById("graph-ppr"),
 		ppr,
 		{
+  			legend: 'always',
 	      	ylabel: "# of players",
 	      	rollPeriod: 3,
 	      	showRoller: true,
 
 	      	axes: {
+	      		x: {
+	      			axisLabelFormatter: fullDate
+	      		},
 	      		y: {
 	      			axisLabelFormatter: function(x) {
 	      				return Math.round(x / 1000) + "k";
@@ -240,52 +309,7 @@
 	        showInRangeSelector: true,
 	        // stackedGraph: true,
 
-	        underlayCallback: function(canvas, area, g) {
-
-	            canvas.fillStyle = "rgba(0,0,0,0.1)";
-
-	            function highlight_period(x_start, x_end) {
-	              var canvas_left_x = g.toDomXCoord(x_start);
-	              var canvas_right_x = g.toDomXCoord(x_end);
-	              var canvas_width = canvas_right_x - canvas_left_x;
-	              canvas.fillRect(canvas_left_x, area.y, canvas_width, area.h);
-	            }
-
-	            var min_data_x = g.getValue(0,0);
-	            var max_data_x = g.getValue(g.numRows()-1,0);
-
-	            // get day of week
-	            var d = new Date(min_data_x);
-	            var dow = d.getUTCDay();
-
-	            var w = min_data_x;
-	            // starting on Sunday is a special case
-	            if (dow === 0) {
-	              highlight_period(w,w+12*3600*1000);
-	            }
-	            // find first saturday
-	            while (dow != 6) {
-	              w += 24*3600*1000;
-	              d = new Date(w);
-	              dow = d.getUTCDay();
-	            }
-	            // shift back 1/2 day to center highlight around the point for the day
-	            w -= 12*3600*1000;
-	            while (w < max_data_x) {
-	              var start_x_highlight = w;
-	              var end_x_highlight = w + 2*24*3600*1000;
-	              // make sure we don't try to plot outside the graph
-	              if (start_x_highlight < min_data_x) {
-	                start_x_highlight = min_data_x;
-	              }
-	              if (end_x_highlight > max_data_x) {
-	                end_x_highlight = max_data_x;
-	              }
-	              highlight_period(start_x_highlight,end_x_highlight);
-	              // calculate start of highlight for next Saturday 
-	              w += 7*24*3600*1000;
-	            }
-	        }
+	        underlayCallback: highlightWeekends
       	}
     );
 
@@ -297,6 +321,15 @@
 		}
 	};
 	pprGraph.updateOptions({clickCallback: pprOnclick}, true);
+
+	var delayOnclick = function(ev) {
+		if (delayGraph.isSeriesLocked()) {
+			delayGraph.clearSelection();
+		} else {
+			delayGraph.setSelection(delayGraph.getSelection(), delayGraph.getHighlightSeries(), true);
+		}
+	};
+	delayGraph.updateOptions({clickCallback: delayOnclick}, true);
 
 
 </script>

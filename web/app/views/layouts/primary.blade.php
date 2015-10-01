@@ -247,14 +247,16 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.13.0/javascript/semantic.min.js"></script>
 <script type="text/javascript" src="http://cdn.azuru.me/global/js/jquery/perfect-scrollbar/perfect-scrollbar-0.4.10.with-mousewheel.min.js"></script>
 <script type="text/javascript" src="http://cdn.azuru.me/apps/dotaboards/db.js"></script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+@if(App::environment() !== "staging")
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-39888846-2', 'dotaboards.com');
-  ga('send', 'pageview');
-</script>
+    ga('create', 'UA-39888846-2', 'dotaboards.com');
+    ga('send', 'pageview');
+    </script>
+@endif
 </body>
 </html>
