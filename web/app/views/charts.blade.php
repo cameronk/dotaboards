@@ -212,7 +212,7 @@
 	      		},
 	      		y: {
 	      			axisLabelFormatter: function(x) {
-	      				return x / 60;
+	      				return +(x / 60).toFixed(2);
 	      			}
 	      		}
 	      	},
