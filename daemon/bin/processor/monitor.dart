@@ -178,11 +178,19 @@ class Monitor {
 		
 		File file = new File(f);
 		
-		if(file.exists() == false) {
-			return file.create().then((File file) {
-				return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
-			});
-		} else return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+		String enc = JSON.encode(data);
+		
+		ENV.log("Monitor has ${data.length} push loops - " + enc.length.toString() + " bytes", level:1, type:4);
+		
+		try {
+			if(file.exists() == false) {
+				return file.create().then((File file) {
+					return file.writeAsString(isJSON == true ? enc : data);
+				});
+			} else return file.writeAsString(isJSON == true ? enc : data);
+		} catch (e) {
+			ENV.log("Caught monitor save error: " + e.toString(), level: 3);
+		}
 	
 	}
 	
