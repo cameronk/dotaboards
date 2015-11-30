@@ -11,7 +11,7 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => '10.0.0.14',
+			'host'      => '10.0.0.17',
 			'database'  => 'dotaboards/main-stage',
 			'username'  => 'root',
 			'password'  => '55184429011771861829418426776407260918862215905453',

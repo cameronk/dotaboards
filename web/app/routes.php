@@ -25,8 +25,6 @@ Route::group(array('domain' => '{region}.' . $domain), function() {
 });
 
 
-
-
 Route::get('/', array('uses' => 'PageController@index'));
 Route::get('signin', array('uses' => 'PageController@signin'));
 Route::get('signout', function() { Session::flush(); return Redirect::to('/'); });
