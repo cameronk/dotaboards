@@ -700,7 +700,7 @@ class Environment {
 				this.StorageDirectory	= "/home/dotaboards/daemon/storage/";
 
 				/// Setup MySQL connection ///
-				this.dbHost = "10.0.0.17";
+				this.dbHost = "10.0.0.69";
 				this.dbUser = "root";
 				this.dbPass = r"55184429011771861829418426776407260918862215905453";
 				this.db		= "dotaboards/main-stage";
@@ -714,7 +714,7 @@ class Environment {
 				this.StorageDirectory 	= "storage/";
 
 				/// Setup MySQL connection ///
-				this.dbHost = "10.0.0.17";
+				this.dbHost = "10.0.0.69";
 				this.dbUser = "root";
 				this.dbPass = r"55184429011771861829418426776407260918862215905453";;
 				this.db		= "dotaboards/main-stage";
