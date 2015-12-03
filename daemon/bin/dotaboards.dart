@@ -31,7 +31,6 @@ void main(List<String> args) {
 		
 		State state = new State();
 		
-		
 		state.Revive().then((_) {
 			
 			ENV.state = state;
