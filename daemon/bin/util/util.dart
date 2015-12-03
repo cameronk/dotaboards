@@ -3,8 +3,12 @@ library util;
 import "dart:io";
 import "dart:math";
 import "dart:async";
-import "package:mailer/mailer.dart";
+import "dart:convert";
+import "../processor/processor.dart";
+import "../request/dispatcher.dart";
+//import "package:mailer/mailer.dart";
 
+part "state.dart";
 part "static.dart";
 part "environment.dart";
 
@@ -82,37 +86,37 @@ class Util {
 		else return "Unknown";
 	}
 	
+
 	
 	/**
 	 * Convert an int id32 into a 64-bit ID.
 	 */
 	int to64(int id32) => id32 + 76561197960265728;
 	
-	
 	/**
 	 * Send a text
 	 */
-	void text(String message) {
-		
-		print(" ==> PREPARING TO TEXT");
-		
-		var options = new SmtpOptions()
-			..username = "noreply@azuru.me"
-			..password = "replynone143"
-			..hostName = "mail.azuru.me"
-			..port     = 25;
-		
-		var emailTransport = new SmtpTransport(options);
-		
-		var envelope = new Envelope()
-			..from = "noreply@azuru.me"
-			..recipients.add('6159279383@messaging.sprintpcs.com')
-			..subject = ""
-			..text = message;
-		
-		emailTransport.send(envelope)
-		    .then((success) => print('Email sent! $success'))
-	        .catchError((e) => print('Error occured: $e'));
-	}
+//	void text(String message) {
+//		
+//		print(" ==> PREPARING TO TEXT");
+//		
+//		var options = new SmtpOptions()
+//			..username = "noreply@azuru.me"
+//			..password = "replynone143"
+//			..hostName = "mail.azuru.me"
+//			..port     = 25;
+//		
+//		var emailTransport = new SmtpTransport(options);
+//		
+//		var envelope = new Envelope()
+//			..from = "noreply@azuru.me"
+//			..recipients.add('6159279383@messaging.sprintpcs.com')
+//			..subject = ""
+//			..text = message;
+//		
+//		emailTransport.send(envelope)
+//		    .then((success) => print('Email sent! $success'))
+//	        .catchError((e) => print('Error occured: $e'));
+//	}
 	
 }

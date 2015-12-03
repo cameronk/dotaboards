@@ -5,8 +5,9 @@ class Monitor {
 	
 	/// Request-related
 	int rawMatchCount;
-	int fetchRequestsSent;
+	int fetchRequestResponses;
 	int totalFetchResponseTime;
+	int totalRequestsSent = 0;
 	
 	/// Match-related
 	int filteredMatchCount;
@@ -31,13 +32,17 @@ class Monitor {
 		this.reset();
 	}
 	
+	void apiRequest() {
+		this.totalRequestsSent++;
+	}
+	
 	/**
 	 * Store data related to this fetch request.
 	 * @return void
 	 */
 	void fetchRequest(List<Map> matches, int responseTimeInMs) {
 		
-		this.fetchRequestsSent++;
+		this.fetchRequestResponses++;
 		
 		///		averageMatchesPerRequest		///
 		/// Calculate the average number of 	///
@@ -93,9 +98,9 @@ class Monitor {
 	/**
 	 * Output the data we've collected so far.
 	 */
-	void push() {
+	void push(Processor mainProcess, Map<String, Processor> regionalProcessors) {
 		
-		ENV.log("[Monitor] running push sequence @ loop ${this.averageMatchProcessingDelays.length}", type: 4);
+		ENV.log("Monitor: running push sequence.", type: 4);
 		
 		DateTime now = new DateTime.now();
 		
@@ -103,16 +108,19 @@ class Monitor {
 		Map newDataThisPush = {
 		                       
 		    /// Proprietary
-		    "recordedAt": now.toLocal().toString(),
+		    "recordedAt": now.toIso8601String(),
 		    
 		    /// Request count for this loop
-		    "requests": this.fetchRequestsSent,
+		    "fetchRequestResponses": this.fetchRequestResponses,
+		    
+		    /// Total request count for this loop
+		    "totalRequests": this.totalRequestsSent,
 		    
 		    /// Average matches per request
-		    "averageMatchesPerRequest": this.rawMatchCount / this.fetchRequestsSent,
+		    "averageMatchesPerRequest": this.rawMatchCount / this.fetchRequestResponses,
 		    
 		    /// Average fetch response time
-		    "averageFetchResponseTime": this.totalFetchResponseTime / this.fetchRequestsSent,
+		    "averageFetchResponseTime": this.totalFetchResponseTime / this.fetchRequestResponses,
 		    
 		    /// Average difference between match ending and match processing
 			"delay": this.matchProcessingDelay / this.filteredMatchCount,
@@ -121,10 +129,36 @@ class Monitor {
 			"downtime": this.downtimeSinceLastPush,
 			
 			/// How many matches were rejected by the MVF in the past push loop
-			"rejectedMatchCounts": this.rejectedMatchCounts
+			"rejectedMatchCounts": this.rejectedMatchCounts,
+			
+			/// Processor
+			"processors": {
+				"global": {
+					"playersProcessed": mainProcess.playersProcessed - mainProcess.playersProcessedUpToLastFetch
+				}
+			}
 			
 		};
 		
+		newDataThisPush.forEach((String key, dynamic value) {
+			if(key == "processors") {
+				Map procs = value;
+				
+				procs.forEach((String region, Map data) {
+					ENV.log("processors.$region:", type: 3);
+					data.forEach((String key, dynamic val) {
+						ENV.log(" -> $key = ${val.toString()}", type:3);
+					});
+				});
+			} else {
+				ENV.log("$key = ${value.toString()}", type: 3);
+			}
+		});
+		
+		regionalProcessors.forEach((String name, Processor processor) {
+			newDataThisPush["processors"][name] = new Map();
+			newDataThisPush["processors"][name]["playersProcessed"] = processor.playersProcessed - processor.playersProcessedUpToLastFetch;
+		});
 		
 		/// Add the new data to our list of pushes ///
 		this.pushList.add(newDataThisPush);
@@ -144,11 +178,19 @@ class Monitor {
 		
 		File file = new File(f);
 		
-		if(file.exists() == false) {
-			return file.create().then((File file) {
-				return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
-			});
-		} else return file.writeAsString(isJSON == true ? JSON.encode(data) : data);
+		String enc = JSON.encode(data);
+		
+		ENV.log("Monitor has ${data.length} push loops - " + enc.length.toString() + " bytes", level:1, type:4);
+		
+		try {
+			if(file.exists() == false) {
+				return file.create().then((File file) {
+					return file.writeAsString(isJSON == true ? enc : data);
+				});
+			} else return file.writeAsString(isJSON == true ? enc : data);
+		} catch (e) {
+			ENV.log("Caught monitor save error: " + e.toString(), level: 3);
+		}
 	
 	}
 	
@@ -157,7 +199,7 @@ class Monitor {
 	 */
 	void reset() {
 		
-		this.fetchRequestsSent = 0;
+		this.fetchRequestResponses = 0;
 		this.rawMatchCount = 0;
 		this.totalFetchResponseTime = 0;
 		

@@ -11,7 +11,9 @@
 |
 */
 
-Route::group(array('domain' => '{region}.dotaboards.com'), function() {
+$domain = Config::get('app.domain');
+
+Route::group(array('domain' => '{region}.' . $domain), function() {
 	Route::get('/', function($region) {
 		$region = strtolower($region);
 		$agent = !Agent::isMobile() ? 'primary' : 'mobile';
@@ -23,8 +25,6 @@ Route::group(array('domain' => '{region}.dotaboards.com'), function() {
 });
 
 
-
-
 Route::get('/', array('uses' => 'PageController@index'));
 Route::get('signin', array('uses' => 'PageController@signin'));
 Route::get('signout', function() { Session::flush(); return Redirect::to('/'); });
@@ -32,14 +32,30 @@ Route::get('stats', array('uses' => 'PageController@stats'));
 Route::get('down', function() { return View::make('down'); });
 Route::get('charts', array('uses' => 'PageController@charts'));
 
-Route::get('region/back', function() {
-	Session::forget('asked');
-	return Redirect::to("/")->withCookie(Cookie::forget('region'));
+
+Route::group(array('prefix' => 'region'), function() {
+	Route::get('back', function() {
+		Session::forget('asked');
+		return Redirect::to( Config::get('app.url') )->withCookie(Cookie::forget('region'));
+	});
+	Route::post('set', function() {
+		$region = Input::get('region');
+		return Response::json(array('success' => true))->withCookie(Cookie::forever('region', $region));
+	});
+	Route::post('nope', function() {
+		$region = Input::get('region');
+		Session::put('asked.'. $region, true);
+		return Response::json(array('success' => true));
+	});
 });
-Route::get('region/set/{region}', function($region) {
-	return Redirect::to("http://" . $region . ".dotaboards.com")->withCookie(Cookie::make('region', $region));
-});
-Route::get('region/nope/{region}', function($region) {
-	Session::put('asked.'. $region, true);
-	return Redirect::to("http://" . $region . ".dotaboards.com");
-});
+// Route::get('region/back', function() {
+// 	Session::forget('asked');
+// 	return Redirect::to("/")->withCookie(Cookie::forget('region'));
+// });
+// Route::get('region/set/{region}', function($region) {
+// 	return Redirect::to("http://" . $region . "." . $domain)->withCookie(Cookie::make('region', $region));
+// });
+// Route::get('region/nope/{region}', function($region) {
+// 	Session::put('asked.'. $region, true);
+// 	return Redirect::to("http://" . $region . "." . $domain);
+// });

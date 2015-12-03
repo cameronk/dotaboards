@@ -29,15 +29,53 @@
     ];
     $split = explode(".", substr(Request::url(), 7));
     $region = $split[0];
+    $site = Site::where('id', '0')->first(); 
 ?>
 
+@if($site->steam_online == 0)
 
-@if(!Request::cookie('region') && !Session::has('asked.' . $region)) 
+    <script>
+    $(function() { 
+        $("#steam-down-modal").modal('show'); 
+        $("a.signin").attr('disabled', true);
+    });
+    </script>
+    <div class="ui small modal" id="steam-down-modal">
+        <i class="close icon"></i>
+        <div class="header"><i class='warning icon'></i> Uh oh!</div>
+        <div class="content">
+            <p>Steam went down about <i>{{{ $site->steam_down_at->diffForHumans() }}}</i>. <br/><br/><strong>DotaBoards</strong> is still online, but new matches will not be recorded until it returns.</p>
+        </div>
+        <div class="actions">
+            <div class="ui green button">Got it!</div>
+        </div>
+    </div>
+
+@elseif(!Request::cookie('region') && !Session::has('asked.' . $region)) 
+
     <script>
         $(function() {
             $("#set-region-modal")
                 .modal({
-                    closable: false
+                    closable: false,
+                    onApprove: function() {
+                        $.post("/region/set", { _token: "{{ csrf_token() }}", region: "{{ $region }}" }, function(response) {
+                            if(response.success == true) {
+                                $("#set-region-modal")
+                                    .modal('hide')
+                                ;
+                            }
+                        });
+                    },
+                    onDeny: function() {
+                        $.post("/region/nope", { _token: "{{ csrf_token() }}", region: "{{ $region }}" }, function(response) {
+                            if(response.success == true) {
+                                $("#set-region-modal")
+                                    .modal('hide')
+                                ;
+                            }
+                        });
+                    }
                 })
                 .modal('show');
         });
@@ -47,14 +85,32 @@
         <div class="header"></div>
         <div class="content">
             <div class="left">
-                <p>Would you like to make <strong>{{ $regions[$region]; }}</strong> your preferred region? We'll remember this region next time you visit DotaBoards - you can change it at any time by clicking the flag in the header controls.</p>
+                <p>Would you like to make <strong>{{ $regions[$region] }}</strong> your preferred region? We'll remember this region next time you visit DotaBoards - you can change it at any time by clicking the flag in the header controls.</p>
             </div>
         </div>
         <div class="actions">
-            <a href="http://dotaboards.com/region/set/{{ $region }}"><div class="ui green button">Sure!</div></a>
-            <a href="http://dotaboards.com/region/nope/{{ $region }}"><div class="ui red button deny">No thanks</div></a>
+            <div class="ui green approve button">Sure!</div>
+            <div class="ui red deny button">No thanks...</div>
         </div>
     </div>
+
+@elseif(!Session::has('user.warning'))
+
+    <?php Session::push('user.warning', 'true'); ?>
+    <script>
+    $(function() { $("#warning-modal").modal('show'); });
+    </script>
+    <div class="ui small modal" id="warning-modal">
+        <i class="close icon"></i>
+        <div class="header"><i class='warning icon'></i> Heads up!</div>
+        <div class="content">
+            <p><strong>DotaBoards</strong> is currently in <em>beta</em>. We're still refining our algorithms and calculation methods &mdash; if you believe a certain player should have reached the boards, please don't hesitate to <a href="http://azuru.me/contact" class="link">shoot us a message</a>.</p>
+        </div>
+        <div class="actions">
+            <div class="ui green button">Got it!</div>
+        </div>
+    </div>
+
 @endif
 
 <div class="ui small basic modal" id="not-found-modal">
@@ -120,54 +176,11 @@
     </div>
 </div>
 
-@if(!Session::has('user.warning'))
-    <?php Session::push('user.warning', 'true'); ?>
-    <script>
-    $(function() { $("#warning-modal").modal('show'); });
-    </script>
-    <div class="ui small modal" id="warning-modal">
-        <i class="close icon"></i>
-        <div class="header"><i class='warning icon'></i> Heads up!</div>
-        <div class="content">
-            <p><strong>DotaBoards</strong> is currently in <em>beta</em>. We're still refining our algorithms and calculation methods &mdash; if you believe a certain player should have reached the boards, please don't hesitate to <a href="http://azuru.me/contact" class="link">shoot us a message</a>.</p>
-        </div>
-        <div class="actions">
-            <div class="ui green button">Got it!</div>
-        </div>
-    </div>
-@endif
-
-<?php $site = Site::where('id', '0')->first(); ?>
-@if($site->steam_online == 0)
-    <script>
-    $(function() { 
-        $("#steam-down-modal").modal('show'); 
-        $("a.signin").attr('disabled', true);
-    });
-    </script>
-    <div class="ui small modal" id="steam-down-modal">
-        <i class="close icon"></i>
-        <div class="header"><i class='warning icon'></i> Uh oh!</div>
-        <div class="content">
-            <p>Steam went down about <i>{{{ $site->steam_down_at->diffForHumans() }}}</i>. <br/><br/><strong>DotaBoards</strong> is still online, but new matches will not be recorded until it returns.</p>
-        </div>
-        <div class="actions">
-            <div class="ui green button">Got it!</div>
-        </div>
-    </div>
-@endif
-
-
-
-
-
-
-
 
 <!-- Begin page content. -->
 <div class="block-header">
     <div id="logo-contain">
-        <a href="http://dotaboards.com/"><div class="logo noselect t200"><strong></strong>DotaBoards</div></a>
+        <a href="//{{ Config::get('app.domain') }}"><div class="logo noselect t200"><strong></strong>DotaBoards</div></a>
         <div class="nav notifs noselect">
             <div class="beta">BETA</div>
             @if(@$index == true)
@@ -176,11 +189,11 @@
             @endif
         </div>
         <div class="nav main noselect">
-            <div class="region action ap-ct" data-content="Change region" data-position="bottom center">
-                <a href="http://dotaboards.com/region/back"><img src="http://cdn.azuru.me/apps/dotaboards/flags/64/{{ $region }}.png" /></a>
-            </div>
             @if(@$index == true)
-                <div class="stats action"><a href="http://global.dotaboards.com/stats"><i class="tasks icon"></i> Statistics</a></div>
+                <div class="region action ap-ct" data-content="Change region" data-position="bottom center">
+                    <a href="{{ url('region/back') }}"><img src="http://cdn.azuru.me/apps/dotaboards/flags/64/{{ $region }}.png" /></a>
+                </div>
+                <div class="stats action"><a href="{{ url('stats') }}"><i class="tasks icon"></i> Statistics</a></div>
                 <div class="expand action"><i class="expand icon"></i> <span>Expand<span></div>
                 <div class="about action"><i class="question mark icon"></i> How it works</div>
             @endif
@@ -219,7 +232,7 @@
     <div class="ui two column grid">
         <div class="row">
             <div class="column">
-                <div class="copyright">Copyright &copy; Azuru Networks 2014. <small>Dota 2 is a registered trademark of Valve Corporation.</small></div>
+                <div class="copyright">Copyright &copy; Azuru Networks 2014-2015. <small>Dota 2 is a registered trademark of Valve Corporation.</small></div>
             </div>
             <div class="column">
                 <div class="azuru-watermark"><a href="http://azuru.me/" target="_blank">Azuru.</a></div>
@@ -234,14 +247,16 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.13.0/javascript/semantic.min.js"></script>
 <script type="text/javascript" src="http://cdn.azuru.me/global/js/jquery/perfect-scrollbar/perfect-scrollbar-0.4.10.with-mousewheel.min.js"></script>
 <script type="text/javascript" src="http://cdn.azuru.me/apps/dotaboards/db.js"></script>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+@if(App::environment() !== "staging")
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-39888846-2', 'dotaboards.com');
-  ga('send', 'pageview');
-</script>
+    ga('create', 'UA-39888846-2', 'dotaboards.com');
+    ga('send', 'pageview');
+    </script>
+@endif
 </body>
 </html>

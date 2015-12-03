@@ -256,12 +256,12 @@ class QueryHelper {
 	/**
 	 * Get player appearances for specific ID.
 	 */
-	Future getAppearancesForPlayerID(String id) {
+	Future getAppearancesForPlayerID(String id, String boardName) {
 		ENV.log("QueryHelper::getAppearancesForPlayerID($id)", type: 3);
 		try {
 			return this._attempt(this.pool.query("SELECT count FROM `appearances` WHERE id = ${id} LIMIT 1"))
 				.then((Results results) {
-					ENV.log(" | Getting appearances for $id");
+					ENV.log(" | QueryHelper: Returned appearances for $boardName-$id");
 					Map appearance = new Map();
 					appearance[id] = 1;
 					return results.forEach((row) {

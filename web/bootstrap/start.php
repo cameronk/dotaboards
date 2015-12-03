@@ -32,12 +32,8 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(function() 
 {
-
-	$split = explode("/", strtolower(__DIR__));
-	if(in_array("stage", $split)) {
-		return "staging-atlas";
-	} else return "production";
-
+	
+	return (file_exists(__DIR__ . '/../../.env.production') ? "production" : "staging");
 });
 
 /*

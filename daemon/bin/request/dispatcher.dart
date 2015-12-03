@@ -2,7 +2,6 @@ library dispatcher;
 
 import "dart:async";
 import "dart:convert";
-import "dart:io";
 
 import "package:http/http.dart" as HTTP;
 
@@ -14,39 +13,112 @@ part "dispatcherror.dart";
 
 class Dispatcher {
 	
+	
+	/**
+	 * Players banned from the boards.
+	 */
 	List<int> bans;
+	
+	/**
+	 * Total match count during deamon lifetime.
+	 */
 	int DaemonLifetimeRecordedCount = 0;
+	
+	/**
+	 * All recorded match seq nums since last clean.
+	 */
 	Set recordedMatches 		= new Set();
+	
+	/**
+	 * The sequence number at which to begin the next fetch loop.
+	 */
 	int lastMatchSequenceNum;
+	
+	/**
+	 * The match count for the last push loop.
+	 * 
+	 * Used to calculate matches pushed in the current loop,
+	 * which is then used to update the total site count.
+	 */
 	int lastRetrievedMatchCount = 0;
+	
+	/**
+	 * Is the daemon waiting to push?
+	 */
 	bool waitingToPush 			= false;
+	
+	/**
+	 * Is the daemon waiting to clean?
+	 */
 	bool waitingToClean			= false;
 	
+	/**
+	 * DateTime object representing when steam's
+	 * API connection failed to respond to requests.
+	 */
 	DateTime steamDownStartTime;
+	
+	/**
+	 * How many times have we sent requests to the API
+	 * and failed to get a response?
+	 */
 	int steamPingAttempts 		= 0;
 	
-	Util util;
+	/**
+	 * QueryHelper object.
+	 */
 	QueryHelper queries;
-	Processor process;
-	Monitor monitor;
 	
+	/**
+	 * The global processor object.
+	 */
+	Processor process;
+	
+	/**
+	 * Regional processors.
+	 */
 	Map<String, Processor> regionalProcessors = new Map();
 	
+	
+	/**
+	 * Data monitoring object.
+	 */
+	Monitor monitor;
+	
+	/**
+	 * Statistics object.
+	 */
 	Statistics stats;
 	
-	/// Directories are relative to the "daemon" directory ///
+	/**
+	 * The Steam API Key.
+	 */
 	final String _key 			= "E03B7DAF68C03DFF4745BF4213BC8672";
+	
+	/**
+	 * Steam 32bit ID for a player whose profile is private.
+	 */
 	final int _privatePlayer 	= 4294967295;
 	
+	/**
+	 * Various loop timers.
+	 */
 	Timer _pushTimer;
 	Timer _cleanTimer;
 	Timer _boardsDebugTimer;
 	Timer fetchRestartTimer;
+	
+	
+	/**
+	 * DateTime object representing last clean loop completed.
+	 */
 	DateTime lastClean = new DateTime.now();
 	
 	
 	/**
 	 * Instantiate a new dispatcher object.
+	 * 
+	 * @return void
 	 */
 	Dispatcher(List bans, QueryHelper queries) {
 		
@@ -54,22 +126,22 @@ class Dispatcher {
 		this.queries = queries;
 		this.monitor = new Monitor();
 		
-		this.instantiateProcessors();
-		
-		this.util = new Util(); 
 		this.stats = new Statistics(this.queries);
 		
-		
+
 		ENV.log("\n\n\n\n");
 		ENV.log("Instantiating a new Dispatcher.", type: 1);
-		
+
 		bans.forEach((id) {
 			ENV.log("Banned: ${id}", type: 3);
 		});
+
 		
-		this.getLatestMatchSeqNum().then((num) {
-			this.lastMatchSequenceNum = num;
-			this.start();
+		this.instantiateProcessors().then((_) {
+			this.getLatestMatchSeqNum().then((num) {
+    			this.lastMatchSequenceNum = num;
+    			this.start();
+    		});
 		});
 		
 	}
@@ -77,26 +149,36 @@ class Dispatcher {
 	
 	/**
 	 * Instantiate processor objects based on a region map.
+	 * 
+	 * @return Future
 	 */
-	void instantiateProcessors() {
+	Future instantiateProcessors() {
+
+		List<Future> wait = new List();
 		
 		/// Clear processors we've already used ///
 		if(regionalProcessors.length > 0)
 			regionalProcessors.clear();
-		
+
 		this.process = new Processor("global", "worldwide");
+		wait.add(this.process.setup());
 		
 		for(String region in (ENV.RegionMap).keys.toList()) {
 			ENV.log("Instantiating: ${region}", type: 4);
 			Processor newProcessor = new Processor(region, (ENV.RegionIdentifiers)[region]);
+			
+			wait.add(newProcessor.setup());
 			this.regionalProcessors[region] = newProcessor;
 		}
 		
+		return Future.wait(wait);
 	}
 	
 	
 	/**
 	 * Begin the first fetch, initialize timers.
+	 * 
+	 * @return void
 	 */
 	void start() {
 		ENV.log("Starting loop sequence at ${this.lastMatchSequenceNum.toString()}", type: 4);
@@ -110,6 +192,8 @@ class Dispatcher {
 	
 	/**
 	 * Construct timers.
+	 * 
+	 * @return void
 	 */
 	void initTimers() {
 		
@@ -147,6 +231,8 @@ class Dispatcher {
 	
 	/**
 	 * Destroy active timers.
+	 * 
+	 * @return void
 	 */
 	void destroyTimers() {
 		this._pushTimer.cancel();
@@ -156,6 +242,8 @@ class Dispatcher {
 	
 	/**
 	 * Run the fetch loop.
+	 * 
+	 * @return void
 	 */
 	void fetch () {
 		if(this.waitingToPush == true) {
@@ -168,6 +256,9 @@ class Dispatcher {
 			HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistoryBySequenceNum/v0001/?key=${this._key}&matches_requested=25&start_at_match_seq_num=${this.lastMatchSequenceNum.toString()}")
 				.then((response) {
 				
+					/// We got a response:
+					this.monitor.apiRequest();
+					
 					int respTime = (new DateTime.now()).difference(fetchStart).inMilliseconds;
 				
 					ENV.log("==> ${respTime}ms", type: 3);
@@ -187,6 +278,7 @@ class Dispatcher {
 						
 							/// Build our ultimate matches list :)
 							final List matches = result["matches"];
+							Set<String> regionsUsed = new Set();
 							
 							/// Toss this request over to the monitor 
         					this.monitor.fetchRequest(matches, respTime);
@@ -246,10 +338,10 @@ class Dispatcher {
 												this.process.player(player);
 												
 												/// Dispatch this player to their specified region. ///
-												String region = ENV.RegionMapReverse[ this.util.getCluster(player['loc']) ];
+												String region = ENV.RegionMapReverse[ ENV.util.getCluster(player['loc']) ];
 												
 												if(regionalProcessors.containsKey(region)) {
-													ENV.log("${player['id']} --> $region", type: 3);
+													regionsUsed.add(region);
 													(this.regionalProcessors[region]).player(player);
 												}
 												
@@ -272,6 +364,22 @@ class Dispatcher {
 							this.lastMatchSequenceNum = matches.last["match_seq_num"] + 1;
 							ENV.log("Looping back to ${this.lastMatchSequenceNum}...", type: 3);
 							
+							/// STATE
+							/// This is where we record the various state changes
+							/// 
+							/// Dispatcher state
+							/// Processor states
+							
+							ENV.state.Store(this);
+							ENV.state.Store(this.process);
+							
+							ENV.log("Regions used: ${regionsUsed.toString()}");
+							regionsUsed.forEach((String region) {
+								if(this.regionalProcessors.containsKey(region)) {
+									ENV.state.Store(this.regionalProcessors[region]);
+								}
+							});
+							
 							//(this.process.saveBoards()).then((_) {
 								int difference = (new DateTime.now()).difference(fetchStart).inMilliseconds;
 								new Timer(new Duration(milliseconds: (2000 - difference)), () => this.fetch());
@@ -284,7 +392,7 @@ class Dispatcher {
 					throw new DispatchError("Timed out.");
 				})
 				.catchError((Error error) {
-					ENV.log("Caught a request error for fetching from ${this.lastMatchSequenceNum}.", type: 3);
+					ENV.log("WARNING: Caught a request error for fetching from ${this.lastMatchSequenceNum}.", type: 3);
 					ENV.log("Running another loop in 15 seconds...", type: 3);
 					this.requestFailure(error.toString());
 					this.fetchRestartTimer = new Timer(const Duration(seconds: 15), () => this.fetch());
@@ -296,6 +404,8 @@ class Dispatcher {
 	
 	/**
 	 * Run the push loop.
+	 * 
+	 * @return void
 	 */
 	void push () {
 		
@@ -307,11 +417,25 @@ class Dispatcher {
 		void done() {
 			this.stats.recordPush(currentRecordedMatches, this.lastRetrievedMatchCount, this.process.getCumulativeStatistics()).then((_) {
 				
-				
 				/// Run the monitor ///
-				this.monitor.push();
+				this.monitor.push(this.process, this.regionalProcessors);
 				
-				this.util.text("Pushed ${currentRecordedMatches.length} @ ${new DateTime.now().toLocal()}.");
+				
+				/// Now update processor playersProcessed data ///
+				this.process.playersProcessedUpToLastFetch = this.process.playersProcessed;
+				for(String region in (ENV.RegionMap).keys.toList()) {
+					
+					if(this.regionalProcessors.containsKey(region)) {
+						Processor proc = this.regionalProcessors[region];
+						
+						proc.playersProcessedUpToLastFetch = proc.playersProcessed;
+						
+					}
+				}
+						
+										
+										
+//				ENV.util.text("Pushed ${currentRecordedMatches.length} @ ${new DateTime.now().toLocal()}.");
 				
 				this.lastRetrievedMatchCount = currentRecordedMatches.length;
 				this.process.resetCumulativeStatistics();
@@ -341,7 +465,7 @@ class Dispatcher {
 				heroPlayCounts.sort((a, b) => (b[1] - a[1]));
 				
 				/// Parse users.json file. ///
-				this.grab(ENV.StorageDirectory + "users.json").then((data) {
+				ENV.grab(ENV.StorageDirectory + "users.json").then((data) {
 	
 					ENV.log("Already got ${data.length} users", type: 4);
 					
@@ -382,7 +506,7 @@ class Dispatcher {
 								store.addAll(response);
 							}
 							
-							this.save(ENV.StorageDirectory + "users.json", store).then((_) {
+							ENV.save(ENV.StorageDirectory + "users.json", store).then((_) {
 		
 								ENV.log("Saved users.json with ${store.length} players.", type: 4);
 								
@@ -395,8 +519,7 @@ class Dispatcher {
 
 								/// Calculate players processed and the avg time inbetween processings during the last fetch in ms /// 
 								playersProcessedMap["global"] = ["Worldwide", this.process.playersProcessed, this.averageTimeBetweenPlayerProcessing(this.process)]; 
-								
-								this.process.playersProcessedUpToLastFetch = this.process.playersProcessed;
+
 								
 								/// Apply generator to loaded regional processors ///
 								for(String region in (ENV.RegionMap).keys.toList()) {
@@ -409,7 +532,7 @@ class Dispatcher {
 										/// Calculate players processed and the avg time inbetween processings during the last fetch in ms /// 
 										playersProcessedMap[region] = [name, proc.playersProcessed, this.averageTimeBetweenPlayerProcessing(proc)]; 
 										
-										proc.playersProcessedUpToLastFetch = proc.playersProcessed;
+//										proc.playersProcessedUpToLastFetch = proc.playersProcessed;
 										
 										/// Add the generator future to the future map for wait() ///
 										generateBoards.add( this.generate(proc, heroPlayCounts, store) );
@@ -421,7 +544,7 @@ class Dispatcher {
 	    						
 	    						Future.wait(generateBoards).then((_) {
 	    							
-	    							this.save(ENV.StorageDirectory + "players-processed.json", playersProcessedMap, isJSON: true).then((_) {
+	    							ENV.save(ENV.StorageDirectory + "players-processed.json", playersProcessedMap, isJSON: true).then((_) {
 		    							ENV.log("Saved boards-latest-primary and boards-latest-mobile.", type: 3);
 		    							done();
 	    							});
@@ -440,11 +563,14 @@ class Dispatcher {
 	
 	/**
 	 * Organize the boards generation.
+	 * 
+	 * @return Future
 	 */
 	Future generate(Processor process, heroPlayCounts, store) {
 		Map cached = process.getLiveBoards();
-        				
-		ENV.log("Dispatching generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches", type: 2);
+        			
+		ENV.log("");
+		ENV.log("Running a generate sequence for ${process.regionalShortcode} @ ${this.recordedMatches.length} matches", type: 2);
 		
 		List<Future> wait = new List();
 		
@@ -452,7 +578,7 @@ class Dispatcher {
 			if(cached[board]["raw"].length > 0) {
 				String first = cached[board]["raw"][0][0];
 				ENV.log("First player for $board: $first", type: 4);
-				wait.add(this.queries.getAppearancesForPlayerID(first));
+				wait.add(this.queries.getAppearancesForPlayerID(first, board));
 			} else {
 				wait.add(new Future(() { return {"none": 0}; }));
 			}
@@ -474,8 +600,8 @@ class Dispatcher {
 			}
 			
 			List<Future> wait = [
-				this.save(ENV.AppDirectory + "views/boards/${process.regionalShortcode}-primary.blade.php", generator.htmlBasic, isJSON: false), 
-				this.save(ENV.AppDirectory + "views/boards/${process.regionalShortcode}-mobile.blade.php", generator.htmlMobile, isJSON: false) 
+				ENV.save(ENV.AppDirectory + "views/boards/${process.regionalShortcode}-primary.blade.php", generator.htmlBasic, isJSON: false), 
+				ENV.save(ENV.AppDirectory + "views/boards/${process.regionalShortcode}-mobile.blade.php", generator.htmlMobile, isJSON: false) 
 			];
 			
 			return wait;
@@ -486,6 +612,8 @@ class Dispatcher {
 	
 	/**
 	 * Run the clean loop.
+	 * 
+	 * @return void
 	 */
 	void clean () {
 		
@@ -538,7 +666,7 @@ class Dispatcher {
 //					ENV.log("STATS: \n ${generator.htmlBasic}");
 					
 					List<Future> wait = [
-						this.save(ENV.AppDirectory + 'views/stats-latest-primary.blade.php', generator.htmlBasic, isJSON: false)
+						ENV.save(ENV.AppDirectory + 'views/stats/primary.blade.php', generator.htmlBasic, isJSON: false)
 					];
 					
 					Future.wait(wait).then((_) {
@@ -549,9 +677,10 @@ class Dispatcher {
 						
 						this.lastRetrievedMatchCount = 0;
 						this.DaemonLifetimeRecordedCount += this.recordedMatches.length;
+						
 						this.recordedMatches.clear();
 						
-						this.util.text("Clean complete @ ${new DateTime.now().toLocal()}. Pushed ${this.DaemonLifetimeRecordedCount} through daemon lifetime.");
+//						ENV.util.text("Clean complete @ ${new DateTime.now().toLocal()}. Pushed ${this.DaemonLifetimeRecordedCount} through daemon lifetime.");
 						
 						queries.retrieveBans().then((bans) {
 							this.lastClean = new DateTime.now();
@@ -573,25 +702,39 @@ class Dispatcher {
 	
 	/**
 	 * Get the latest match seq num.
+	 * 
+	 * @return Future<int>
 	 */
-	Future<int> getLatestMatchSeqNum ({wait: true}) {
+	Future<int> getLatestMatchSeqNum () {
 		
 		var completer = new Completer();
 
-		HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v001/?key=${this._key}&matches_requested=1").then((response) {
-			if(response.statusCode == 200) {
-				completer.complete(JSON.decode(response.body)['result']['matches'][0]['match_seq_num']);
-			} else {
-				throw new DispatchError("\nFailed to get latest match sequence number. #0001");
-			}
-		})
-		.catchError((error) {
-			new Timer(const Duration(seconds: 5), () {
-				this.getLatestMatchSeqNum().then((num) {
-					completer.complete(num);
+		if(ENV.state.startingMatch != null) {
+			/// Use our previous match seq num.
+			
+			completer.complete(ENV.state.startingMatch);
+			
+		} else {
+			/// No state stored. Get the most recent match seq num.
+			HTTP.get("https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v001/?key=${this._key}&matches_requested=1").then((response) {
+				
+				/// We got a response:
+				this.monitor.apiRequest();
+				
+				if(response.statusCode == 200) {
+					completer.complete(JSON.decode(response.body)['result']['matches'][0]['match_seq_num']);
+				} else {
+					throw new DispatchError("\nFailed to get latest match sequence number.");
+				}
+			})
+			.catchError((error) {
+				new Timer(const Duration(seconds: 5), () {
+					this.getLatestMatchSeqNum().then((num) {
+						completer.complete(num);
+					});
 				});
 			});
-		});
+		}
 		
 		return completer.future;
 		
@@ -600,10 +743,16 @@ class Dispatcher {
 	
 	/**
 	 * Request user information from steam API
+	 * 
+	 * @return Future
 	 */
 	Future getUserData(Map<int, int> idMap, List<int> requestIDs) {
 		return HTTP.get("https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${this._key}&steamids=${requestIDs.join(",")}")
 			.then((response) {
+			
+				/// We got a response:
+				this.monitor.apiRequest();
+			
 				if(response.statusCode == 200) {
 					
 					List<Map<String, String>> players = JSON.decode(response.body)["response"]["players"];
@@ -635,47 +784,23 @@ class Dispatcher {
 			})
 			.catchError((Error error) {
 				this.requestFailure(error.toString());
-				this.util.printError(error);
+				ENV.util.printError(error);
 				ENV.log("Set timer for next request...\n\n\n");
 				return new Future.delayed(const Duration(seconds:5), () => this.getUserData(idMap, requestIDs));
 			});
 	}
 	
-	
-	/**
-	 * Read and parse the given file.
-	 */
-	Future<Map> grab(String file) {
-		
-		ENV.log("Grabbing $file", type:4, level:0);
-		File fileToGrab = new File(file);
-		
-		return fileToGrab.exists().then(
-			(bool exists) => exists == false ? new Future.value(new Map()) : fileToGrab.readAsString().then(
-				(String contents) => contents.length > 0 ? JSON.decode(contents) : new Map())
-		);
-	}
-	
-	
-	/**
-	 * Write data to file.
-	 */
-	Future<File> save(String file, dynamic<Map, List, String> data, {isJSON: true}) {
-
-		ENV.log("Saving $file", type:4, level:0);
-		return new File(file).writeAsString(isJSON == true ? JSON.encode(data) : data);
-	
-	}
-	
 	/**
 	 * Assess the validity of a match.
+	 * 
+	 * @return bool
 	 */
 	bool MVF (Map<String, dynamic> match) {
 		Map<String, Map<String, int>> teams = { 
 			"dire": 
 			{ "level": 0, "heroesWithoutAbilities": 0, "abandons":0, "leavers":0, "probablyFakePlayers":0 }, 
 			"radiant": 
-			{ "level": 0, "heroesWithoutAbilities": 0, "abandons": 0, "leavers":0, "probablyFakePlayers": 0 }
+			{ "level": 0, "heroesWithoutAbilities": 0, "abandons":0, "leavers":0, "probablyFakePlayers": 0 }
 		};
 		
 		Map ratios = {};
@@ -753,13 +878,15 @@ class Dispatcher {
 
 	/**
 	 * Receieved a successful request.
+	 * 
+	 * @return void
 	 */
 	void requestSuccess() {
 		if(this.steamPingAttempts > 0) {
 			
 			if(this.steamPingAttempts >= 10) {
 				Duration down = this.steamDownStartTime.difference(new DateTime.now());
-				this.util.text("Steam API back up @ ${new DateTime.now().toLocal()} [${down.toString()}] after ${this.steamPingAttempts} attempts");
+//				ENV.util.text("Steam API back up @ ${new DateTime.now().toLocal()} [${down.toString()}] after ${this.steamPingAttempts} attempts");
 				
 				this.monitor.hasBeenDown(down.inMinutes);
 				
@@ -774,6 +901,8 @@ class Dispatcher {
 	
 	/**
 	 * Request failed.
+	 * 
+	 * @return void
 	 */
 	void requestFailure([String reason="unknown"]) {
 		ENV.log("RequestFailure ($reason)", type: 4);
@@ -782,7 +911,7 @@ class Dispatcher {
 		
 		if(this.steamPingAttempts == 10) {
 			ENV.log("Putting the API down...", type: 4);
-			this.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
+//			ENV.util.text("Steam API down [reason: $reason] at ${this.steamDownStartTime.toLocal()}");
 			
 			this.destroyTimers();
 			this.queries.steamStatus(0);
@@ -795,6 +924,8 @@ class Dispatcher {
 
 	/**
 	 * Return a player map with required information for future processing.
+	 * 
+	 * @return Map<String, dynamic>
 	 */
 	Map<String, dynamic> buildPlayerMap(Map player, Map match) {
 		return {
@@ -823,7 +954,18 @@ class Dispatcher {
 	
 	/**
 	 * Return the average time in MS between this calls to this processor's .player() method
+	 * 
+	 * @return int
 	 */
-	int averageTimeBetweenPlayerProcessing(Processor proc) => ((1 / ((proc.playersProcessed - proc.playersProcessedUpToLastFetch) / 1200)) * 1000).toInt();
-
+	int averageTimeBetweenPlayerProcessing(Processor proc) {
+		try {
+			ENV.log("${proc.regionalShortcode}: ${proc.playersProcessed} processed, ${proc.playersProcessedUpToLastFetch} up to last fetch");
+//			return ((1 / ((proc.playersProcessed - proc.playersProcessedUpToLastFetch) / 1200)) * 1000).toInt();
+			return 1200000 ~/ (proc.playersProcessed - proc.playersProcessedUpToLastFetch);
+		} catch(e) {
+			ENV.log(e.toString(), type:0, level:3);
+			return 10;
+		}
+	}
+	
 }

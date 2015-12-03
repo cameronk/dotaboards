@@ -18,9 +18,9 @@ class PageController extends BaseController {
 				App::abort(500, "An internal error occurred.");
 				Log::error("players-processed.json not found");
 			} finally {
-				return View::make("regions-" . $this->agent, array('regions' => $contents));
+				return View::make("regions/" . $this->agent, array('regions' => $contents));
 			}
-		} else return Redirect::to("http://" . Cookie::get('region') . ".dotaboards.com");
+		} else return Redirect::to("http://" . Cookie::get('region') . "." . Config::get('app.domain'));
 
 		// return View::make("regions");
 	}
@@ -29,7 +29,7 @@ class PageController extends BaseController {
 
 		$contents = "{}";
 		try {
-			$contents = File::get("../../daemon/storage/monitor.json");
+			$contents = File::get("../../daemon/storage/monitors/monitor-latest.json");
 		} catch(Exception $e) {
 			App::abort(500, "An internal error occurred.");
 			Log::error("monitor.json not found");
